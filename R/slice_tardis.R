@@ -18,7 +18,7 @@
 #' and so forth.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'

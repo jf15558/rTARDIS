@@ -4,6 +4,7 @@
 #' palaeogeographic digital elevation models and one modern digital elevation
 #' model of the Galapagos archipelago. Models are in geographic coordinates with
 #' elevations in metres above sea level.
+#' @return `SpatRaster`
 #' @export
 #'
 #' @details Each DEM records the topography and bathymetry of the archipelago

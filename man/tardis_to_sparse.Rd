@@ -23,7 +23,7 @@ Create either a sparse weighted adjacency or transition probability matrix
 from a tardis graph.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

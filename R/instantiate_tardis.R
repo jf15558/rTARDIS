@@ -15,9 +15,9 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' #library(terra)
-#' #library(rTARDIS)
+#' \donttest{
+#' library(terra)
+#' library(rTARDIS)
 #'
 #' # load a dataset of the Galapagos archipelago through geological time
 #' gal <- galapagos()

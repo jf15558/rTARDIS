@@ -32,7 +32,7 @@ This can very quickly create large objects. For example, a tardis graph with
 in size. You may wish to optimise the resolution and masking of your landscapes first.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

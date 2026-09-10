@@ -33,7 +33,7 @@
 #' (~111 km).
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(rTARDIS)
 #' rast <- rast(nrows = 2, ncols = 2)
 #' ages <- c(440, 430, 420)

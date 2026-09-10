@@ -26,7 +26,7 @@ in the plotting window. Clicked locations are automatically resolved to the
 nearest edge cell in the geoglist.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

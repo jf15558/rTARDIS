@@ -18,7 +18,7 @@ Calculate Voronoi polygons around islands in a geoglist. These 'domains' are
 the basis for how \code{link_islands} determines connections across masked areas
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

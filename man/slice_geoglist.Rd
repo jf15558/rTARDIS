@@ -19,7 +19,7 @@ Extract layers in a geoglist to their own geoglist, along with any links if pres
 Unlike with \code{slice_tardis()}, discontinuous ranges of layers can be selected.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

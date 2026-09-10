@@ -39,7 +39,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(rTARDIS)
 #' library(terra)
 #'
@@ -51,9 +51,9 @@
 #' plot(regs)
 #' }
 
-plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = T,
+plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
                           lcol = "grey", lwd = 1, lty = 1, hex.border = NA,
-                          legend = T, axes = T, bg = NA, add = F,
+                          legend = TRUE, axes = TRUE, bg = NA, add = FALSE,
                           xlim = NULL, ylim = NULL, ...) {
 
    # x = rasts
@@ -113,6 +113,8 @@ plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = T,
       stop("ylim should be numeric")
     }
   }
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
 
   if(legend) {
     pr <- newmar <- par("mar")

@@ -4,7 +4,7 @@
 \alias{link_islands}
 \title{link_islands}
 \usage{
-link_islands(geog, klink = NULL, verbose = T)
+link_islands(geog, klink = NULL, verbose = TRUE)
 }
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
@@ -58,7 +58,7 @@ on global scales are approximate, although they still appear to return reasonabl
 results.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

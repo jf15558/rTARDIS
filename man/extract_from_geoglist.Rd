@@ -30,7 +30,7 @@ collection. This geometry is expected to be from another TARDIS function
 geometry.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

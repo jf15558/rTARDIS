@@ -10,7 +10,7 @@ rast_to_geoglist(
   as.hex = FALSE,
   hex = "auto",
   method = "mean",
-  verbose = T,
+  verbose = TRUE,
   ...
 )
 }
@@ -79,9 +79,9 @@ as this is currently much faster compared to the terra's native weighted resampl
 function. Weighting is not meaningful for all functions, e.g., \code{"max"}.
 }
 \examples{
-\dontrun{
-#library(terra)
-#library(rTARDIS)
+\donttest{
+library(terra)
+library(rTARDIS)
 
 # load a dataset of the Galapagos archipelago through geological time
 gal <- galapagos()

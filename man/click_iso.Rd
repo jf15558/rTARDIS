@@ -32,6 +32,9 @@ Defaults to \code{NULL}, in which case the first slice is used}
 
 \item{...}{Additional arguments passed to \code{plot.geoglist()}}
 }
+\value{
+No return value
+}
 \description{
 Interactively calculate and plot an isochrone around a clicked point on the
 landscape displayed by the function. Clicked points falling in masked regions are automatically resolved to the nearest available
@@ -41,7 +44,7 @@ cell.
 interactive function under development
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

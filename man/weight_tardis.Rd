@@ -71,7 +71,7 @@ inaccessible islands into a landscape even if island linkage has already been
 performed.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

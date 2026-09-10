@@ -15,12 +15,13 @@
 #' @param col `character`. The colour to use for plotting interactive features.
 #' @param cost `numeric`. the maximum cost for calculating the isochrone.
 #' @param ... Additional arguments passed to `plot.geoglist()`
+#' @return No return value
 #' @import terra sf
 #' @importFrom scales alpha
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'

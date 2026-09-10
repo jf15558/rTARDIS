@@ -50,7 +50,7 @@
 #' results.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'
@@ -68,7 +68,7 @@
 #' plot(hexes)
 #' }
 
-link_islands <- function(geog, klink = NULL, verbose = T) {
+link_islands <- function(geog, klink = NULL, verbose = TRUE) {
   #
   #
   #geog <- out

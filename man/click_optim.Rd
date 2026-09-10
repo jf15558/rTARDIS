@@ -37,13 +37,16 @@ end point to start point to return a polygon? Defaults to \code{FALSE}.}
 
 \item{...}{Additional arguments passed to \code{plot.geoglist()}}
 }
+\value{
+No return value
+}
 \description{
 Interactively calculate and plot an isochrone around a clicked point on the
 landscape displayed by the function. Clicked points falling in masked regions are automatically resolved to the nearest available
 cell.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

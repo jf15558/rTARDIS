@@ -27,7 +27,7 @@ Lines are drawn by clicking their start and end points on the geog layer
 plotted in the plotting window.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

@@ -61,7 +61,7 @@ walk is terminated at the closest distance to the target as the walks will
 not necessarily be able to precisely hit the target distance.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

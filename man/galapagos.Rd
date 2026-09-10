@@ -15,6 +15,9 @@ downloaded from the embedded link in the page: ftp://ftp.pmel.noaa.gov/newport/c
 \usage{
 galapagos()
 }
+\value{
+\code{SpatRaster}
+}
 \description{
 Load a terra 'SpatRaster' object from a source tiff containing four
 palaeogeographic digital elevation models and one modern digital elevation

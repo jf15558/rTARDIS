@@ -18,7 +18,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'
@@ -33,7 +33,7 @@
 #' click_points(rasts, points = 2)
 #' }
 
-click_points <- function(geog, layer = 1, points = 1, print.only = T, ...) {
+click_points <- function(geog, layer = 1, points = 1, print.only = TRUE, ...) {
   #
   # geog = rasts
   # layer = 1

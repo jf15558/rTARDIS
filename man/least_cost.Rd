@@ -38,7 +38,7 @@ using Djikstra's algorithm. Costs are either geographic distances or a custom
 weighting scheme supplied by the user.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

@@ -42,7 +42,7 @@ Note that the time directionality in the TARDIS graph will also affect the
 minimum spanning arborescence structure.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

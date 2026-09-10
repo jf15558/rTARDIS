@@ -3,6 +3,7 @@
 #' Load a terra 'SpatRaster' object from a source tiff containing two
 #' palaeogeographic digital elevation models of the Earth during the Cretaceous.
 #' Models are in geographic coordinates with elevations in metres relative to sea level.
+#' @return `SpatRaster`
 #' @export
 #'
 #' @details Each DEM records the estimated topography and bathymetry of the Earth

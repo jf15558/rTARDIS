@@ -57,9 +57,9 @@
 #' function. Weighting is not meaningful for all functions, e.g., `"max"`.
 #'
 #' @examples
-#' \dontrun{
-#' #library(terra)
-#' #library(rTARDIS)
+#' \donttest{
+#' library(terra)
+#' library(rTARDIS)
 #'
 #' # load a dataset of the Galapagos archipelago through geological time
 #' gal <- galapagos()
@@ -74,7 +74,7 @@
 #' rasts <- rast_to_geoglist(gal, gal_m)
 #' }
 
-rast_to_geoglist <- function(geog, mask = NULL, as.hex = FALSE, hex = "auto", method = "mean", verbose = T, ...) {
+rast_to_geoglist <- function(geog, mask = NULL, as.hex = FALSE, hex = "auto", method = "mean", verbose = TRUE, ...) {
 
   #gal <- galapagos()
   #gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T), right = F)

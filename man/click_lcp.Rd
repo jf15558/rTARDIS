@@ -32,6 +32,9 @@ Defaults to \code{NULL}, in which case the first slice is used.}
 
 \item{...}{Additional arguments passed to \code{plot.geoglist()}.}
 }
+\value{
+No return value
+}
 \description{
 Interactively calculate and plot \code{n} least cost paths by clicking their start
 and end points on the landscape displayed by the function. Clicked points
@@ -39,7 +42,7 @@ falling in masked regions are automatically resolved to the nearest available
 cell.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

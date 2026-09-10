@@ -4,7 +4,7 @@
 \alias{cost_surface}
 \title{cost_surface}
 \usage{
-cost_surface(tardis, weights = "gdist", exclude.links = F, verbose = T)
+cost_surface(tardis, weights = "gdist", exclude.links = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{tardis}{\code{tardis}. An object of class 'tardis'}
@@ -27,9 +27,9 @@ Visualise the weighting scheme for the layers in a tardis object. Weights are
 calculated as the mean of inbound edges for a given cell.
 }
 \examples{
-\dontrun{
-#library(terra)
-#library(rTARDIS)
+\donttest{
+library(terra)
+library(rTARDIS)
 
 # load data
 gal <- galapagos()

@@ -9,15 +9,15 @@
   x,
   y = 1,
   pal = sf.colors(10),
-  links = T,
+  links = TRUE,
   lcol = "grey",
   lwd = 1,
   lty = 1,
   hex.border = NA,
-  legend = T,
-  axes = T,
+  legend = TRUE,
+  axes = TRUE,
   bg = NA,
-  add = F,
+  add = FALSE,
   xlim = NULL,
   ylim = NULL,
   ...
@@ -73,7 +73,7 @@ Plotting method for a geoglist layer. If the geoglist contains multiple
 layers, then default behaviour is to plot the first one.
 }
 \examples{
-\dontrun{
+\donttest{
 library(rTARDIS)
 library(terra)
 

@@ -4,7 +4,7 @@
 \alias{click_points}
 \title{click_points}
 \usage{
-click_points(geog, layer = 1, points = 1, print.only = T, ...)
+click_points(geog, layer = 1, points = 1, print.only = TRUE, ...)
 }
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
@@ -30,7 +30,7 @@ of those locations. All locations are resolved to the nearest available
 cell, including any which fall outside of unmasked areas of the layer.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

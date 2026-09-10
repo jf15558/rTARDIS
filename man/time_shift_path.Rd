@@ -41,8 +41,8 @@ homologous between layers (i.e., where locations shift due to plate tectonic
 rotation or some other process).
 }
 \examples{
-\dontrun{
-#' library(terra)
+\donttest{
+library(terra)
 library(rTARDIS)
 
 gal <- galapagos()

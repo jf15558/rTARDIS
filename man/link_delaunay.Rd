@@ -4,7 +4,7 @@
 \alias{link_delaunay}
 \title{link_delaunay}
 \usage{
-link_delaunay(geog, max.dist = NULL, verbose = T)
+link_delaunay(geog, max.dist = NULL, verbose = TRUE)
 }
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
@@ -45,7 +45,7 @@ spherical geometry is not yet supported. As such, Delaunay linkage on global
 scales is approximate, although it still appears to return reasonable results.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

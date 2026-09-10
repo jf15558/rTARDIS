@@ -24,7 +24,7 @@ desirable for plotting purposes, but will render the resulting geoglist
 incompatible with most rTARDIS functions.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

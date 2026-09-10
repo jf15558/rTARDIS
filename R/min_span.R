@@ -36,7 +36,7 @@
 #' minimum spanning arborescence structure.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'

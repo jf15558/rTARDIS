@@ -16,9 +16,9 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' #library(terra)
-#' #library(rTARDIS)
+#' \donttest{
+#' library(terra)
+#' library(rTARDIS)
 #'
 #' # load data
 #' gal <- galapagos()
@@ -32,7 +32,7 @@
 #' cost_surface(rtd)
 #' }
 
-cost_surface <- function(tardis, weights = "gdist", exclude.links = F, verbose = T) {
+cost_surface <- function(tardis, weights = "gdist", exclude.links = FALSE, verbose = TRUE) {
 
    #tardis = rtd
    #weights = "gdist"

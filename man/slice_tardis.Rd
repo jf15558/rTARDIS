@@ -29,7 +29,7 @@ layers are counted in decreasing age order, so the oldest time layer will be 1
 and so forth.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

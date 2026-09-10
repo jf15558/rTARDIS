@@ -9,14 +9,14 @@ plot_globe(
   y = 1,
   range = NULL,
   pal = sf.colors(10),
-  links = T,
+  links = TRUE,
   lcol = "steelblue",
   lwd = 1,
   lty = 1,
   bg = "aliceblue",
-  graticule = T,
+  graticule = TRUE,
   grat.col = "grey95",
-  add = F,
+  add = FALSE,
   ...
 )
 }
@@ -77,7 +77,7 @@ The background sphere is produced using a slightly smaller radius to prevent
 occulusion and artefacts in features plotted onto its surface
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

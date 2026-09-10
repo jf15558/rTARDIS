@@ -45,7 +45,7 @@
 #' occulusion and artefacts in features plotted onto its surface
 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'
@@ -56,8 +56,8 @@
 #' plot_globe(rasts, 1)
 #' }
 
-plot_globe <- function(x, y = 1, range = NULL, pal = sf.colors(10), links = T, lcol = "steelblue",
-                       lwd = 1, lty = 1, bg = "aliceblue", graticule = T, grat.col = "grey95", add = F, ...) {
+plot_globe <- function(x, y = 1, range = NULL, pal = sf.colors(10), links = TRUE, lcol = "steelblue",
+                       lwd = 1, lty = 1, bg = "aliceblue", graticule = TRUE, grat.col = "grey95", add = FALSE, ...) {
 
   # x = rst
   # y = 1

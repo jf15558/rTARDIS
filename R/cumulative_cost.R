@@ -17,9 +17,9 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' #library(terra)
-#' #library(rTARDIS)
+#' \donttest{
+#' library(terra)
+#' library(rTARDIS)
 #'
 #' # load data
 #' gal <- galapagos()

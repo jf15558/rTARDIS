@@ -35,7 +35,7 @@ or backwards in time regardless of the time directionality in the tardis graph.
 Points without cells in their target layer will return NA.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

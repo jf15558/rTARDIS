@@ -34,7 +34,7 @@ Calculate a cost isochrone around a point, that is all cells in the same
 time layer which fall within a certain cost of access of that point.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

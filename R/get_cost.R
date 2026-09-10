@@ -21,7 +21,7 @@
 #' in size. You may wish to optimise the resolution and masking of your landscapes first.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'

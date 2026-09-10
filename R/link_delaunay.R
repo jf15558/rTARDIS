@@ -35,7 +35,7 @@
 #' scales is approximate, although it still appears to return reasonable results.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'
@@ -53,7 +53,7 @@
 #' plot(hexes)
 #' }
 
-link_delaunay <- function(geog, max.dist = NULL, verbose = T) {
+link_delaunay <- function(geog, max.dist = NULL, verbose = TRUE) {
 
   #geog = out
   #max.dist = 5e4

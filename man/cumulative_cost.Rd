@@ -28,9 +28,9 @@ From a given starting point, calculate the cost of reaching every other location
 in the same time slice in a tardis graph and return the cumulative cost surface
 }
 \examples{
-\dontrun{
-#library(terra)
-#library(rTARDIS)
+\donttest{
+library(terra)
+library(rTARDIS)
 
 # load data
 gal <- galapagos()

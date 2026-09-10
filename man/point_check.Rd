@@ -32,7 +32,7 @@ cell within a tardis object. Discrepant points are adjusted to their nearest
 accessible cell based on great circle distance.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

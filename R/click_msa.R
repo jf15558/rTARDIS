@@ -16,11 +16,12 @@
 #' arborescence.
 #' @param col `character`. The colour to use for plotting interactive features.
 #' @param ... Additional arguments passed to `plot.geoglist()`
+#' @return No return value
 #' @import terra sf
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'

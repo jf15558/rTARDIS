@@ -20,6 +20,9 @@ SP544b
 \usage{
 cretaceous()
 }
+\value{
+\code{SpatRaster}
+}
 \description{
 Load a terra 'SpatRaster' object from a source tiff containing two
 palaeogeographic digital elevation models of the Earth during the Cretaceous.

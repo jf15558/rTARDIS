@@ -33,6 +33,9 @@ arborescence.}
 
 \item{...}{Additional arguments passed to \code{plot.geoglist()}}
 }
+\value{
+No return value
+}
 \description{
 Interactively calculate and plot a minimum spanning arboresence for \code{n} points
 by clicking on the landscape displayed by the function. Clicked points
@@ -40,7 +43,7 @@ falling in masked regions are automatically resolved to the nearest available
 cell.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

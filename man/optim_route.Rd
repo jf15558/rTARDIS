@@ -35,7 +35,7 @@ all pairs of input points using Djikstra's algorithm, then the optimal route
 identified from these sets of pairwise distances.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

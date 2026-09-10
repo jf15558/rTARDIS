@@ -24,7 +24,7 @@ Classify all cells in the layers of a geoglist by which region they
 belong to. Optionally, only the boundary cells of these regions may be returned.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

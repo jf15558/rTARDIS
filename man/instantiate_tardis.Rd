@@ -25,9 +25,9 @@ directly interact with this graph themselves, or to supply a pre-instantiated
 \code{tardis} object within a loop to avoid repeated calls to this function.
 }
 \examples{
-\dontrun{
-#library(terra)
-#library(rTARDIS)
+\donttest{
+library(terra)
+library(rTARDIS)
 
 # load a dataset of the Galapagos archipelago through geological time
 gal <- galapagos()
