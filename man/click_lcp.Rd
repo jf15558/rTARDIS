@@ -47,12 +47,12 @@ library(terra)
 library(rTARDIS)
 
 gal <- galapagos()
-gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T), right = F)
-hexes <- rast_to_geoglist(gal, gal_m, as.hex = T, hex = 7)
+gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
+hexes <- rast_to_geoglist(gal, gal_m, as.hex = TRUE, hex = 7)
 hlink <- link_islands(hexes)
 htd <- build_tardis(hexes, times = c(seq(2.25, 0, -0.5), 0))
 
 # click two start and end points on the map
-click_iso(tardis = rtd, geog = hexes, time = 2, n = 2)
+click_iso(tardis = htd, geog = hexes, time = 2, n = 2)
 }
 }

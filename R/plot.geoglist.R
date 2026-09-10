@@ -31,6 +31,9 @@
 #' @param ylim `numeric`. If not `NULL`, then a vector of two numbers to set the
 #' minimum and maximum y extent of the plot in terms of the projection system in
 #' `geoglist`.
+#' @param par.reset `logical`. Should default plotting parameters be restored on function
+#' exit? Defaults to TRUE to meet CRAN requirements, but can be toggled to allow
+#' interactive clicking functions to operate.
 #' @param ... Other arguments passed to `terra::plot()`.
 #' @import sf terra
 #' @importFrom graphics par
@@ -44,7 +47,7 @@
 #' library(terra)
 #'
 #' gal <- cretaceous()
-#' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T), right = F)
+#' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 #' rasts <- rast_to_geoglist(gal, gal_m)
 #' rasts <- link_islands(rasts, klink = 1)
 #'
@@ -54,7 +57,7 @@
 plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
                           lcol = "grey", lwd = 1, lty = 1, hex.border = NA,
                           legend = TRUE, axes = TRUE, bg = NA, add = FALSE,
-                          xlim = NULL, ylim = NULL, ...) {
+                          xlim = NULL, ylim = NULL, par.reset = T, ...) {
 
    # x = rasts
    # y = 1
@@ -113,8 +116,11 @@ plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
       stop("ylim should be numeric")
     }
   }
-  oldpar <- par(no.readonly = TRUE)
-  on.exit(par(oldpar))
+
+  if(par.reset) {
+    oldpar <- par(no.readonly = TRUE)
+    on.exit(par(oldpar))
+  }
 
   if(legend) {
     pr <- newmar <- par("mar")

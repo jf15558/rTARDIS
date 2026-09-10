@@ -27,10 +27,10 @@
 #' library(rTARDIS)
 #'
 #' gal <- galapagos()
-#' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T), right = F)
+#' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 #'
 #' # create a geoglist and link islands
-#' hexes <- rast_to_geoglist(gal, gal_m, as.hex = T, hex = 6)
+#' hexes <- rast_to_geoglist(gal, gal_m, as.hex = TRUE, hex = 6)
 #' hexes <- link_islands(hexes)
 #'
 #' htd <- build_tardis(hexes, times = c(seq(2.25, 0, -0.5), 0))
