@@ -52,6 +52,6 @@ pts <- rbind(c(-89.78873, -1.420627, 2),
              c(-88.70836, -0.2627832, 2))
 
 rpts <- point_check(rtd, pts)
-rlcp <- least_cost(rtd, origin = pts[1,], dest = pts[2,])
+rlcp <- least_cost(rtd, origin = rpts[1,], dest = rpts[2,])
 }
 }

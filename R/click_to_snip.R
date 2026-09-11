@@ -29,7 +29,7 @@
 #' rasts <- link_islands(rasts)
 #'
 #' # click to either side of a link to remove it
-#' click_to_snip(rasts)
+#' #click_to_snip(rasts)
 #' }
 
 click_to_snip <- function(geog, layer = 1, nsnips = 1, ...) {
@@ -72,7 +72,9 @@ click_to_snip <- function(geog, layer = 1, nsnips = 1, ...) {
       stop("nsnips should be a single integer")
     }
 
-    plot.geoglist(geog, layer, ...)
+    oldpar <- par(no.readonly = TRUE)
+    on.exit(par(oldpar))
+    plot.geoglist(geog, layer, par.reset = F, ...)
 
     snips <- list()
     for(i in 1:nsnips) {

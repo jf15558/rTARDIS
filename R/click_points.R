@@ -30,7 +30,7 @@
 #' rasts <- rast_to_geoglist(gal, gal_m)
 #'
 #' # click to get two points
-#' click_points(rasts, points = 2)
+#' #click_points(rasts, points = 2)
 #' }
 
 click_points <- function(geog, layer = 1, points = 1, print.only = TRUE, ...) {
@@ -82,7 +82,9 @@ click_points <- function(geog, layer = 1, points = 1, print.only = TRUE, ...) {
     bounds <- centroids(bounds[which(table(bar[,1]) != 7)])
   }
 
-  plot(geog, layer, ...)
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+  plot.geoglist(geog, layer, par.reset = F, ...)
 
   lnk <- list()
   for(i in 1:points) {

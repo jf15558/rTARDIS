@@ -34,7 +34,7 @@ hexes <- rast_to_geoglist(gal[[1]], gal_m[[1]], as.hex = TRUE, hex = 6)
 hexes <- link_islands(hexes)
 
 htd <- build_tardis(hexes)
-cs <- tardis_to_matrix(htd, mode = "cost")
-aj <- tardis_to_matrix(htd, mode = "adjacency")
+cs <- tardis_to_sparse(htd, mode = "transition")
+aj <- tardis_to_sparse(htd, mode = "adjacency")
 }
 }

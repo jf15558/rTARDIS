@@ -6,17 +6,17 @@
 #' geometry.
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.
-#' @param geom `sf simple features collection`. A set of sf geometries which
+#' @param geom `SpatVector`. A SpatVector geometry which
 #' will be used to extract values from geog.
 #' @param layer `numeric`. If not NULL, then an integer specifying from which
 #' layer in `geog` values are to be extracted. This argument is intended for
 #' use with user-designed `geom` objects which do not already contain layer
 #' assigments, unlike returns from other rTARDIS functions.
-#' @return `sf simple features collection`. A simple features collection of points
+#' @return `SpatVector`. A SpatVector of points
 #' corresponding to the centroids of all cells in geog intersected by an input
 #' geometry (denoted by `$feature`) in its specified layer (`$layer`), and the
 #' value present at that point (`$value`).
-#' @import sf terra h3jsr
+#' @import terra h3jsr
 #' @export
 #'
 #' @examples
@@ -28,7 +28,7 @@
 #' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 #'
 #' rasts <- rast_to_geoglist(gal, gal_m, as.hex = TRUE, hex = 6)
-#' rlink <- link_islands(rasts)
+#' rasts <- link_islands(rasts)
 #' rtd <- build_tardis(rasts, times = c(seq(2.25, 0, -0.5), 0))
 #' org <- rbind(c(-89.78873, -1.420627, 2),
 #'              c(-89.58525, -1.473917, 2))
@@ -37,14 +37,14 @@
 #'
 #' rpts <- point_check(rtd, rbind(org, dst))
 #' rlcp <- least_cost(rtd, origin = rpts[1,], dest = rpts[3,])
-#' vals <- extract_geoglist(rasts, rlcp)
+#' vals <- extract_from_geoglist(rasts, rlcp)
 #' }
 
 extract_from_geoglist <- function(geog, geom, layer = NULL) {
 
-  # geog = rasts
-  # geom = ln
-  # layer = NULL
+   #geog = rasts
+   #geom = rlcp
+   #layer = NULL
 
   if(!exists("geog")) {
     stop("Supply geog as a geoglist with rast_to_geoglist()")
@@ -53,7 +53,7 @@ extract_from_geoglist <- function(geog, geom, layer = NULL) {
     stop("Supply geog as a geoglist from rast_to_geoglist()")
   }
   if(!exists("geom")) {
-    stop("Supply geom as an sf object")
+    stop("Supply geom as an SpatVector object")
   }
   if(!is.null(layer)) {
     if(!is.atomic(layer) | length(layer) != 1) {
@@ -82,22 +82,23 @@ extract_from_geoglist <- function(geog, geom, layer = NULL) {
       lyr <- geog$layers[[y]]
       if(inherits(lyr, "SpatRaster")) {
         vl <- extract(lyr, vect(prt), cells = T)
-        cls <- cbind.data.frame(x, y, vl[,2])
-        colnames(cls) <- c("feature", "layer", "value")
-        cls$geometry <- st_as_sf(vect(xyFromCell(lyr, vl$cell)))$geometry
+        cls <- vect(xyFromCell(lyr, vl$cell))
+        cls$feature <- rep(x, length(cls))
+        cls$layer <- rep(y, length(cls))
+        cls$value <- vl[,2]
+
 
       } else {
-        vl <- unlist(st_intersects(prt, lyr))
-        cls <- st_drop_geometry(lyr[vl,1])
-        cls <- cbind.data.frame(x, y, st_drop_geometry(lyr[vl,1]))
-        colnames(cls) <- c("feature", "layer", "value")
-        cls$geometry <- cell_to_point(grid[as.numeric(rownames(lyr)[vl])], geog$gdat[7])$geometry
+
+        vl <- which(relate(lyr, prt, "intersects")[,1])
+        cls <- centroids(lyr[vl,1])
+        cls$value <- cls[[names(cls)]][,1]
+        cls$feature <- rep(x, length(cls))
+        cls$layer <- rep(y, length(cls))
+        cls <- cls[,c("feature", "layer", "value")]
       }
-      cls <- st_as_sf(cls)
-      st_crs(cls) <- "+proj=lonlat"
-      cls
     })
     do.call(rbind, vals2)
   })
-  return(vect(do.call(rbind, vals)))
+  return(do.call(rbind, vals))
 }

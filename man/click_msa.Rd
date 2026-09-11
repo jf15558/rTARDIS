@@ -54,6 +54,6 @@ hlink <- link_islands(hexes)
 htd <- build_tardis(hexes, times = c(seq(2.25, 0, -0.5), 0))
 
 # click a point on the map
-click_iso(tardis = htd, geog = hexes, time = 2, cost = 1e5)
+#click_iso(tardis = htd, geog = hexes, time = 2, cost = 1e5)
 }
 }

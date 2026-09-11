@@ -42,6 +42,6 @@ gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE)
 rasts <- rast_to_geoglist(gal, gal_m)
 
 # click to get two points
-click_points(rasts, points = 2)
+#click_points(rasts, points = 2)
 }
 }

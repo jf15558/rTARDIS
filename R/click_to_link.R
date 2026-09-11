@@ -27,7 +27,7 @@
 #' rasts <- rast_to_geoglist(gal, gal_m)
 #'
 #' # click the start and end points for two links
-#' click_to_link(rasts, nlinks = 2)
+#' #click_to_link(rasts, nlinks = 2)
 #' }
 
 click_to_link <- function(geog, layer = 1, nlinks = 1, ...) {
@@ -79,7 +79,9 @@ click_to_link <- function(geog, layer = 1, nlinks = 1, ...) {
     bounds <- centroids(bounds[which(table(bar[,1]) != 7)])
   }
 
-  plot(geog, layer, ...)
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+  plot.geoglist(geog, layer, par.reset = F, ...)
 
   lnk <- list()
   for(i in 1:nlinks) {

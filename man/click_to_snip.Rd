@@ -40,6 +40,6 @@ rasts <- rast_to_geoglist(gal, gal_m)
 rasts <- link_islands(rasts)
 
 # click to either side of a link to remove it
-click_to_snip(rasts)
+#click_to_snip(rasts)
 }
 }

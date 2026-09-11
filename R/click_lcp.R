@@ -32,7 +32,7 @@
 #' htd <- build_tardis(hexes, times = c(seq(2.25, 0, -0.5), 0))
 #'
 #' # click two start and end points on the map
-#' click_iso(tardis = htd, geog = hexes, time = 2, n = 2)
+#' #click_iso(tardis = htd, geog = hexes, time = 2, n = 2)
 #' }
 
 click_lcp <- function(tardis, weights = "gdist", geog, time = NULL, n = 1, col = "gold", ...) {
@@ -54,7 +54,10 @@ click_lcp <- function(tardis, weights = "gdist", geog, time = NULL, n = 1, col =
     }
     bin <- sum(time < tardis$tdat)
   }
-  plot.geoglist(geog, bin, ...)
+
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+  plot.geoglist(geog, bin, par.reset = F, ...)
 
   org <- cbind(click(n = n), rep(time, n))
   dst <- cbind(click(n = n), rep(time, n))

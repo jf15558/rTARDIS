@@ -42,7 +42,7 @@ gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE)
 hexes <- rast_to_geoglist(gal, gal_m, as.hex = TRUE, hex = 7)
 hexes <- link_islands(hexes)
 
-htd <- build_tardis(hexes, times = c(seq(2.25, 0, -0.5), 0), mlink = hlink)
+htd <- build_tardis(hexes, times = c(seq(2.25, 0, -0.5), 0))
 
 org <- rbind(c(-89.78873, -1.420627, 2),
              c(-89.58525, -1.473917, 2),

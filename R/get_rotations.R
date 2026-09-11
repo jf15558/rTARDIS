@@ -34,10 +34,13 @@
 #'
 #' @examples
 #' \donttest{
+#' library(terra)
 #' library(rTARDIS)
-#' rast <- rast(nrows = 2, ncols = 2)
+#'
+#' rast <- rast(nrows = 2, ncols = 2, vals = 1)
+#' geog <- rast_to_geoglist(c(rast, rast))
 #' ages <- c(440, 430, 420)
-#' foo <- get_rotations(rast = rast, times = ages, model = "MERDITH2021")
+#' foo <- get_rotations(geog, times = ages, model = "MERDITH2021")
 #'}
 
 get_rotations <- function(geog, times, model, method = "grid", verbose = TRUE, ...) {

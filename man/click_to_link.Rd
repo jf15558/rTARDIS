@@ -38,6 +38,6 @@ gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE)
 rasts <- rast_to_geoglist(gal, gal_m)
 
 # click the start and end points for two links
-click_to_link(rasts, nlinks = 2)
+#click_to_link(rasts, nlinks = 2)
 }
 }

@@ -33,7 +33,8 @@
 #' `geoglist`.
 #' @param par.reset `logical`. Should default plotting parameters be restored on function
 #' exit? Defaults to TRUE to meet CRAN requirements, but can be toggled to allow
-#' interactive clicking functions to operate.
+#' interactive clicking functions to operate, or to allow other features to be
+#' easily added within the plot axis limits (e.g., with `add = TRUE`).
 #' @param ... Other arguments passed to `terra::plot()`.
 #' @import sf terra
 #' @importFrom graphics par
@@ -51,7 +52,7 @@
 #' rasts <- rast_to_geoglist(gal, gal_m)
 #' rasts <- link_islands(rasts, klink = 1)
 #'
-#' plot(regs)
+#' plot(rasts)
 #' }
 
 plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,

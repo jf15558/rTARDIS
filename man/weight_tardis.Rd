@@ -38,9 +38,9 @@ The \code{weight_tardis} function is heavily inspired by the weighting function
 used in the \code{gen3sis} R package by Oskar Hagen.
 
 Internally, \code{weight_tardis()} generates two \code{data.frames}, \code{origin} and \code{dest}.
-These minimally record the properties for each pair of origin and destination cells
-comprising the edges in a graph layer. Each records the cell ID, the type of edge it forms, the horizontal
-distance and bearing to its partner cell in metres and degrees respectively,
+These minimallt record the core properties for each pair of origin and destination cells
+comprising the edges in a graph layer: the cell ID, the type of edge it forms,
+the horizontal distance and bearing to its partner cell in metres and degrees respectively,
 the vertical distance to its partner cell in metres, and the time layer in which that cell resides. Horizontal distance will
 be the same in \code{origin} and \code{dest}, but the vertical distance will be positive
 or negative depending on whether elevation is gained or lost along an edge.
@@ -63,9 +63,9 @@ Weights are iteratively calculated for each landscape layer in tardis, with
 the index of the landscape layer available in each data.frame to allow the
 user to design weighting rules that can vary through time.
 
-Crucially, all returned weights should be finite and > 0, as negative
-weights are not permitted for downstream functions and 0 is reserved for temporal links.
-\code{NA} values are permitted to allow the designation of impermeable edges (for example to restrict
+Crucially, all returned weights should be finite and >= 0, as negative
+weights are not permitted for downstream functions. \code{NA} values are permitted
+to allow the designation of impermeable edges (for example to restrict
 movement above a certain threshold cost). Such values, however, may introduce
 inaccessible islands into a landscape even if island linkage has already been
 performed.
@@ -75,6 +75,9 @@ performed.
 library(terra)
 library(rTARDIS)
 
+# defaults for CRAN checks (safely ignore)
+origin <- dest <- NULL
+
 # load a dataset of the Galapagos archipelago through geological time
 gal <- galapagos()
 gal <- crop(gal, ext(-92, -88, -2, 1))
@@ -82,26 +85,56 @@ gal <- crop(gal, ext(-92, -88, -2, 1))
 # create a land-sea mask from the archipelago raster set
 gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 
-# create a geoglist with hexagonal resampling and mask the sea
+# create a geoglist and mask the sea
 rasts <- rast_to_geoglist(gal, gal_m)
 rasts <- link_islands(rasts)
 rtd <- build_tardis(rasts, times = c(seq(2.25, 0, -0.5), 0))
 
+# define a function where all geographic distances are doubled
+times_ten <- function(origin, dest) {
+  (origin$hdist^2 + abs(origin$vdist)^2) * 2
+}
+
+# add the weighting scheme
+rtd <- weight_tardis(rtd, name = "tentimes", wfun = times_ten)
+
+
+# define a function where mask links are upweighed by a factor of 100
+high_mask <- function(origin, dest) {
+
+  # calculate true geographic distance
+  gdist <- sqrt(origin$hdist^2 + abs(origin$vdist)^2)
+
+  # get the indices of the mask links
+  mlink <- which(origin$type == 1)
+
+  # multiply mask link costs by 100
+  gdist[mlink] <- gdist[mlink] * 100
+
+  # return costs
+  return(gdist)
+}
+
+# add the weighting scheme
+rtd <- weight_tardis(rtd, name = "highmask", wfun = high_mask)
+
+
 # create a dummy alternative raster dataset with random values
-gal_v <- rast(gal_m, vals = rnorm(abs(ncell(gal_m) * nlyr(gal_m))))
+gal_v <- rast(gal_m, vals = abs(rnorm(ncell(gal_m) * nlyr(gal_m))))
 
 # convert the dummy data to a geoglist with the same masking
 gvars <- rast_to_geoglist(gal_v, gal_m)
 
-# define a function where geographic distances are multiplied by 10
-altfunc <- function(origin, dest, tnum, ...) {
-  (origin$hdist^2 + abs(origin$vdist)^2) * 10
-}
-
 # place the alternative geoglist data into a list
 vrs <- list(rand = gvars)
 
-# generate a new weighting scheme where geographic distances along mask links are multiplied by 10
-gtw <- weight_tardis(rts, name = "altweight", vars = vrs, mfun = altfunc())
+
+# define a function which uses the means of the alternative data
+alt_func <- function(origin, dest) {
+  (origin$rand + dest$rand) / 2
+}
+
+# add the weighting scheme
+rtd <- weight_tardis(rtd, name = "altfunc", vars = vrs, wfun = alt_func)
 }
 }

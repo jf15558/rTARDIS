@@ -9,7 +9,7 @@ extract_from_geoglist(geog, geom, layer = NULL)
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{geom}{\verb{sf simple features collection}. A set of sf geometries which
+\item{geom}{\code{SpatVector}. A SpatVector geometry which
 will be used to extract values from geog.}
 
 \item{layer}{\code{numeric}. If not NULL, then an integer specifying from which
@@ -18,7 +18,7 @@ use with user-designed \code{geom} objects which do not already contain layer
 assigments, unlike returns from other rTARDIS functions.}
 }
 \value{
-\verb{sf simple features collection}. A simple features collection of points
+\code{SpatVector}. A SpatVector of points
 corresponding to the centroids of all cells in geog intersected by an input
 geometry (denoted by \verb{$feature}) in its specified layer (\verb{$layer}), and the
 value present at that point (\verb{$value}).
@@ -38,7 +38,7 @@ gal <- galapagos()
 gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 
 rasts <- rast_to_geoglist(gal, gal_m, as.hex = TRUE, hex = 6)
-rlink <- link_islands(rasts)
+rasts <- link_islands(rasts)
 rtd <- build_tardis(rasts, times = c(seq(2.25, 0, -0.5), 0))
 org <- rbind(c(-89.78873, -1.420627, 2),
              c(-89.58525, -1.473917, 2))
@@ -47,6 +47,6 @@ dst <- rbind(c(-88.70836, -0.2627832, 2),
 
 rpts <- point_check(rtd, rbind(org, dst))
 rlcp <- least_cost(rtd, origin = rpts[1,], dest = rpts[3,])
-vals <- extract_geoglist(rasts, rlcp)
+vals <- extract_from_geoglist(rasts, rlcp)
 }
 }

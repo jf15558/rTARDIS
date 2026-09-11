@@ -20,6 +20,7 @@
   add = FALSE,
   xlim = NULL,
   ylim = NULL,
+  par.reset = T,
   ...
 )
 }
@@ -63,6 +64,11 @@ minimum and maximum x extent of the plot in terms of the projection system in
 minimum and maximum y extent of the plot in terms of the projection system in
 \code{geoglist}.}
 
+\item{par.reset}{\code{logical}. Should default plotting parameters be restored on function
+exit? Defaults to TRUE to meet CRAN requirements, but can be toggled to allow
+interactive clicking functions to operate, or to allow other features to be
+easily added within the plot axis limits (e.g., with \code{add = TRUE}).}
+
 \item{...}{Other arguments passed to \code{terra::plot()}.}
 }
 \value{
@@ -82,6 +88,6 @@ gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE)
 rasts <- rast_to_geoglist(gal, gal_m)
 rasts <- link_islands(rasts, klink = 1)
 
-plot(regs)
+plot(rasts)
 }
 }
