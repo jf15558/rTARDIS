@@ -105,7 +105,7 @@ Much better! The mask now permits shallow marine circumnavigation of all islands
 To implement a mask, we simply supply the input raster and mask to `rast_to_geoglist()`. In this instance, we will also define the temporal durations of each layer. Note that the input raster cannot contain missing values. If your dataset contains such values, then these should be infilled, potentially with an average of the surrounding cells, or a dummy value, and then excluded using the mask if desired. We will use the land mask from earlier:
 
 ```{r, fig.width=9.5, fig.height=10, dev="svg"}
-rst <- rast_to_geoglist(gal, mask = gal_l, times = c(seq(2.25, 0, -0.5), 0))
+rst <- rast_to_geoglist(gal, mask = gal_l)
 plot(rst)
 ```
 
