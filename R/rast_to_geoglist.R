@@ -88,13 +88,13 @@ rast_to_geoglist <- function(geog, times = NULL, mask = NULL, as.hex = FALSE, he
   #gal <- galapagos()
   #gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T), right = F)
 
-  geog  = cret
-  mask = cret_l
-  as.hex = T
-  times = NULL
-  hex = 2
-  method = "mean"
-  verbose = T
+  #geog  = cret
+  #mask = cret_l
+  #as.hex = T
+  #times = NULL
+  #hex = 2
+  #method = "mean"
+  #verbose = T
 
   # check geography
   if(!exists("geog")) {
