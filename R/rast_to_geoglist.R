@@ -83,7 +83,7 @@
 #' hexes <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
 #' }
 
-rast_to_geoglist <- function(geog, times = NULL, mask = NULL, as.hex = FALSE, hex = "auto", method = "mean", verbose = TRUE, ...) {
+rast_to_geoglist <- function(geog, mask = NULL, times = NULL, as.hex = FALSE, hex = "auto", method = "mean", verbose = TRUE, ...) {
 
   #gal <- galapagos()
   #gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T), right = F)

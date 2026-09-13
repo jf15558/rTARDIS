@@ -6,8 +6,8 @@
 \usage{
 rast_to_geoglist(
   geog,
-  times = NULL,
   mask = NULL,
+  times = NULL,
   as.hex = FALSE,
   hex = "auto",
   method = "mean",
@@ -20,15 +20,15 @@ rast_to_geoglist(
 longitude-latitude projection. Missing values are not permitted and should
 be replaced (e.g. with the average of the surrounding cells, or a dummy value).}
 
-\item{times}{\code{numeric} or \code{NULL}. If the layers do not relate to each other,
-or only a single raster layer is present, then \code{times} can be left as \code{NULL}.
-Otherwise a numeric vector with \code{nlayers(geog) + 1} positive elements,
-expressing the temporal boundaries of each layer as time in the past.}
-
 \item{mask}{\code{SpatRaster} or \code{NULL}. If not \code{NULL}, this will be used to
 designate non-accessible areas in \code{geog}. It must be fully contiguous with
 \code{geog} (i.e., share the same resolution, extent and number of layers) and
 contain only \code{1} (non-masked, accessible) or \code{NA} (masked, non-accessible) values.}
+
+\item{times}{\code{numeric} or \code{NULL}. If the layers do not relate to each other,
+or only a single raster layer is present, then \code{times} can be left as \code{NULL}.
+Otherwise a numeric vector with \code{nlayers(geog) + 1} positive elements,
+expressing the temporal boundaries of each layer as time in the past.}
 
 \item{as.hex}{\code{logical}. Should \code{geog} be resampled to the hexagonal grid
 system defined by Uber's H3 library? Defaults to \code{FALSE}.}
