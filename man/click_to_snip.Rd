@@ -36,7 +36,7 @@ gal <- galapagos()
 gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 
 # make geoglist and add links
-rasts <- rast_to_geoglist(gal, gal_m)
+rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0))
 rasts <- link_islands(rasts)
 
 # click to either side of a link to remove it

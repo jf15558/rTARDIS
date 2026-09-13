@@ -6,6 +6,7 @@
 \usage{
 rast_to_geoglist(
   geog,
+  times = NULL,
   mask = NULL,
   as.hex = FALSE,
   hex = "auto",
@@ -18,6 +19,11 @@ rast_to_geoglist(
 \item{geog}{\code{SpatRaster}. A set of geographic rasters. These must be in
 longitude-latitude projection. Missing values are not permitted and should
 be replaced (e.g. with the average of the surrounding cells, or a dummy value).}
+
+\item{times}{\code{numeric} or \code{NULL}. If the layers do not relate to each other,
+or only a single raster layer is present, then \code{times} can be left as \code{NULL}.
+Otherwise a numeric vector with \code{nlayers(geog) + 1} positive elements,
+expressing the temporal boundaries of each layer as time in the past.}
 
 \item{mask}{\code{SpatRaster} or \code{NULL}. If not \code{NULL}, this will be used to
 designate non-accessible areas in \code{geog}. It must be fully contiguous with
@@ -50,13 +56,16 @@ or a \code{SpatVectorCollection} of hexagonal polygons if resampling was impleme
 \description{
 Convert a set of rasters to the S3 \code{geoglist} object compatible with downstream
 rTARDIS functions. Typically, these rasters will record topography and/or bathymetry
-measured in metres, but could record other geographic properties instead.
-Some downstream functions will also assume that the raster set records the
-geographic area ordered forwards in time (i.e., the first raster in the set
-is the oldest).
+measured in metres, but could record other geographic properties instead. If
+the rasters represent the same area through time, then the first raster in
+the set must be the oldest.
 }
 \details{
-Masking is a key feature of rTARDIS. Often landscapes will contain
+For temporal ordering, the vector need not end in the present (i.e. \code{0}), but
+time must flow from oldest to youngest. Successive pairs of vector elements
+define the temporal extent of each other such that: \verb{t(n) > x >= t(n + 1)}.
+
+Masking is a key feature of \code{rTARDIS}. Often landscapes will contain
 areas which we want to exclude from traversal. This is desirable for two reasons.
 The first is that operations on these landscapes can be spatially constrained
 in a realistic manner (e.g., restricting terrestrial organisms to the land surface,
@@ -80,6 +89,7 @@ function. Weighting is not meaningful for all functions, e.g., \code{"max"}.
 }
 \examples{
 \donttest{
+# load libraries
 library(terra)
 library(rTARDIS)
 
@@ -89,10 +99,10 @@ gal <- galapagos()
 # create a land-sea mask from the archipelago raster set
 gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 
-# create a geoglist with hexagonal resampling
-hexes <- rast_to_geoglist(gal, gal_m, as.hex = TRUE, hex = 6)
+# create a geoglist from a single raster layer
+rasts <- rast_to_geoglist(gal[[1]], gal_m[[1]])
 
-# create a geoglist using rasters directly
-rasts <- rast_to_geoglist(gal, gal_m)
+# create a multi-layer geoglist with hexagonal resampling
+hexes <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
 }
 }

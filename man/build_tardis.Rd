@@ -4,21 +4,14 @@
 \alias{build_tardis}
 \title{build_tardis}
 \usage{
-build_tardis(geog, times = NULL, tlink = 1, rotations = NULL, verbose = TRUE)
+build_tardis(geog, tlink = 1, rotations = NULL, verbose = TRUE)
 }
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{times}{\code{numeric} or \code{NULL}. A  vector with \code{nlayers(geog) + 1} positive
-elements, expressing the temporal boundaries of each layer as time in the past.
-The vector need not end in the present (i.e. \code{0}), but time must flow from
-oldest to youngest. If only a single layer is being analysed, \code{times} can be
-disregarded for convenience, although this may cause problems in some downstream
-functions.}
-
-\item{tlink}{\code{integer}. The linking mode between layers, either \code{1} (forwards-in-time),
-\code{2} (backwards-in-time) or \code{3} (bidirectional). The forwards-in-time case is
-the default.}
+\item{tlink}{\code{integer}. The linking mode between layers if multiple are present,
+either \code{1} (forwards-in-time), \code{2} (backwards-in-time) or \code{3} (bidirectional).
+The forwards-in-time case is the default.}
 
 \item{rotations}{\code{list} or \code{NULL}. By default \code{NULL}, indictating that temporal
 links are spatially constant. Otherwise, a list with \code{nlayers(geog) - 1} elements
@@ -78,18 +71,18 @@ gal <- galapagos()
 gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 
 # create a geoglist with hexagonal resampling and mask the sea
-hexes <- rast_to_geoglist(gal, gal_m, as.hex = TRUE, hex = 6)
+hexes <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
 hexes <- link_islands(hexes)
 
 # build a tardis with hexagonal cells
-htd <- build_tardis(hexes, times = c(seq(2.25, 0, -0.5), 0))
+htd <- build_tardis(hexes)
 
-# create a geoglist in raster format and mask the sea
-rasts <- rast_to_geoglist(gal, gal_m)
+# create a single layer geoglist in raster format and mask the sea
+rasts <- rast_to_geoglist(gal[[1]], gal_m[[1]])
 rasts <- link_islands(rasts)
 
 # build a tardis from raster cells
-rtd <- build_tardis(rasts, times = c(seq(2.25, 0, -0.5), 0))
+rtd <- build_tardis(rasts)
 }
 
 }

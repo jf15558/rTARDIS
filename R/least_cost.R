@@ -33,9 +33,9 @@
 #' gal <- galapagos()
 #' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 #'
-#' rasts <- rast_to_geoglist(gal, gal_m, as.hex = TRUE, hex = 6)
+#' rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
 #' rlink <- link_islands(rasts)
-#' rtd <- build_tardis(rasts, times = c(seq(2.25, 0, -0.5), 0))
+#' rtd <- build_tardis(rasts)
 #' pts <- rbind(c(-89.78873, -1.420627, 2),
 #'              c(-88.70836, -0.2627832, 2))
 #'

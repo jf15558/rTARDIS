@@ -7,15 +7,9 @@
 #' Connections through time can be spatially constant, or variable.
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.
-#' @param times `numeric` or `NULL`. A  vector with `nlayers(geog) + 1` positive
-#' elements, expressing the temporal boundaries of each layer as time in the past.
-#' The vector need not end in the present (i.e. `0`), but time must flow from
-#' oldest to youngest. If only a single layer is being analysed, `times` can be
-#' disregarded for convenience, although this may cause problems in some downstream
-#' functions.
-#' @param tlink `integer`. The linking mode between layers, either `1` (forwards-in-time),
-#' `2` (backwards-in-time) or `3` (bidirectional). The forwards-in-time case is
-#' the default.
+#' @param tlink `integer`. The linking mode between layers if multiple are present,
+#' either `1` (forwards-in-time), `2` (backwards-in-time) or `3` (bidirectional).
+#' The forwards-in-time case is the default.
 #' @param rotations `list` or `NULL`. By default `NULL`, indictating that temporal
 #' links are spatially constant. Otherwise, a list with `nlayers(geog) - 1` elements
 #' recording the shift in cell locations between layers (see @details).
@@ -68,22 +62,22 @@
 #' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 #'
 #' # create a geoglist with hexagonal resampling and mask the sea
-#' hexes <- rast_to_geoglist(gal, gal_m, as.hex = TRUE, hex = 6)
+#' hexes <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
 #' hexes <- link_islands(hexes)
 #'
 #' # build a tardis with hexagonal cells
-#' htd <- build_tardis(hexes, times = c(seq(2.25, 0, -0.5), 0))
+#' htd <- build_tardis(hexes)
 #'
-#' # create a geoglist in raster format and mask the sea
-#' rasts <- rast_to_geoglist(gal, gal_m)
+#' # create a single layer geoglist in raster format and mask the sea
+#' rasts <- rast_to_geoglist(gal[[1]], gal_m[[1]])
 #' rasts <- link_islands(rasts)
 #'
 #' # build a tardis from raster cells
-#' rtd <- build_tardis(rasts, times = c(seq(2.25, 0, -0.5), 0))
+#' rtd <- build_tardis(rasts)
 #' }
 #'
 
-build_tardis <- function(geog, times = NULL, tlink = 1, rotations = NULL, verbose = TRUE) {
+build_tardis <- function(geog, tlink = 1, rotations = NULL, verbose = TRUE) {
 
   #geog = hexes
   #times = c(seq(2.25, 0, -0.5), 0)
@@ -98,15 +92,16 @@ build_tardis <- function(geog, times = NULL, tlink = 1, rotations = NULL, verbos
   } else {
     nlayers <- length(geog$layers)
   }
+
   if(nlayers > 1) {
-    if (!exists("times")) {
-      stop("If there are multiple layers in geog, then times must be specified")
+    if (is.null(geog$tdat)) {
+      stop("If there are multiple layers in geog, then $tdat must be defined")
     }
-    if (!is.numeric(times) | length(times) != nlayers + 1) {
-      stop("Please supply times as a vector of time bin boundaries with n elements in geog$layers + 1")
+    if (!is.numeric(geog$tdat) | length(geog$tdat) != nlayers + 1) {
+      stop("$tdat must be a vector of time bin boundaries with n elements in geog$layers + 1")
     }
-    if (any(diff(times) > 0)) {
-      stop("All elements of times should be positive (i.e. before present) and in descending age order")
+    if (any(diff(geog$tdat) > 0)) {
+      stop("All elements of $tdat should be positive (i.e. before present) and in descending age order")
     }
     if (!is.numeric(tlink) | length(tlink) != 1) {
       stop("tlink should be one of 1 (forward-in-time), 2 (backward-in-time) or 3 (bidirectional")
@@ -259,7 +254,7 @@ build_tardis <- function(geog, times = NULL, tlink = 1, rotations = NULL, verbos
     glinked[[i]] <- edge[complete.cases(edge), ]
   }
 
-  if (!is.null(times)) {
+  if (!is.null(geog$tdat)) {
     for (i in 1:length(rotations)) {
       glinked[[i + 1]][, 1:2] <- glinked[[i + 1]][, 1:2] + (i * geog$gdat[5])
       ob <- rotations[[i]]
@@ -307,7 +302,7 @@ build_tardis <- function(geog, times = NULL, tlink = 1, rotations = NULL, verbos
   nodes <- unique(c(src, dst))
   id <- 0:(length(nodes) - 1)
 
-  out <- list(edges = glinked, gdat = geog$gdat, tdat = times, tlink = tlink,
+  out <- list(edges = glinked, gdat = geog$gdat, tdat = geog$tdat, tlink = tlink,
               tgraph = list(data = NULL, dict = data.frame(ref = nodes, id = id),
                             coords = NULL, nbnode = length(nodes),
                             attrib = list(aux = NULL, cap = NULL, alpha = NULL, beta = NULL),

@@ -74,9 +74,9 @@
 #' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 #'
 #' # create a geoglist and mask the sea
-#' rasts <- rast_to_geoglist(gal, gal_m)
+#' rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0))
 #' rasts <- link_islands(rasts)
-#' rtd <- build_tardis(rasts, times = c(seq(2.25, 0, -0.5), 0))
+#' rtd <- build_tardis(rasts)
 #'
 #' # define a function where all geographic distances are doubled
 #' times_ten <- function(origin, dest) {

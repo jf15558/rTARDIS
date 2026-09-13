@@ -2,10 +2,9 @@
 #'
 #' Convert a set of rasters to the S3 `geoglist` object compatible with downstream
 #' rTARDIS functions. Typically, these rasters will record topography and/or bathymetry
-#' measured in metres, but could record other geographic properties instead.
-#' Some downstream functions will also assume that the raster set records the
-#' geographic area ordered forwards in time (i.e., the first raster in the set
-#' is the oldest).
+#' measured in metres, but could record other geographic properties instead. If
+#' the rasters represent the same area through time, then the first raster in
+#' the set must be the oldest.
 #'
 #' @param geog `SpatRaster`. A set of geographic rasters. These must be in
 #' longitude-latitude projection. Missing values are not permitted and should
@@ -14,6 +13,10 @@
 #' designate non-accessible areas in `geog`. It must be fully contiguous with
 #' `geog` (i.e., share the same resolution, extent and number of layers) and
 #' contain only `1` (non-masked, accessible) or `NA` (masked, non-accessible) values.
+#' @param times `numeric` or `NULL`. If the layers do not relate to each other,
+#' or only a single raster layer is present, then `times` can be left as `NULL`.
+#' Otherwise a numeric vector with `nlayers(geog) + 1` positive elements,
+#' expressing the temporal boundaries of each layer as time in the past.
 #' @param as.hex `logical`. Should `geog` be resampled to the hexagonal grid
 #' system defined by Uber's H3 library? Defaults to `FALSE`.
 #' @param hex `"auto"` or `integer`. The desired H3 resolution to be used for
@@ -34,7 +37,12 @@
 #' @export
 #'
 #' @details
-#' Masking is a key feature of rTARDIS. Often landscapes will contain
+#'
+#' For temporal ordering, the vector need not end in the present (i.e. `0`), but
+#' time must flow from oldest to youngest. Successive pairs of vector elements
+#' define the temporal extent of each other such that: `t(n) > x >= t(n + 1)`.
+#'
+#' Masking is a key feature of `rTARDIS`. Often landscapes will contain
 #' areas which we want to exclude from traversal. This is desirable for two reasons.
 #' The first is that operations on these landscapes can be spatially constrained
 #' in a realistic manner (e.g., restricting terrestrial organisms to the land surface,
@@ -58,6 +66,7 @@
 #'
 #' @examples
 #' \donttest{
+#' # load libraries
 #' library(terra)
 #' library(rTARDIS)
 #'
@@ -67,14 +76,14 @@
 #' # create a land-sea mask from the archipelago raster set
 #' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 #'
-#' # create a geoglist with hexagonal resampling
-#' hexes <- rast_to_geoglist(gal, gal_m, as.hex = TRUE, hex = 6)
+#' # create a geoglist from a single raster layer
+#' rasts <- rast_to_geoglist(gal[[1]], gal_m[[1]])
 #'
-#' # create a geoglist using rasters directly
-#' rasts <- rast_to_geoglist(gal, gal_m)
+#' # create a multi-layer geoglist with hexagonal resampling
+#' hexes <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
 #' }
 
-rast_to_geoglist <- function(geog, mask = NULL, as.hex = FALSE, hex = "auto", method = "mean", verbose = TRUE, ...) {
+rast_to_geoglist <- function(geog, times = NULL, mask = NULL, as.hex = FALSE, hex = "auto", method = "mean", verbose = TRUE, ...) {
 
   #gal <- galapagos()
   #gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T), right = F)
@@ -99,6 +108,16 @@ rast_to_geoglist <- function(geog, mask = NULL, as.hex = FALSE, hex = "auto", me
   crs(geog) <- "EPSG:4326"
   if(any(is.na(geog[]))) {
     stop("NA values present in geog")
+  }
+
+  # check temporal data if supplied
+  if(!is.null(times)) {
+    if (!is.numeric(times) | length(times) != nlyr(geog) + 1) {
+      stop("times must be a vector of time bin boundaries with nlayers(geog) + 1 elements")
+    }
+    if (any(diff(times) > 0)) {
+      stop("All elements of times should be positive (i.e. before present) and in descending age order")
+    }
   }
 
   if(!is.null(mask)) {
@@ -187,10 +206,10 @@ rast_to_geoglist <- function(geog, mask = NULL, as.hex = FALSE, hex = "auto", me
 
       hex_list[[i]] <- baz[,1]
     }
-    out <- list(gdat = c(as.vector(ext(geog)), ncell = length(clist), ncol = NA, hex = hex), layers = svc(hex_list))
+    out <- list(gdat = c(as.vector(ext(geog)), ncell = length(clist), ncol = NA, hex = hex), tdat = times, layers = svc(hex_list))
 
   } else {
-    out <- list(gdat = c(as.vector(ext(geog)), ncell = ncell(geog), ncol = ncol(geog), hex = NA), layers = geog)
+    out <- list(gdat = c(as.vector(ext(geog)), ncell = ncell(geog), ncol = ncol(geog), hex = NA), tdat = times, layers = geog)
   }
   class(out) <- "geoglist"
   return(out)

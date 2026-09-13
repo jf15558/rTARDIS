@@ -26,11 +26,11 @@
 #' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 #'
 #' # create a geoglist in raster format and mask the sea
-#' rasts <- rast_to_geoglist(gal, gal_m)
+#' rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0))
 #' rasts <- link_islands(rasts)
 #'
 #' # build a tardis from raster cells
-#' rtd <- build_tardis(rasts, times = c(seq(2.25, 0, -0.5), 0))
+#' rtd <- build_tardis(rasts)
 #'
 #' # instantiate
 #' rtd <- instantiate_tardis(rtd)

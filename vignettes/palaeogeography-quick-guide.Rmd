@@ -45,15 +45,15 @@ The data is returned as a `RasterArray`, a class from the `via` R package design
 tms <- dem@index
 dem <- dem@stack
 unloadNamespace("via")
-tem
+tms
 ```
 
-```{r, include = F}
+```{r, echo = F}
 tms <- readRDS(system.file("extdata", "idm.RData", package = "rTARDIS"))
 tms
 ```
 
-If we examine `tem`, we can see it contains 113 elements, with each element name denoting the age of each raster layer. These ages are also present in the raster layer names themselves (000, 005, 010 ect.). We can select any contiguous subset of these layers to use with `rTARDIS`. Indeed, the `cretaceous` data set in the package is just the time layers for 115 and 110 million years ago, taken from `chronosphere`.
+If we examine `tms`, we can see it contains 113 elements, with each element name denoting the age of each raster layer. These ages are also present in the raster layer names themselves (000, 005, 010 ect.). We can select any contiguous subset of these layers to use with `rTARDIS`. Indeed, the `cretaceous` data set in the package is just the time layers for 115 and 110 million years ago, taken from `chronosphere`.
 
 For this vignette, we will extract 4 time slices for the Devonian from the `chronosphere` data set, mask those rasters to the land surface, and create a `geoglist` with hexagonal re-gridding to improve representation of geographic space at the poles:
 
@@ -65,28 +65,30 @@ dvn <- dem[[78:75]]
 dvn_l <- classify(dvn, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T), right = F)
 
 # convert to geoglist
-hexes <- rast_to_geoglist(dvn, dvn_l, as.hex = T, hex = 3)
+hexes <- rast_to_geoglist(dvn, dvn_l, times = c(387.5, 382.5, 377.5, 372.5, 367.5), as.hex = T, hex = 3)
 
 # plot
 plot(hexes, 2)
 ```
 
-```{r, echo=F, fig.width=9.5, fig.height=4.5, dev="svg"}
+```{r, include=F}
 dvn <- readRDS(system.file("extdata", "rdm.RData", package = "rTARDIS"))
 
 # create the land-sea mask
 dvn_l <- classify(dvn, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T), right = F)
 
 # convert to geoglist
-hexes <- rast_to_geoglist(dvn, dvn_l, as.hex = T, hex = 3)
+hexes <- rast_to_geoglist(dvn, dvn_l, times = c(387.5, 382.5, 377.5, 372.5, 367.5), as.hex = T, hex = 3)
+```
 
+```{r, echo=F, fig.width=9.5, fig.height=4.5, dev="svg"}
 # plot
 plot(hexes, 2)
 ```
 
 There are many disconnected islands in this landscape. If we want to be able to move between them, we will need to add links between those islands. We can do this very simply by adding single connections between islands until there is some possible route between all the islands:
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 # link islands
 hexes <- link_islands(hexes, klink = 1)
 
@@ -95,11 +97,14 @@ plot(hexes, 2)
 ```
 
 ```{r, echo=F, fig.width=9.5, fig.height=4.5, dev="svg"}
+# link islands
+hexes <- link_islands(hexes, klink = 1)
+
 # plot
 plot(hexes, 2)
 ```
 
-This is quite a conservative linking scheme and others are available. You can take a look at the vignette *Building Geographic Spaces* for more general guidance.\
+This is a simple, conservative linking scheme and others are available. You can take a look at the vignette *Building Geographic Spaces* for more general guidance.\
 
 ## Plate tectonic drift
 
@@ -109,14 +114,11 @@ Quite a specific data structure is requiree. It must be a list with `nlayers - 1
 
 In practice, these lists may be quite complicated to construct by hand, particularly for plate tectonic rotation models. `rTARDIS` provides a function to automate this procedure called `get_rotations()`. This takes a `geoglist`, its accompanying time vector and a plate rotation model name as its principle arguments, then uses the `palaeoverse` R package function `palaeorotate()` to calculate rotations between cells in each successive pair of geoglist layers. The user is directed to the documentation for `palaeorotate()` for more detailed information on what plate rotation models are available. Crucially, however, this should match the palaeogeographic data used to construct the `geoglist`.
 
-We will implement this workflow below. The Devonian dataset contains 4 time layers, based on the PALEOMAP plate rotation model, at 5 million-year intervals. Firstly, we will resample to hexagons, both to better represent global geography and to speed up downstream function runs. We will derive rotations for the `geoglist`, using a corresponding vector of interval times. Note that the function also requires that times are ordered forwards in time:
+We will implement this workflow below. The Devonian dataset contains 4 time layers, based on the PALEOMAP plate rotation model, at 5 million-year intervals. Firstly, we will resample to hexagons, both to better represent global geography and to speed up downstream function runs. We will derive rotations for the `geoglist`, using its vector of interval times. Note that the function also requires that times are ordered forwards in time:
 
 ```{r}
-# construct our time vector
-tms <- c(387.5, 382.5, 377.5, 372.5, 367.5)
-
 # get rotations for the PALEOMAP model
-rots <- get_rotations(hexes, tms, "PALEOMAP")
+rots <- get_rotations(hexes, hexes$tdat, "PALEOMAP")
 
 # interrogate the output
 length(rots)
@@ -127,7 +129,7 @@ As expected, `rots` contains three list elements, for the four layers in `hexes`
 
 ```{r}
 # build tardis
-htd <- build_tardis(hexes, tms, rotations = rots)
+htd <- build_tardis(hexes, rotations = rots)
 ```
 
 We now have a temporally varying palaeogeography model which we can analyse using other functions from `rTARDIS`. These are covered by other vignettes.\
