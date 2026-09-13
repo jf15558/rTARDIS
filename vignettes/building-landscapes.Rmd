@@ -27,7 +27,7 @@ The structure of a `geoglist` is deliberately simple to maintain interoperabilit
 
 ```{r}
 # convert a toy dataset to a geoglist and view its structure
-rasts <- rast_to_geoglist(galapagos())
+rasts <- rast_to_geoglist(galapagos(), times = c(seq(2.25, 0, -0.5), 0))
 rasts
 ```
 
