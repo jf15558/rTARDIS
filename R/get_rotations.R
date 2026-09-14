@@ -33,7 +33,7 @@
 #' (~111 km).
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(terra)
 #' library(rTARDIS)
 #'

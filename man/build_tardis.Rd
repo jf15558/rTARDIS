@@ -9,11 +9,11 @@ build_tardis(geog, tlink = 1, rotations = NULL, verbose = TRUE)
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{tlink}{\code{integer}. The linking mode between layers if multiple are present,
-either \code{1} (forwards-in-time), \code{2} (backwards-in-time) or \code{3} (bidirectional).
-The forwards-in-time case is the default.}
+\item{tlink}{\code{integer}. The linking mode between \code{geoglist} layers if multiple
+are present: either \code{1} (forwards-in-time, default), \code{2} (backwards-in-time)
+or \code{3} (bidirectional).}
 
-\item{rotations}{\code{list} or \code{NULL}. By default \code{NULL}, indictating that temporal
+\item{rotations}{\code{list} or \code{NULL}. By default \code{NULL}, indicating that temporal
 links are spatially constant. Otherwise, a list with \code{nlayers(geog) - 1} elements
 recording the shift in cell locations between layers (see @details).}
 
@@ -27,11 +27,10 @@ the spatial, temporal and linkage properties of the graph for internal use by
 downstream rTARDIS functions.
 }
 \description{
-Generate a tardis graph from a geoglist, representing landscape connectivity
-across space and through time. Weights in the graph represent the geographic
-distances between cells. As such, the function assumes that the input
-\code{geoglist} contains topographic and/or bathymetric data measured in metres.
-Connections through time can be spatially constant, or variable.
+Generate a tardis graph from a geoglist, where graph weights represent the
+geographic distances between cells. As such, the function assumes that the
+input \code{geoglist} contains topographic and/or bathymetric data measured in
+metres.
 }
 \details{
 The resulting graph can be thought of as a 3D lattice. Graph weights for

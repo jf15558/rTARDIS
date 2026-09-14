@@ -31,7 +31,7 @@ library(rTARDIS)
 gal <- cretaceous()
 gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 
-rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0))
+rasts <- rast_to_geoglist(gal, gal_m, times = c(112.5, 110, 107.5))
 rasts <- link_islands(rasts, klink = 1)
 
 regs <- project_geoglist(geog = rasts, crs = "+proj=eqearth")

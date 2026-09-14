@@ -1,16 +1,15 @@
 #' build_tardis
 #'
-#' Generate a tardis graph from a geoglist, representing landscape connectivity
-#' across space and through time. Weights in the graph represent the geographic
-#' distances between cells. As such, the function assumes that the input
-#' `geoglist` contains topographic and/or bathymetric data measured in metres.
-#' Connections through time can be spatially constant, or variable.
+#' Generate a tardis graph from a geoglist, where graph weights represent the
+#' geographic distances between cells. As such, the function assumes that the
+#' input `geoglist` contains topographic and/or bathymetric data measured in
+#' metres.
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.
-#' @param tlink `integer`. The linking mode between layers if multiple are present,
-#' either `1` (forwards-in-time), `2` (backwards-in-time) or `3` (bidirectional).
-#' The forwards-in-time case is the default.
-#' @param rotations `list` or `NULL`. By default `NULL`, indictating that temporal
+#' @param tlink `integer`. The linking mode between `geoglist` layers if multiple
+#' are present: either `1` (forwards-in-time, default), `2` (backwards-in-time)
+#' or `3` (bidirectional).
+#' @param rotations `list` or `NULL`. By default `NULL`, indicating that temporal
 #' links are spatially constant. Otherwise, a list with `nlayers(geog) - 1` elements
 #' recording the shift in cell locations between layers (see @details).
 #' @param verbose `logical`. Should function progress be to the user? This may

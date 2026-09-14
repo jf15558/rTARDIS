@@ -46,7 +46,7 @@ models of topography and bathymetry rarely if ever exceed 1 degree resolution
 (~111 km).
 }
 \examples{
-\donttest{
+\dontrun{
 library(terra)
 library(rTARDIS)
 
