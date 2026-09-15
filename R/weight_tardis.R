@@ -1,20 +1,22 @@
 #' weight_tardis
 #'
 #' Generate a custom weighting scheme for a `tardis` graph This may be based
-#' on the properties in `tardis` itself or derived from `geoglist` objects recording
-#' alternative properties of a landscape.
+#' on the properties in `tardis` itself or derived from `geoglist` objects
+#' recording alternative properties of the landscape.
 #'
 #' @param tardis `tardis`. The output of `build_tardis()`.
-#' @param name `character`. The name for weighting scheme to be generated. The names 'cell', 'type', 'layer', 'bearing',
-#' 'hdist', 'vdist' and gdist' are reserved.
-#' @param vars `list`. A named list of `geoglist` objects, each recording an alternative
-#' geographic property of the landscape represented in `tardis`. As such, these
-#' must bear the same resolution, extent, number of layers and layer order as the
-#' `geoglist` used to create `tardis`. The names 'cell', 'type', 'layer', 'bearing',
-#' 'hdist', 'vdist' and gdist' are reserved.
+#' @param name `character`. The name for weighting scheme to be generated.
+#' The names `"cell"`, `"type"`, `"layer"`, `"bearing"`, `"hdist"`, `"vdist"`
+#' and `"gdist"` are reserved for internal use.
+#' @param vars `list`. A named list of `geoglist` objects, each recording an
+#' alternative geographic property of the landscape represented in `tardis`. As
+#' such, these must bear the same resolution, extent, number of layers and layer
+#' order as the `geoglist` used to create `tardis`. The list names `"cell"`,
+#' `"type"`, `"layer"`, `"bearing"`, `"hdist"`, `"vdist"` and `"gdist"` are
+#' reserved for internal use.
 #' @param wfun `function(origin, dest)` A function to calculate the
-#' cost of traversal for the edges in each graph layer. See @details for the required
-#' function signature.
+#' cost of traversal for the edges in each graph layer. See @details for the
+#' required function signature.
 #' @param verbose `logical`. Should function progress be to the user?
 #' @return The input `tardis` object with the new weighting scheme added to
 #' `tardis$edges` under the column name given in `weights`.
@@ -23,33 +25,34 @@
 #'
 #' @details
 #' The `weight_tardis` function is heavily inspired by the weighting function
-#' used in the `gen3sis` R package by Oskar Hagen.
+#' used in the `gen3sis` R package by Oskar Hagen. This function only affects
+#' weights for links within landscape layers. Temporal link weights are always
+#' zero and cannot be altered using this function.
 #'
-#' Internally, `weight_tardis()` generates two `data.frames`, `origin` and `dest`.
-#' These minimallt record the core properties for each pair of origin and destination cells
-#' comprising the edges in a graph layer: the cell ID, the type of edge it forms,
-#' the horizontal distance and bearing to its partner cell in metres and degrees respectively,
-#' the vertical distance to its partner cell in metres, and the time layer in which that cell resides. Horizontal distance will
-#' be the same in `origin` and `dest`, but the vertical distance will be positive
-#' or negative depending on whether elevation is gained or lost along an edge.
-#'
-#' If `vars` are supplied, then subsequent columns in both data.frames record the
-#' cell characteristics in each `geoglist`. The columns in these data.frames can
-#' then be used to calculate weights with a custom, user-supplied weighting function.
-#' If the tardis graph contains mask links, these can be weighted differently if
-#' desired.
+#' Internally, `weight_tardis()` generates two `data.frames`, `origin` and
+#' `dest`. These minimally record the core properties for each pair of origin
+#' and destination cells comprising the edges in a graph layer: the cell ID
+#' (`$cell`), the type of edge it forms (`$type`), its time layer (`$layer`),
+#' the bearing (`$bearing`) and horizontal distance to its partner cell in
+#' degrees and metresrespectively, the vertical distance (`$vdist`) to its
+#' partner cell in metres, and the total geographic distance (`$gdist`) based on
+#' those horizontal and vertical values. Horizontal distance will be the same in
+#' `origin` and `dest`, but the vertical distance will be positive or negative
+#' depending on whether elevation is gained or lost along an edge. If `vars` is
+#' supplied, then subsequent columns in `origin` and `dest` record the cell
+#' characteristics in each `geoglist` in `vars`.
 #'
 #' The core of the weighting function can have as many steps as the
 #' user likes, but must consist of vectorised calculations that call on the
-#' columns in the data.frames `origin` and `dest`. The argument default exemplifies
+#' column names in `origin` and `dest`. The argument default exemplifies
 #' this and will return identical geographic distances to those in within x,
-#' using Pythagoras's theorem on the horizontal (origin$hdist) and vertical
-#' (origin$vdist) intercell distances. The user function can use one, the other,
-#' or any combination of origin and dest columns in any order.
-#'
-#' Weights are iteratively calculated for each landscape layer in tardis, with
-#' the index of the landscape layer available in each data.frame to allow the
-#' user to design weighting rules that can vary through time.
+#' using Pythagoras's theorem on the horizontal (`origin$hdist`) and vertical
+#' (`origin$vdist`) intercell distances. The user function can use any
+#' combination of `origin` and `dest` columns in any order. Weights are
+#' iteratively calculated for each landscape layer in tardis, with
+#' landscape layer column enabling weighting rules to vary through time.
+#' Similarly, the `$type` can be used to weight mask links differently to links
+#' in unmasked space.
 #'
 #' Crucially, all returned weights should be finite and >= 0, as negative
 #' weights are not permitted for downstream functions. `NA` values are permitted
@@ -73,7 +76,7 @@
 #' # create a land-sea mask from the archipelago raster set
 #' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 #'
-#' # create a geoglist and mask the sea
+#' # create a geoglist, masking the sea
 #' rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0))
 #' rasts <- link_islands(rasts)
 #' rtd <- build_tardis(rasts)

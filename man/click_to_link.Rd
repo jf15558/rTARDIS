@@ -2,14 +2,14 @@
 % Please edit documentation in R/click_to_link.R
 \name{click_to_link}
 \alias{click_to_link}
-\title{click_to_snip}
+\title{click_to_link}
 \usage{
 click_to_link(geog, layer = 1, nlinks = 1, ...)
 }
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{layer}{\code{numeric}. The layer in the geoglist to be plotted, along with
+\item{layer}{\code{numeric}. The layer in the \code{geoglist} to be plotted, along with
 its links.}
 
 \item{nlinks}{\code{numeric}. The number of links you wish to generate.
@@ -21,9 +21,9 @@ Simply rerun the function if you need to add more lines.}
 The input \code{geoglist} with added links.
 }
 \description{
-Interactively add links to a geoglist by clicking their start and end points
-in the plotting window. Clicked locations are automatically resolved to the
-nearest edge cell in the geoglist.
+Interactively add links to a \code{geoglist} by clicking their start and end
+points in the plotting window. Clicked locations are automatically resolved
+to the nearest cell bordering masked space in the \code{geoglist}.
 }
 \examples{
 \donttest{

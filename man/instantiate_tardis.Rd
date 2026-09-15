@@ -7,22 +7,23 @@
 instantiate_tardis(tardis, weights = "gdist")
 }
 \arguments{
-\item{tardis}{\code{tardis}. The output of \code{build_tardis()} or \code{weight_tardis()}.}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
 
-\item{weights}{\code{character}. The name of the weighting scheme column in
-\code{tardis$edges} to use. By default these are true geographic distances
-(\code{"gdist"}). Alternatively, the name of a weighting scheme added to the tardis
-object with \code{weight_tardis()}.}
+\item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
+use for distance calculation. By default these are true geographic distances
+(\code{"gdist"}). Alternatively, the name of another weighting scheme added to
+\code{tardis} using \code{weight_tardis()}.}
 }
 \value{
-. The input \code{tardis} object with the additional element, \code{tgraph}.
+. The input \code{tardis} object with the additional element, \verb{$tgraph}.
 }
 \description{
-Take a tardis object and generate a graph compatible with functions from the
-\code{rcppRouting} package. This function is primarily called internally by other
-rTARDIS package functions, but it may be useful for the user to be able to
-directly interact with this graph themselves, or to supply a pre-instantiated
-\code{tardis} object within a loop to avoid repeated calls to this function.
+Take a \code{tardis} object and generate a graph compatible with functions from
+the \code{rcppRouting} package. This function is primarily called internally by
+other \code{rTARDIS} package functions, but it may be useful for the user to be
+able to directly interact with this graph themselves, or to supply a
+pre-instantiated \code{tardis} object within a loop to avoid repeated calls to
+this function.
 }
 \examples{
 \donttest{

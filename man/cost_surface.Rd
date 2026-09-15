@@ -7,24 +7,26 @@
 cost_surface(tardis, weights = "gdist", exclude.links = FALSE, verbose = TRUE)
 }
 \arguments{
-\item{tardis}{\code{tardis}. An object of class 'tardis'}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis}.}
 
-\item{weights}{\code{character}. A character string denoting the weighting scheme to visualise.
-By default these are true geographic distances (gdist). Alternatively, the
-name of a weighting scheme added to the tardis object with weight_tardis().}
+\item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
+use for distance calculation. By default these are true geographic distances
+(\code{"gdist"}). Alternatively, the name of another weighting scheme added to
+\code{tardis} using \code{weight_tardis()}.}
 
-\item{exclude.links}{\code{logical}. Should the weights of island links be excluded from the cost calculation? Defaults to \code{FALSE}.}
+\item{exclude.links}{\code{logical}. Should the weights of island links be
+excluded from the cost calculation? Defaults to \code{FALSE}.}
 
-\item{verbose}{\code{logical}. A logical indicating whether function progress should be
-reported to the user.}
+\item{verbose}{\code{logical}. Should function progress be reported to the user?}
 }
 \value{
-A geoglist with layers corresponding to the original landscape
-layers in the graph, and cell values calculated as the mean of its inbound edge weights.
+A \code{geoglist} with layers corresponding to the landscape layers in the
+graph, and cell values calculated as the mean of their inbound edge weights.
 }
 \description{
-Visualise the weighting scheme for the layers in a tardis object. Weights are
-calculated as the mean of inbound edges for a given cell.
+Visualise the weighting scheme for the layers in a \code{tardis} object. Weights
+are calculated as the mean of inbound edges for a given cell (i.e., the
+average cost to reach that cell from its neighbours).
 }
 \examples{
 \donttest{

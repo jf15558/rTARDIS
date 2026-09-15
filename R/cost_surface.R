@@ -1,17 +1,19 @@
 #' cost_surface
 #'
-#' Visualise the weighting scheme for the layers in a tardis object. Weights are
-#' calculated as the mean of inbound edges for a given cell.
+#' Visualise the weighting scheme for the layers in a `tardis` object. Weights
+#' are calculated as the mean of inbound edges for a given cell (i.e., the
+#' average cost to reach that cell from its neighbours).
 #'
-#' @param tardis `tardis`. An object of class 'tardis'
-#' @param weights `character`. A character string denoting the weighting scheme to visualise.
-#' By default these are true geographic distances (gdist). Alternatively, the
-#' name of a weighting scheme added to the tardis object with weight_tardis().
-#' @param exclude.links `logical`. Should the weights of island links be excluded from the cost calculation? Defaults to `FALSE`.
-#' @param verbose `logical`. A logical indicating whether function progress should be
-#' reported to the user.
-#' @return A geoglist with layers corresponding to the original landscape
-#' layers in the graph, and cell values calculated as the mean of its inbound edge weights.
+#' @param tardis `tardis`. The output of `build_tardis`.
+#' @param weights `character`. The name of the weighting scheme in `tardis` to
+#' use for distance calculation. By default these are true geographic distances
+#' (`"gdist"`). Alternatively, the name of another weighting scheme added to
+#' `tardis` using `weight_tardis()`.
+#' @param exclude.links `logical`. Should the weights of island links be
+#' excluded from the cost calculation? Defaults to `FALSE`.
+#' @param verbose `logical`. Should function progress be reported to the user?
+#' @return A `geoglist` with layers corresponding to the landscape layers in the
+#' graph, and cell values calculated as the mean of their inbound edge weights.
 #' @import terra sf h3jsr
 #' @export
 #'

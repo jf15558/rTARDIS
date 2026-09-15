@@ -1,21 +1,23 @@
 #' point_check
 #'
-#' Check a set of coordinates to determine whether they fall within an accessible
-#' cell within a tardis object. Discrepant points are adjusted to their nearest
-#' accessible cell based on great circle distance.
+#' Check a set of coordinates to determine whether they fall within an
+#' accessible cell within a `tardis` object. Discrepant points are adjusted to
+#' their nearest accessible cell based on great circle distance.
 #'
 #' @param tardis `tardis`. The output of `build_tardis()` or `weight_tardis()`.
 #' @param points `matrix` or `data.frame`. A two or three column matrix or
-#' data.frame of coordinates. Column ordering is assumed to be longitude
+#' `data.frame` of coordinates. Column ordering is assumed to be longitude
 #' (decimal degrees), latitude (decimal degrees) and time (positive, time before
-#' present). The time column is only required if `tardis` contains multiple layers.
-#' @param max.dist `numeric`. The maximum distance in metres permitted for adjusting
-#' points to accessible cells. Points with adjustments above this threshold will
-#' be discarded. `NULL` by default, meaning that no points are discarded.
+#' present). The time column is only required if `tardis` contains multiple
+#' layers.
+#' @param max.dist `numeric`. The maximum distance in metres permitted for
+#' adjusting points to accessible cells. Points with adjustments above this
+#' threshold will be discarded. `NULL` by default, meaning that no points are
+#' discarded.
 #' @param verbose `logical` Should function progress be reported to the user?
 #' @return A `SpatVector` of points, recording which input point they correspond
-#' to in case points were discarded (`$feature`), the id of the tardis cell they
-#' fall into (`$cell`), the layer to which they belong (`$layer`) and their
+#' to in case points were discarded (`$feature`), the ID of the `tardis` cell
+#' they fall into (`$cell`), the layer to which they belong (`$layer`) and their
 #' adjusted distance (`$adj`).
 #' @import geosphere terra sf h3jsr
 #' @export

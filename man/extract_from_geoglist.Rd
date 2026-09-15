@@ -9,25 +9,25 @@ extract_from_geoglist(geog, geom, layer = NULL)
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{geom}{\code{SpatVector}. A SpatVector geometry which
-will be used to extract values from geog.}
+\item{geom}{\code{SpatVector}. The geometry or geometries which will be used to
+extract values from \code{geog}.}
 
-\item{layer}{\code{numeric}. If not NULL, then an integer specifying from which
-layer in \code{geog} values are to be extracted. This argument is intended for
-use with user-designed \code{geom} objects which do not already contain layer
-assigments, unlike returns from other rTARDIS functions.}
+\item{layer}{\code{numeric}. If not \code{NULL}, then an integer specifying the layer
+in \code{geog} from which values are to be extracted. This argument is primarily
+intended for use with user-designed \code{geom} objects which do not contain layer
+assignments, unlike returns from other \code{rTARDIS} functions.}
 }
 \value{
-\code{SpatVector}. A SpatVector of points
-corresponding to the centroids of all cells in geog intersected by an input
-geometry (denoted by \verb{$feature}) in its specified layer (\verb{$layer}), and the
-value present at that point (\verb{$value}).
+\code{SpatVector}. A \code{SpatVector} of points corresponding to the centroids
+of all cells in \code{geog} intersected by each geometry in \code{geom} (denoted by
+\verb{$feature}), the layers of each intersected cell (\verb{$layer}), and the cell
+values (\verb{$value}).
 }
 \description{
-Extract values from the layers in a geoglist object, using an sf geometry
-collection. This geometry is expected to be from another TARDIS function
-(e.g, \code{least_cost()}, \code{isochrone()}, ect), but could also be a user-designed
-geometry.
+Extract values from the layers in a \code{geoglist} using a terra R package
+\code{SpatVector} containing one or several geometries. This will typically come
+from another \code{rTARDIS} function (e.g, \code{least_cost()}, \code{isochrone()}, ect),
+but could instead be user-designed.
 }
 \examples{
 \donttest{

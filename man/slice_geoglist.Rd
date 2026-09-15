@@ -4,19 +4,27 @@
 \alias{slice_geoglist}
 \title{slice_geoglist}
 \usage{
-slice_geoglist(geog, layers)
+slice_geoglist(geog, times = NULL, layers = NULL)
 }
 \arguments{
-\item{geog}{\code{geoglist}. A geoglist object, with or without links.}
+\item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{layers}{\code{numeric}. The layer index to extract or a range.}
+\item{times}{\code{numeric}. A vector of numbers denoting the desired times of
+layers to subset from \code{geog}. One of \code{times} or \code{layers} must be specified.
+Times corresponding to duplicated layer numbers will be ignored.}
+
+\item{layers}{\code{numeric}. A vector of numbers denoting the layers to subset
+from \code{geog}. One of \code{times} or \code{layers} must be specified. Duplicated layer
+numbers will be ignored.}
 }
 \value{
-\code{geoglist}. A subsetted geoglist.
+A \code{geoglist} of the requested subset of layers.
 }
 \description{
-Extract layers in a geoglist to their own geoglist, along with any links if present.
-Unlike with \code{slice_tardis()}, discontinuous ranges of layers can be selected.
+Subset a \code{geoglist} to a given set of layers, along with any links if
+present. If temporal. A discontiguous set of layers can be selected, unlike
+with \code{slice_tardis()}, but any temporal information will be discarded if
+so.
 }
 \examples{
 \donttest{

@@ -4,58 +4,55 @@
 \alias{link_islands}
 \title{link_islands}
 \usage{
-link_islands(geog, klink = NULL, verbose = TRUE)
+link_islands(geog, klink = NULL, replace = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{klink}{\code{integer} or \code{NULL}. The k-nearest neighbours to be linked for
-each island. Defaults to \code{NULL}, in which case the Voronoi neighbourhood of
-each island will determine its k-nearest neighbours automatically (see @details).}
+\item{klink}{\code{integer} or \code{NULL}. The k-nearest Voronoi neighbours to be
+linked for each island. Defaults to \code{NULL}, in which case the full Voronoi
+neighbourhood of each island will be linked.}
 
-\item{verbose}{\code{logical}. Should function progress be to the user? This may
-be useful when dealing with large rasters (high resolution and/or many layers).}
+\item{replace}{\code{logical}. Should any existing links in \code{geog} be replaced?
+Defaults to \code{FALSE}, in which case links are appended to any existing ones.}
+
+\item{verbose}{\code{logical}. Should function progress be to the user?}
 }
 \value{
-A \code{geoglist} as supplied in \code{geog} with the additional element, \code{links}.
-This contains an \verb{sf data.frame} of linestrings representing the island links,
-recording their start and end cell IDs, the landscape layer to which they belong
-and their lengths in metres. If links were already generated using another
-function from TARDIS, they are appended to the existing element \code{links} and
-duplicate entries removed. If no landscape layers contained islands, then
-\code{geog} is returned without this additional slot.
+The input \code{geoglist} with the \verb{$links} element filled with a
+\code{SpatVector} of lines representing the island links, and recording their
+start (\verb{$srt}) and end (\verb{$end}) cell IDs, the landscape layer to which they
+belong (\verb{$layer}) and their lengths in metres (\verb{$distance}). If no landscape
+layers contained islands, then \verb{$links} will remain \code{NULL}.
 }
 \description{
-Detect islands in the layers in a \code{geoglist} and calculate closest bridging
-points to maintain connectivity between these isolated regions.
+Calculate links between the nearest cells of isolated regions within a
+\code{geoglist} layer, based on their Voronoi adjacency.
 }
 \details{
-Like masking, island linkage is another key feature of rTARDIS.
-Landscapes may contain geographically isolated regions, but practically we
-may still want to permit movement between them without considering the
-structure of the intervening space. This function assumes that movement across
-masked space should occur along the geographically shortest routes between islands.
+Linkage is a key feature of \code{rTARDIS} to permit movement otherwise
+disconnected regions in geographic space. Linkage between islands is based on
+their Voronoi neighbourhoods (see \code{domains()}). This can be thought of as
+detecting line-of-site between all islands in a layer, then ranking those
+line-of-site neighbours by the shortest distances required to reach them.
+Links which intersect other islands or their Voronoi neighbourhoods are
+considered invalid and discarded internally. The number of links between
+neighbours is then determined by \code{klink}.
 
-Linkage between islands is based on their Voronoi neighbourhoods. This can
-be thought of as detecting each island within the line-of-site of every
-other island, then ranking those line-of-site neighbours by the shortest
-distances required to reach them. Links which intersect other islands or their
-Voronoi neighbourhoods are considered invalid and discarded internally. The
-number of links between neighbours is then determined by \code{klink}.
+For \code{klink = 1}, the returned links will form a minimum spanning tree,
+ensuring that every island can be reached by some route from any other
+island. This is a conservative method of linkage and islands may instead have
+many neighbours of similar distances. Setting \code{klink} to higher values will
+therefore create an increasingly densely connected neighbourhood of islands.
+\code{klink} can be set as high as the user likes, but the Voronoi neighbourhood
+of an island will set the maximum number of links which the function will
+return.
 
-For klink = 1, the returned links will form a minimum spanning tree, ensuring
-that every island can be reached by some route from any other island. This is
-a conservative method of linkage and islands may instead have many neighbours
-of similar distances. Setting \code{klink} to higher values will therefore create
-an increasingly densely connected neighbourhood of islands. \code{klink} can be set
-as high as the user likes, but the Voronoid neighbourhood of an island will set
-the maximum number of links which the function will return.
-
-Currently, Voronoi neighbourhoods are calculated using \code{terra::voronoi()}. While
-terra generally uses spherical geometry, this function appears to be a rare exception
-where spherical geometry is not yet supported. As such, Voronoi neighbourhoods
-on global scales are approximate, although they still appear to return reasonable
-results.
+Currently, Voronoi neighbourhoods are calculated using \code{terra::voronoi()}.
+While \code{terra} generally uses spherical geometry, this function appears to be
+a rare exception where spherical geometry is not yet supported. As such,
+Voronoi neighbourhoods on global scales are approximate, although they still
+appear to return reasonable results.
 }
 \examples{
 \donttest{

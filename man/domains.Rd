@@ -11,11 +11,11 @@ domains(geog)
 }
 \value{
 A \code{SpatVectorCollection} with each element containing the Voronoi
-polygons for the corresponding layer in the input geoglist.
+polygons for the corresponding layer in the input \code{geoglist}.
 }
 \description{
-Calculate Voronoi polygons around islands in a geoglist. These 'domains' are
-the basis for how \code{link_islands} determines connections across masked areas
+Calculate Voronoi domains around islands in a \code{geoglist}. These polygonal
+domains are the basis for how connections are determined across masked areas.
 }
 \examples{
 \donttest{

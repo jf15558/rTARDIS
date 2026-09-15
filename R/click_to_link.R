@@ -1,11 +1,11 @@
-#' click_to_snip
+#' click_to_link
 #'
-#' Interactively add links to a geoglist by clicking their start and end points
-#' in the plotting window. Clicked locations are automatically resolved to the
-#' nearest edge cell in the geoglist.
+#' Interactively add links to a `geoglist` by clicking their start and end
+#' points in the plotting window. Clicked locations are automatically resolved
+#' to the nearest cell bordering masked space in the `geoglist`.
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.
-#' @param layer `numeric`. The layer in the geoglist to be plotted, along with
+#' @param layer `numeric`. The layer in the `geoglist` to be plotted, along with
 #' its links.
 #' @param nlinks `numeric`. The number of links you wish to generate.
 #' Simply rerun the function if you need to add more lines.

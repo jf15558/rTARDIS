@@ -1,68 +1,68 @@
 #' rast_to_geoglist
 #'
-#' Convert a set of rasters to the S3 `geoglist` object compatible with downstream
-#' rTARDIS functions. Typically, these rasters will record topography and/or bathymetry
-#' measured in metres, but could record other geographic properties instead. If
-#' the rasters represent the same area through time, then the first raster in
-#' the set must be the oldest.
+#' Convert a set of rasters to an S3 class `geoglist` object compatible with
+#' downstream `rTARDIS` functions. Typically, these rasters will record
+#' topography and/or bathymetry measured in metres, but could record other
+#' geographic properties instead. If the rasters represent the same area through
+#' time, then the first raster in the set must be the oldest.
 #'
 #' @param geog `SpatRaster`. A set of geographic rasters. These must be in
 #' longitude-latitude projection. Missing values are not permitted and should
-#' be replaced (e.g. with the average of the surrounding cells, or a dummy value).
+#' be replaced (e.g. with the average of the surrounding cells, or a dummy
+#' value).
 #' @param mask `SpatRaster` or `NULL`. If not `NULL`, this will be used to
 #' designate non-accessible areas in `geog`. It must be fully contiguous with
 #' `geog` (i.e., share the same resolution, extent and number of layers) and
-#' contain only `1` (non-masked, accessible) or `NA` (masked, non-accessible) values.
+#' contain only `1` (non-masked, accessible) or `NA` (masked, non-accessible)
+#' values.
 #' @param times `numeric` or `NULL`. If the layers do not relate to each other,
-#' or only a single raster layer is present, then `times` can be left as `NULL`.
-#' Otherwise a numeric vector with `nlayers(geog) + 1` positive elements,
-#' expressing the temporal boundaries of each layer as time in the past.
+#' temporally, or only a single raster layer is present, then `times` can be
+#' left as `NULL`. Otherwise a numeric vector with `nlayers(geog) + 1` positive
+#' elements, with successive pairs expressing the temporal extent of each layer
+#' as time in the past, such that: `t(n) > x >= t(n + 1)`. For temporal
+#' ordering, the vector need not end in the present (i.e. `0`), but time must
+#' flow from oldest to youngest.
 #' @param as.hex `logical`. Should `geog` be resampled to the hexagonal grid
 #' system defined by Uber's H3 library? Defaults to `FALSE`.
 #' @param hex `"auto"` or `integer`. The desired H3 resolution to be used for
 #' resampling rasters. Defaults to `"auto"`, resulting in the function selecting
-#' the H3 resolution closest to the resolution of `geog`. Otherwise an integer in
-#' the range 1 - 15.
-#' @param method `character`. The function to be used for resampling the raster grid.
-#' This must be compatible with `exactextractr::exact_extract()`.
+#' the H3 resolution closest to the resolution of `geog`. Otherwise an integer
+#' in the range 1 - 15.
+#' @param method `character`. The function to be used for resampling the raster
+#' grid. This must be compatible with `exactextractr::exact_extract()`.
 #' Defaults to `"mean"`.
-#' @param verbose `logical`. Should function progress should be reported to the user?
-#' @param ... Additional arguments passed internally to `exactextractr::exact_extract()`
-#' for resampling of raster grids.
-#' @return A `geoglist` with list elements `gdat` and `layers`. The former records
-#' spatial properties of the input rasters used throughout downstream TARDIS functions.
-#' The latter is a set of geographic layers, either as a standard `SpatRaster`,
-#' or a `SpatVectorCollection` of hexagonal polygons if resampling was implemented.
+#' @param verbose `logical`. Should function progress be reported to the user?
+#' @param ... Additional arguments passed internally to
+#' `exactextractr::exact_extract()` for resampling of raster grids.
+#' @return A `geoglist` with four list elements. `$gdat` records spatial
+#' properties of the input rasters used throughout downstream TARDIS functions.
+#' `$tdat` records the temporal extent of each layer, or is `NULL` if this
+#' information was omitted in the function run. `$layers` is a set of geographic
+#' layers, either as a standard `SpatRaster`, or a `SpatVectorCollection` of
+#' hexagonal polygons if resampling was implemented. `$links` is a `NULL`
+#' placeholder slot for storing the output of linking functions used later on.
 #' @import terra exactextractr h3jsr
 #' @export
 #'
 #' @details
-#'
-#' For temporal ordering, the vector need not end in the present (i.e. `0`), but
-#' time must flow from oldest to youngest. Successive pairs of vector elements
-#' define the temporal extent of each other such that: `t(n) > x >= t(n + 1)`.
-#'
-#' Masking is a key feature of `rTARDIS`. Often landscapes will contain
-#' areas which we want to exclude from traversal. This is desirable for two reasons.
-#' The first is that operations on these landscapes can be spatially constrained
-#' in a realistic manner (e.g., restricting terrestrial organisms to the land surface,
-#' or marine organisms to the oceans. The other is that masking can dramatically
-#' reduce the number of cells and so memory required for landscape representation,
+#' Masking is a key feature of `rTARDIS`. Besides providing more realistic
+#' representation of accessible geographic space, it can dramatically reduce the
+#' number of cells and so memory required for landscape representation,
 #' improving computational efficiency.
 #'
-#' Resampling to a hexagonal grid may be desirable when working with landscapes
-#' approaching global extents in reduce the number of cells required to represent
-#' polar latitudes, again helping to improve computational efficiency. The trade
-#' off is that landscape features may be altered or lost depending on the grid
-#' resolution used, although this an inevitable risk of any resampling procedure.
-#' In addition, a large `SpatRaster` layer may be noticeably faster to plot than
-#' a `SpatVector` layer of similar extent and resolution, which will affect
-#' performance in some downstream functions.
+#' Resampling to a hexagonal grid is implemented using
+#' `exactextractr::exact_extract()` with weighting by cell area, as this is
+#' currently much faster compared to the weighted resampling in the `terra` R
+#' package. Weighting is not meaningful for all functions, e.g., `"max"`.
 #'
-#' Resampling is weighted by the fraction of each raster cell covered by
-#' a given hexagonal cell. This is implemented using `exactextractr::exact_extract()`
-#' as this is currently much faster compared to the terra's native weighted resampling
-#' function. Weighting is not meaningful for all functions, e.g., `"max"`.
+#' Resampling to a hexagonal grid may be desirable when working with landscapes
+#' approaching global extents in reduce the number of cells required to
+#' represent polar latitudes, again helping to improve computational efficiency.
+#' The trade off is that landscape features may be altered or lost depending on
+#' the grid resolution used, although this a risk of any resampling procedure.
+#' In addition, a large rectangular grid layer may be noticeably faster to plot
+#' than a hexagonal grid of similar extent and resolution due to their handling
+#' by `terra`, affecting performance in some downstream functions.
 #'
 #' @examples
 #' \donttest{

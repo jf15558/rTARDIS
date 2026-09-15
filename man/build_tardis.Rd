@@ -9,54 +9,49 @@ build_tardis(geog, tlink = 1, rotations = NULL, verbose = TRUE)
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{tlink}{\code{integer}. The linking mode between \code{geoglist} layers if multiple
-are present: either \code{1} (forwards-in-time, default), \code{2} (backwards-in-time)
-or \code{3} (bidirectional).}
+\item{tlink}{\code{integer}. The linking mode through time if multiple layers are
+are present in geog: either \code{1} (forwards-in-time), \code{2} (backwards-
+in-time) or \code{3} (bidirectional). Defaults to \code{1}.}
 
-\item{rotations}{\code{list} or \code{NULL}. By default \code{NULL}, indicating that temporal
-links are spatially constant. Otherwise, a list with \code{nlayers(geog) - 1} elements
-recording the shift in cell locations between layers (see @details).}
+\item{rotations}{\code{list} or \code{NULL}. By default \code{NULL}, indicating that
+temporal links are spatially constant. Otherwise, a list with \code{nlayers(geog)}
+\code{- 1} elements recording the shift in cell locations between layers.}
 
-\item{verbose}{\code{logical}. Should function progress be to the user? This may
-be useful when dealing with large rasters (high resolution and/or many layers).}
+\item{verbose}{\code{logical}. Should function progress be reported to the user?}
 }
 \value{
-A \code{tardis} spatiotemporal object with elements \code{edges}, \code{gdat}, \code{tdat}
-and \code{tlink}. \code{edges} is the main graph object (see @details), while the other elements record
-the spatial, temporal and linkage properties of the graph for internal use by
-downstream rTARDIS functions.
+An object of class \code{tardis}.
 }
 \description{
-Generate a tardis graph from a geoglist, where graph weights represent the
-geographic distances between cells. As such, the function assumes that the
-input \code{geoglist} contains topographic and/or bathymetric data measured in
-metres.
+Generate a tardis graph from a \code{geoglist}, where graph weights represent the
+geographic distances between cells. The function assumes that the input
+\code{geoglist} contains topographic and/or bathymetric data measured in metres.
 }
 \details{
-The resulting graph can be thought of as a 3D lattice. Graph weights for
-horizontal edges within layers record the great circle distances between
-adjacent cells in metres, adjusted' for differences in cell elevation using
-Pythagoras's theorem. For raster inputs, 8-degree (Queen's case) adjacency
-is used, while for hexagonally resampled inputs, 6-degree adjacency is used.
-Single layer cases (i.e. no time element) are allowed. Otherwise vertical
-edges between time layers are assigned weights of zero so that they do not
-affect downstream distance calculations.
+A \code{tardis} object is an S3 class. It is a list with elements \code{edges}, \code{gdat},
+\code{tdat} and \code{tlink}. The first two are taken from \code{geog}, and \code{tlink} from the
+corresponding function argument. \code{edges} is a graph edgelist. The graph can
+be envisaged as a 3D lattice, where layers in the lattice correspond to time
+layers in \code{geog}. Graph weights for horizontal edges within layers record the
+great circle distances between adjacent cells in metres, adjusted for
+differences in cell elevation using Pythagoras's theorem. For raster inputs,
+8-degree (Queen's case) adjacency is used, while for hexagonally resampled
+inputs, 6-degree adjacency is used. Single layer cases (i.e. no time element)
+are allowed. Otherwise vertical edges between time layers are assigned
+weights of zero so that they do not affect downstream distance calculations.
 
 In many cases, the positions of cells will remain constant within the extent
-of each layer in \code{geog}. For global landscapes over geological timescales,
-however, the positions of landmasses chance noticeably due to continental
-drift. In these cases, the edges can be altered so that they connect pairs of
-geographically homologous cells through time. This is implemented using the
-\code{rotations} argument.
-
-If rotations is not \code{NULL}, then each element in the list is a two-column
-numeric matrix containing the IDs of geographically homologous cells between
-successive pairs of layers in x. No list element can be blank as there must
-be at least one edge between each pair of layers. Otherwise, any number of
-edges between layers can be specified, although it  makes sense for there to
-be maximally as many edges as cells within a layer. As this is quite a specific
-format, the function \code{get_rotations} can be used to expedite its construction.
-Examples of the rotations object are available via its documentation
+of each layer in \code{geog} and the \code{rotations} arguments can be left as \code{NULL}.
+For global landscapes over geological timescales, however, the positions of
+landmasses chance noticeably due to continental drift. In these cases,
+rotations can be a list of two-column numeric matrices containing the IDs of
+geographically homologous cells between successive pairs of layers in \code{geog}.
+No list element can be blank as there must be at least one edge between each
+pair of layers. Otherwise, any number of edges between layers can be
+specified, although it  makes sense for there to be maximally as many edges
+as cells within a layer. As this is quite a specific format, the function
+\code{get_rotations} can be used to expedite its construction. Examples of the
+rotations object are available in its documentation.
 }
 \examples{
 \donttest{

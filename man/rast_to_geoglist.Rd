@@ -18,74 +18,75 @@ rast_to_geoglist(
 \arguments{
 \item{geog}{\code{SpatRaster}. A set of geographic rasters. These must be in
 longitude-latitude projection. Missing values are not permitted and should
-be replaced (e.g. with the average of the surrounding cells, or a dummy value).}
+be replaced (e.g. with the average of the surrounding cells, or a dummy
+value).}
 
 \item{mask}{\code{SpatRaster} or \code{NULL}. If not \code{NULL}, this will be used to
 designate non-accessible areas in \code{geog}. It must be fully contiguous with
 \code{geog} (i.e., share the same resolution, extent and number of layers) and
-contain only \code{1} (non-masked, accessible) or \code{NA} (masked, non-accessible) values.}
+contain only \code{1} (non-masked, accessible) or \code{NA} (masked, non-accessible)
+values.}
 
 \item{times}{\code{numeric} or \code{NULL}. If the layers do not relate to each other,
-or only a single raster layer is present, then \code{times} can be left as \code{NULL}.
-Otherwise a numeric vector with \code{nlayers(geog) + 1} positive elements,
-expressing the temporal boundaries of each layer as time in the past.}
+temporally, or only a single raster layer is present, then \code{times} can be
+left as \code{NULL}. Otherwise a numeric vector with \code{nlayers(geog) + 1} positive
+elements, with successive pairs expressing the temporal extent of each layer
+as time in the past, such that: \verb{t(n) > x >= t(n + 1)}. For temporal
+ordering, the vector need not end in the present (i.e. \code{0}), but time must
+flow from oldest to youngest.}
 
 \item{as.hex}{\code{logical}. Should \code{geog} be resampled to the hexagonal grid
 system defined by Uber's H3 library? Defaults to \code{FALSE}.}
 
 \item{hex}{\code{"auto"} or \code{integer}. The desired H3 resolution to be used for
 resampling rasters. Defaults to \code{"auto"}, resulting in the function selecting
-the H3 resolution closest to the resolution of \code{geog}. Otherwise an integer in
-the range 1 - 15.}
+the H3 resolution closest to the resolution of \code{geog}. Otherwise an integer
+in the range 1 - 15.}
 
-\item{method}{\code{character}. The function to be used for resampling the raster grid.
-This must be compatible with \code{exactextractr::exact_extract()}.
+\item{method}{\code{character}. The function to be used for resampling the raster
+grid. This must be compatible with \code{exactextractr::exact_extract()}.
 Defaults to \code{"mean"}.}
 
-\item{verbose}{\code{logical}. Should function progress should be reported to the user?}
+\item{verbose}{\code{logical}. Should function progress be reported to the user?}
 
-\item{...}{Additional arguments passed internally to \code{exactextractr::exact_extract()}
-for resampling of raster grids.}
+\item{...}{Additional arguments passed internally to
+\code{exactextractr::exact_extract()} for resampling of raster grids.}
 }
 \value{
-A \code{geoglist} with list elements \code{gdat} and \code{layers}. The former records
-spatial properties of the input rasters used throughout downstream TARDIS functions.
-The latter is a set of geographic layers, either as a standard \code{SpatRaster},
-or a \code{SpatVectorCollection} of hexagonal polygons if resampling was implemented.
+A \code{geoglist} with four list elements. \verb{$gdat} records spatial
+properties of the input rasters used throughout downstream TARDIS functions.
+\verb{$tdat} records the temporal extent of each layer, or is \code{NULL} if this
+information was omitted in the function run. \verb{$layers} is a set of geographic
+layers, either as a standard \code{SpatRaster}, or a \code{SpatVectorCollection} of
+hexagonal polygons if resampling was implemented. \verb{$links} is a \code{NULL}
+placeholder slot for storing the output of linking functions used later on.
 }
 \description{
-Convert a set of rasters to the S3 \code{geoglist} object compatible with downstream
-rTARDIS functions. Typically, these rasters will record topography and/or bathymetry
-measured in metres, but could record other geographic properties instead. If
-the rasters represent the same area through time, then the first raster in
-the set must be the oldest.
+Convert a set of rasters to an S3 class \code{geoglist} object compatible with
+downstream \code{rTARDIS} functions. Typically, these rasters will record
+topography and/or bathymetry measured in metres, but could record other
+geographic properties instead. If the rasters represent the same area through
+time, then the first raster in the set must be the oldest.
 }
 \details{
-For temporal ordering, the vector need not end in the present (i.e. \code{0}), but
-time must flow from oldest to youngest. Successive pairs of vector elements
-define the temporal extent of each other such that: \verb{t(n) > x >= t(n + 1)}.
-
-Masking is a key feature of \code{rTARDIS}. Often landscapes will contain
-areas which we want to exclude from traversal. This is desirable for two reasons.
-The first is that operations on these landscapes can be spatially constrained
-in a realistic manner (e.g., restricting terrestrial organisms to the land surface,
-or marine organisms to the oceans. The other is that masking can dramatically
-reduce the number of cells and so memory required for landscape representation,
+Masking is a key feature of \code{rTARDIS}. Besides providing more realistic
+representation of accessible geographic space, it can dramatically reduce the
+number of cells and so memory required for landscape representation,
 improving computational efficiency.
 
-Resampling to a hexagonal grid may be desirable when working with landscapes
-approaching global extents in reduce the number of cells required to represent
-polar latitudes, again helping to improve computational efficiency. The trade
-off is that landscape features may be altered or lost depending on the grid
-resolution used, although this an inevitable risk of any resampling procedure.
-In addition, a large \code{SpatRaster} layer may be noticeably faster to plot than
-a \code{SpatVector} layer of similar extent and resolution, which will affect
-performance in some downstream functions.
+Resampling to a hexagonal grid is implemented using
+\code{exactextractr::exact_extract()} with weighting by cell area, as this is
+currently much faster compared to the weighted resampling in the \code{terra} R
+package. Weighting is not meaningful for all functions, e.g., \code{"max"}.
 
-Resampling is weighted by the fraction of each raster cell covered by
-a given hexagonal cell. This is implemented using \code{exactextractr::exact_extract()}
-as this is currently much faster compared to the terra's native weighted resampling
-function. Weighting is not meaningful for all functions, e.g., \code{"max"}.
+Resampling to a hexagonal grid may be desirable when working with landscapes
+approaching global extents in reduce the number of cells required to
+represent polar latitudes, again helping to improve computational efficiency.
+The trade off is that landscape features may be altered or lost depending on
+the grid resolution used, although this a risk of any resampling procedure.
+In addition, a large rectangular grid layer may be noticeably faster to plot
+than a hexagonal grid of similar extent and resolution due to their handling
+by \code{terra}, affecting performance in some downstream functions.
 }
 \examples{
 \donttest{

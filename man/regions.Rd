@@ -12,16 +12,17 @@ regions(geog, bounds.only = T, use.links = F)
 \item{bounds.only}{\code{logical}. Should only the boundary cells of regions be
 returned?}
 
-\item{use.links}{\code{logical}. Should any links added to the geoglist also be
-accounted for when determining cell connectivity and so region membership?
-This argument will have no effect if the geoglist does not contain any links.}
+\item{use.links}{\code{logical}. Should links in \code{geog} be accounted for when
+determining cell connectivity and so region membership? This argument will
+have no effect if \code{geog} does not contain any links.}
 }
 \value{
-A geoglist recording the region affinity of the cells in each layer.
+A \code{geoglist} recording the region affinity of the cells in each
+layer.
 }
 \description{
-Classify all cells in the layers of a geoglist by which region they
-belong to. Optionally, only the boundary cells of these regions may be returned.
+Classify all cells in the layers of a  geoglist   by which region they belong
+to. Optionally, only the boundary cells of these regions may be returned.
 }
 \examples{
 \donttest{

@@ -1,17 +1,16 @@
 #' click_points
 #'
-#' Click locations on a geoglist layer and return the coordinates and cell IDs
+#' Click locations on a `geoglist` layer and return the coordinates and cell IDs
 #' of those locations. All locations are resolved to the nearest available
 #' cell, including any which fall outside of unmasked areas of the layer.
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.
-#' @param layer `numeric`. The layer in the geoglist to be plotted, along with
+#' @param layer `numeric`. The layer in the `geoglist` to be plotted, along with
 #' its links.
-#' @param points `numeric`. The number of links you wish to generate.
-#' Simply rerun the function if you need to add more lines.
-#' @param print.only `logical`. Defaults to `TRUE` and the cell indices and values
-#' are only printed to the console. If `FALSE`, then those points are returned
-#' as a `SpatVector` object.
+#' @param points `numeric`. The number of points you wish to generate.
+#' @param print.only `logical`. Defaults to `TRUE`, printing cell indices and
+#' values to the console only. If `FALSE`, then those points are returned as a
+#' `SpatVector` object.
 #' @param ... Additional arguments passed to `plot.geoglist()`
 #' @return Either `NULL` (default) or a `SpatVector` of the clicked points.
 #' @import terra sf h3jsr

@@ -1,11 +1,11 @@
 #' domains
 #'
-#' Calculate Voronoi polygons around islands in a geoglist. These 'domains' are
-#' the basis for how `link_islands` determines connections across masked areas
+#' Calculate Voronoi domains around islands in a `geoglist`. These polygonal
+#' domains are the basis for how connections are determined across masked areas.
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.
 #' @return A `SpatVectorCollection` with each element containing the Voronoi
-#' polygons for the corresponding layer in the input geoglist.
+#' polygons for the corresponding layer in the input `geoglist`.
 #' @import terra
 #' @export
 #'

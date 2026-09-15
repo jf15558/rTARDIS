@@ -9,12 +9,11 @@ click_to_snip(geog, layer = 1, nsnips = 1, ...)
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{layer}{\code{numeric}. The layer in the geoglist to be plotted, along with
+\item{layer}{\code{numeric}. The layer in the \code{geoglist} to be plotted, along with
 its links.}
 
 \item{nsnips}{\code{numeric}. The number of snipping lines you wish to generate.
-Simply rerun the function if you need to remove more lines, or add unwanted
-remaining lines such that they do not intersect any links.}
+Simply rerun the function if you need to remove more lines.}
 
 \item{...}{Additional arguments passed to \code{plot.geoglist()}}
 }
@@ -22,9 +21,9 @@ remaining lines such that they do not intersect any links.}
 The input \code{geoglist} with the snipped links removed.
 }
 \description{
-Interactively remove links from a geoglist by drawing lines across them.
-Lines are drawn by clicking their start and end points on the geog layer
-plotted in the plotting window.
+Interactively remove links from a \code{geoglist} by drawing lines through them
+in the plotting window. Lines are drawn by clicking their start and end
+points in the plotting window.
 }
 \examples{
 \donttest{

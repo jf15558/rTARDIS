@@ -7,29 +7,33 @@
 get_cost(tardis, weights = "gdist", origin, dest)
 }
 \arguments{
-\item{tardis}{\code{tardis}. A tardis graph as produced by build_tardis().}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
 
-\item{weights}{\code{character}. A character string denoting the weighting scheme to use. By
-default these are true geographic distances (gdist). Alternatively, the name
-of a weighting scheme added to the tardis object with weight_tardis().}
+\item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
+use for distance calculation. By default these are true geographic distances
+(\code{"gdist"}). Alternatively, the name of another weighting scheme added to
+\code{tardis} using \code{weight_tardis()}.}
 
-\item{origin}{\code{character}. A vector of cell IDs.}
+\item{origin}{\code{character}. A vector of \code{tardis} cell IDs.}
 
-\item{dest}{\code{character}. A vector of cell IDs.}
+\item{dest}{\code{character}. A vector of \code{tardis} cell IDs.}
 }
 \value{
-For a pair of cells, a single value is returned. For one cell to many, a vector
-of cost values is returned. For a set of cells, a matrix of costs is returned
+For a pair of cells, a single value is returned. For one cell to
+many, a vector of cost values is returned. For a set of cells, a square
+matrix of costs is returned
 }
 \description{
-Get the cost of movement between cells in a tardis graph. Costs can be calculated
-between pairs of cell, from one cell to many, or between a set of cells.
+Get the cost of movement between cells in a \code{tardis} graph. Costs can be
+calculated between pairs of cell, from one cell to many, or pairwise between
+a set of cells.
 }
 \details{
-Getting the costs from a set of cells effectively creates a distance matrix.
-This can very quickly create large objects. For example, a tardis graph with
-~20,000 accessible cells will give a 20k x 20k matrix approaching a gigabyte
-in size. You may wish to optimise the resolution and masking of your landscapes first.
+Getting the costs for a set of cells effectively creates a distance matrix.
+This can very quickly create large objects. For example, a \code{tardis} graph
+with ~20,000 accessible cells will give a 20k x 20k matrix approaching a
+gigabyte in size. You may wish to optimise the resolution and masking of
+your landscapes first if costing a large set of cells.
 }
 \examples{
 \donttest{

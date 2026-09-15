@@ -1,15 +1,16 @@
 #' regions
 #'
-#' Classify all cells in the layers of a geoglist by which region they
-#' belong to. Optionally, only the boundary cells of these regions may be returned.
+#' Classify all cells in the layers of a  geoglist   by which region they belong
+#' to. Optionally, only the boundary cells of these regions may be returned.
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.
 #' @param bounds.only `logical`. Should only the boundary cells of regions be
 #' returned?
-#' @param use.links `logical`. Should any links added to the geoglist also be
-#' accounted for when determining cell connectivity and so region membership?
-#' This argument will have no effect if the geoglist does not contain any links.
-#' @return A geoglist recording the region affinity of the cells in each layer.
+#' @param use.links `logical`. Should links in `geog` be accounted for when
+#' determining cell connectivity and so region membership? This argument will
+#' have no effect if `geog` does not contain any links.
+#' @return A `geoglist` recording the region affinity of the cells in each
+#' layer.
 #' @import sf terra
 #' @importFrom igraph graph_from_edgelist
 #' @importFrom igraph components

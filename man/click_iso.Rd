@@ -15,33 +15,31 @@ click_iso(
 )
 }
 \arguments{
-\item{tardis}{\code{tardis}. An object of class 'tardis', produced by create_tardis}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
 
-\item{weights}{\code{character}. The name of the weighting scheme column in
-\code{tardis$edges} to use. By default these are true geographic distances
-(\code{"gdist"}). Alternatively, the name of a weighting scheme added to the tardis}
+\item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
+use for distance calculation. By default these are true geographic distances
+(\code{"gdist"}). Alternatively, the name of another weighting scheme added to
+\code{tardis} using \code{weight_tardis()}.}
 
-\item{geog}{\code{geoglist}. A geoglist}
+\item{geog}{\code{geoglist}. The \code{geoglist} used to build \code{tardis}.}
 
-\item{time}{\code{integer}. The tardis time slice to plot and interact with.
-Defaults to \code{NULL}, in which case the first slice is used}
+\item{time}{\code{integer}. The \code{tardis} time slice to plot and interact with.
+Defaults to \code{NULL}, in which case the first slice is used.}
 
-\item{cost}{\code{numeric}. the maximum cost for calculating the isochrone.}
+\item{cost}{\code{numeric}. The maximum cost for calculating the isochrone.}
 
-\item{col}{\code{character}. The colour to use for plotting interactive features.}
+\item{col}{\code{character}. The colour to use for plotting the isochrone.}
 
-\item{...}{Additional arguments passed to \code{plot.geoglist()}}
+\item{...}{Additional arguments passed to \code{plot.geoglist()}.}
 }
 \value{
-No return value
+No return value.
 }
 \description{
-Interactively calculate and plot an isochrone around a clicked point on the
-landscape displayed by the function. Clicked points falling in masked regions are automatically resolved to the nearest available
-cell.
-}
-\details{
-interactive function under development
+Interactively calculate and display an isochrone around a clicked point on
+the landscape plotted by the function. Clicked points falling in masked
+regions are automatically resolved to the nearest available cell.
 }
 \examples{
 \donttest{

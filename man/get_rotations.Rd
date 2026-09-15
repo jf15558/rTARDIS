@@ -7,21 +7,21 @@
 get_rotations(geog, times, model, method = "grid", verbose = TRUE, ...)
 }
 \arguments{
-\item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}. This should contain
-at least two layers, representing two palaeogeographic time slices where
-there is appreciable intervening plate rotation.}
+\item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}. This should
+contain at least two layers, representing two palaeogeographic time slices
+where there is appreciable intervening plate rotation.}
 
 \item{times}{\code{numeric}. A  vector with \code{nlayers(geog) + 1} positive
 elements, expressing the temporal boundaries of each layer as millions of
-years in the past. The vector need not end in the present (i.e. \code{0}), but time
-must flow from oldest to youngest. Reconstructions will be made using the
-midpoints of these intervals}
+years in the past. The vector need not end in the present (i.e. \code{0}), but
+time must flow from oldest to youngest. Reconstructions will be made using
+the midpoints of these intervals}
 
-\item{model}{\code{character}. The desired plate reconstruction model. See \code{palaeoverse::palaeorotate()}
-for details.}
+\item{model}{\code{character}. The desired plate reconstruction model. See
+\code{palaeoverse::palaeorotate()} for details.}
 
-\item{method}{\code{character}. The reconstruction method to use. See \code{palaeoverse::palaeorotate()}
-for details.}
+\item{method}{\code{character}. The reconstruction method to use. See
+\code{palaeoverse::palaeorotate()} for details.}
 
 \item{verbose}{\code{logical} Should function progress be reported to the user?}
 
@@ -34,16 +34,18 @@ between successive landscape layers.
 }
 \description{
 Generate a rotation list from commonly-used plate rotation models for
-use with build_tardis(). Ensure that the same plate rotation model on which
+use with \code{build_tardis()}. Ensure that the same plate rotation model on which
 the input \code{geoglist} is based is requested for function call.
 }
 \details{
-Cell reconstruction from layer to layer is performed by \code{palaeoverse::palaeorotate()}.
-By default this uses the \code{"grid"} method, by retrieving reconstructed coordinates
-from pre-rotated H3 grids at resolution 3 (~119 km). This is almost
-certainly sufficient for any global scale analyses given that palaeogeographic
-models of topography and bathymetry rarely if ever exceed 1 degree resolution
-(~111 km).
+Cell reconstruction from layer to layer is performed by
+\code{palaeoverse::palaeorotate()}. By default this uses the \code{"grid"} method, by
+retrieving reconstructed coordinates from pre-rotated H3 grids at resolution
+3 (~119 km). This is almost certainly sufficient for any global scale
+analyses given that global palaeogeographic models of topography and
+bathymetry rarely exceed 1 degree resolution (~111 km), while models which
+do exceed this resolution can become prohibitively computationally expensive
+to work with.
 }
 \examples{
 \dontrun{

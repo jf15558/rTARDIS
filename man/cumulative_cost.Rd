@@ -7,15 +7,15 @@
 cumulative_cost(tardis, weights = "gdist", origin, verbose = TRUE)
 }
 \arguments{
-\item{tardis}{\code{tardis}. The output of \code{build_tardis()} or \code{weight_tardis()}.}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
 
-\item{weights}{\code{character}. The name of the weighting scheme column in
-\code{tardis$edges} to use. By default these are true geographic distances
-(\code{"gdist"}). Alternatively, the name of a weighting scheme added to the tardis
-object with \code{weight_tardis()}.}
+\item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
+use for distance calculation. By default these are true geographic distances
+(\code{"gdist"}). Alternatively, the name of another weighting scheme added to
+\code{tardis} using \code{weight_tardis()}.}
 
 \item{origin}{\code{SpatVector}. The output of \code{point_check()}, denoting the point
-from which to calculate cumulative costs}
+from which to calculate cumulative costs.}
 
 \item{verbose}{\code{logical} Should function progress be reported to the user?}
 }
@@ -24,8 +24,8 @@ A \code{geoglist} recording the costs required to reach, from the origin
 point, each cell in the same time slice as that point.
 }
 \description{
-From a given starting point, calculate the cost of reaching every other location
-in the same time slice in a tardis graph and return the cumulative cost surface
+From a given starting cell, calculate the cost of reaching every other
+location in the same time slice in a \code{tardis} graph.
 }
 \examples{
 \donttest{

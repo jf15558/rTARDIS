@@ -1,27 +1,27 @@
 #' least_cost
 #'
-#' Determine least cost paths between pairs of origin and destination coordinates
-#' using Djikstra's algorithm. Costs are either geographic distances or a custom
-#' weighting scheme supplied by the user.
+#' Determine least cost paths between pairs of origin and destination
+#' coordinates using Djikstra's algorithm. Costs are either geographic distances
+#' or a custom weighting scheme supplied by the user.
 #'
-#' @param tardis `tardis`. The output of `build_tardis()` or `weight_tardis()`.
-#' @param weights `character`. The name of the weighting scheme column in
-#' `tardis$edges` to use. By default these are true geographic distances
-#' (`"gdist"`). Alternatively, the name of a weighting scheme added to the tardis
-#' object with `weight_tardis()`.
+#' @param tardis `tardis`. The output of `build_tardis()`.
+#' @param weights `character`. The name of the weighting scheme in `tardis` to
+#' use for distance calculation. By default these are true geographic distances
+#' (`"gdist"`). Alternatively, the name of another weighting scheme added to
+#' `tardis` using `weight_tardis()`.
 #' @param origin `SpatVector`. The output of `point_check()`, denoting the
 #' starting points of the least cost paths.
 #' @param dest `SpatVector`. The output of `point_check()`, denoting the
-#' destination points of the least cost paths. The user should be careful to ensure
-#' that the time ordering of point pairs matches the time linking mode if
-#' tardis contains multiple layers (i.e., points in older layers cannot be
-#' accessed from points in younger layers if the linking mode is forwards in time
-#' (`tlink = 1`).
+#' destination points of the least cost paths. The time ordering of point pairs
+#' must match the time linking mode if it is unidirectional (i.e., points in
+#' older layers cannot be accessed from points in younger layers if the linking
+#' mode is forwards in time (`tlink = 1`).
 #' @param verbose `logical`. Should function progress be reported to the user?
-#' @return An `SpatVector` of time-discrete lines representing the least
+#' @return A `SpatVector` of time-discrete lines representing the least
 #' cost paths between each point pair, recording which overall path they belong
-#' to (`$feature`), the costs along each line (`$cost`) and their geographic
-#' distances (`$distance`, identical if `weights = gdist`).
+#' to (`$feature`), the layer the path segment occupies (`$layer`), the costs
+#' along each segment (`$cost`) and their geographic distances (`$distance`,
+#' identical if `weights = "gdist"`).
 #' @import terra sf cppRouting h3jsr
 #' @export
 #'
@@ -34,7 +34,7 @@
 #' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 #'
 #' rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
-#' rlink <- link_islands(rasts)
+#' rasts <- link_islands(rasts)
 #' rtd <- build_tardis(rasts)
 #' pts <- rbind(c(-89.78873, -1.420627, 2),
 #'              c(-88.70836, -0.2627832, 2))

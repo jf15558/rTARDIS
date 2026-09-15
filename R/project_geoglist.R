@@ -1,15 +1,15 @@
 #' project_geoglist
 #'
-#' Transform a geoglist and its links to a CRS other than lon-lat. This may be
-#' desirable for plotting purposes, but will render the resulting geoglist
-#' incompatible with most rTARDIS functions.
+#' Transform a `geoglist` and its links to a coordinate reference system (CRS)
+#' other than lon-lat. This may be desirable for plotting purposes, but will
+#' render the `geoglist` incompatible with most `rTARDIS` functions.
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.
-#' @param crs `character`. A valid crs character string to which the geoglist
-#' will be transformed
+#' @param crs `character`. A valid CRS character string to which `geog`
+#' will be transformed.
 #' @param ... Additional arguments passed to `terra::project` to control how
-#' the raster grid is resampled to the new grid geometry.
-#' @return `geoglist`. The input geoglist transformed to the target crs.
+#' the grid is resampled to the new CRS geometry.
+#' @return `geoglist`. The input `geoglist` transformed to the target CRS.
 #' @import sf terra
 #' @export
 #'

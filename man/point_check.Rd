@@ -10,26 +10,28 @@ point_check(tardis, points, max.dist = NULL, verbose = TRUE)
 \item{tardis}{\code{tardis}. The output of \code{build_tardis()} or \code{weight_tardis()}.}
 
 \item{points}{\code{matrix} or \code{data.frame}. A two or three column matrix or
-data.frame of coordinates. Column ordering is assumed to be longitude
+\code{data.frame} of coordinates. Column ordering is assumed to be longitude
 (decimal degrees), latitude (decimal degrees) and time (positive, time before
-present). The time column is only required if \code{tardis} contains multiple layers.}
+present). The time column is only required if \code{tardis} contains multiple
+layers.}
 
-\item{max.dist}{\code{numeric}. The maximum distance in metres permitted for adjusting
-points to accessible cells. Points with adjustments above this threshold will
-be discarded. \code{NULL} by default, meaning that no points are discarded.}
+\item{max.dist}{\code{numeric}. The maximum distance in metres permitted for
+adjusting points to accessible cells. Points with adjustments above this
+threshold will be discarded. \code{NULL} by default, meaning that no points are
+discarded.}
 
 \item{verbose}{\code{logical} Should function progress be reported to the user?}
 }
 \value{
 A \code{SpatVector} of points, recording which input point they correspond
-to in case points were discarded (\verb{$feature}), the id of the tardis cell they
-fall into (\verb{$cell}), the layer to which they belong (\verb{$layer}) and their
+to in case points were discarded (\verb{$feature}), the ID of the \code{tardis} cell
+they fall into (\verb{$cell}), the layer to which they belong (\verb{$layer}) and their
 adjusted distance (\verb{$adj}).
 }
 \description{
-Check a set of coordinates to determine whether they fall within an accessible
-cell within a tardis object. Discrepant points are adjusted to their nearest
-accessible cell based on great circle distance.
+Check a set of coordinates to determine whether they fall within an
+accessible cell within a \code{tardis} object. Discrepant points are adjusted to
+their nearest accessible cell based on great circle distance.
 }
 \examples{
 \donttest{

@@ -1,53 +1,49 @@
 #' build_tardis
 #'
-#' Generate a tardis graph from a geoglist, where graph weights represent the
-#' geographic distances between cells. As such, the function assumes that the
-#' input `geoglist` contains topographic and/or bathymetric data measured in
-#' metres.
+#' Generate a tardis graph from a `geoglist`, where graph weights represent the
+#' geographic distances between cells. The function assumes that the input
+#' `geoglist` contains topographic and/or bathymetric data measured in metres.
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.
-#' @param tlink `integer`. The linking mode between `geoglist` layers if multiple
-#' are present: either `1` (forwards-in-time, default), `2` (backwards-in-time)
-#' or `3` (bidirectional).
-#' @param rotations `list` or `NULL`. By default `NULL`, indicating that temporal
-#' links are spatially constant. Otherwise, a list with `nlayers(geog) - 1` elements
-#' recording the shift in cell locations between layers (see @details).
-#' @param verbose `logical`. Should function progress be to the user? This may
-#' be useful when dealing with large rasters (high resolution and/or many layers).
-#' @return A `tardis` spatiotemporal object with elements `edges`, `gdat`, `tdat`
-#' and `tlink`. `edges` is the main graph object (see @details), while the other elements record
-#' the spatial, temporal and linkage properties of the graph for internal use by
-#' downstream rTARDIS functions.
+#' @param tlink `integer`. The linking mode through time if multiple layers are
+#' are present in geog: either `1` (forwards-in-time), `2` (backwards-
+#' in-time) or `3` (bidirectional). Defaults to `1`.
+#' @param rotations `list` or `NULL`. By default `NULL`, indicating that
+#' temporal links are spatially constant. Otherwise, a list with `nlayers(geog)`
+#' `- 1` elements recording the shift in cell locations between layers.
+#' @param verbose `logical`. Should function progress be reported to the user?
+#' @return An object of class `tardis`.
 #' @import terra h3jsr sf
 #' @importFrom geosphere distGeo bearing
 #' @importFrom stats complete.cases
 #' @export
 #'
 #' @details
-#' The resulting graph can be thought of as a 3D lattice. Graph weights for
-#' horizontal edges within layers record the great circle distances between
-#' adjacent cells in metres, adjusted' for differences in cell elevation using
-#' Pythagoras's theorem. For raster inputs, 8-degree (Queen's case) adjacency
-#' is used, while for hexagonally resampled inputs, 6-degree adjacency is used.
-#' Single layer cases (i.e. no time element) are allowed. Otherwise vertical
-#' edges between time layers are assigned weights of zero so that they do not
-#' affect downstream distance calculations.
+#'
+#' A `tardis` object is an S3 class. It is a list with elements `edges`, `gdat`,
+#' `tdat` and `tlink`. The first two are taken from `geog`, and `tlink` from the
+#' corresponding function argument. `edges` is a graph edgelist. The graph can
+#' be envisaged as a 3D lattice, where layers in the lattice correspond to time
+#' layers in `geog`. Graph weights for horizontal edges within layers record the
+#' great circle distances between adjacent cells in metres, adjusted for
+#' differences in cell elevation using Pythagoras's theorem. For raster inputs,
+#' 8-degree (Queen's case) adjacency is used, while for hexagonally resampled
+#' inputs, 6-degree adjacency is used. Single layer cases (i.e. no time element)
+#' are allowed. Otherwise vertical edges between time layers are assigned
+#' weights of zero so that they do not affect downstream distance calculations.
 #'
 #' In many cases, the positions of cells will remain constant within the extent
-#' of each layer in `geog`. For global landscapes over geological timescales,
-#' however, the positions of landmasses chance noticeably due to continental
-#' drift. In these cases, the edges can be altered so that they connect pairs of
-#' geographically homologous cells through time. This is implemented using the
-#' `rotations` argument.
-#'
-#' If rotations is not `NULL`, then each element in the list is a two-column
-#' numeric matrix containing the IDs of geographically homologous cells between
-#' successive pairs of layers in x. No list element can be blank as there must
-#' be at least one edge between each pair of layers. Otherwise, any number of
-#' edges between layers can be specified, although it  makes sense for there to
-#' be maximally as many edges as cells within a layer. As this is quite a specific
-#' format, the function `get_rotations` can be used to expedite its construction.
-#' Examples of the rotations object are available via its documentation
+#' of each layer in `geog` and the `rotations` arguments can be left as `NULL`.
+#' For global landscapes over geological timescales, however, the positions of
+#' landmasses chance noticeably due to continental drift. In these cases,
+#' rotations can be a list of two-column numeric matrices containing the IDs of
+#' geographically homologous cells between successive pairs of layers in `geog`.
+#' No list element can be blank as there must be at least one edge between each
+#' pair of layers. Otherwise, any number of edges between layers can be
+#' specified, although it  makes sense for there to be maximally as many edges
+#' as cells within a layer. As this is quite a specific format, the function
+#' `get_rotations` can be used to expedite its construction. Examples of the
+#' rotations object are available in its documentation.
 #'
 #' @examples
 #' \donttest{

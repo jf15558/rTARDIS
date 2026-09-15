@@ -1,21 +1,22 @@
 #' click_lcp
 #'
-#' Interactively calculate and plot `n` least cost paths by clicking their start
-#' and end points on the landscape displayed by the function. Clicked points
+#' Interactively calculate and display least cost paths by clicking their start
+#' and end points on the landscape plotted by the function. Clicked points
 #' falling in masked regions are automatically resolved to the nearest available
 #' cell.
 #'
-#' @param tardis `tardis`. An object of class 'tardis', produced by create_tardis
-#' @param weights `character`. The name of the weighting scheme column in
-#' `tardis$edges` to use. By default these are true geographic distances
-#' (`"gdist"`). Alternatively, the name of a weighting scheme added to the tardis
-#' @param geog `geoglist`. A geoglist
-#' @param time `integer`. The tardis time slice to plot and interact with.
+#' @param tardis `tardis`. The output of `build_tardis()`.
+#' @param weights `character`. The name of the weighting scheme in `tardis` to
+#' use for distance calculation. By default these are true geographic distances
+#' (`"gdist"`). Alternatively, the name of another weighting scheme added to
+#' `tardis` using `weight_tardis()`.
+#' @param geog `geoglist`. The `geoglist` used to build `tardis`.
+#' @param time `integer`. The `tardis` time slice to plot and interact with.
 #' Defaults to `NULL`, in which case the first slice is used.
 #' @param n `integer`. the number of point pairs to run (only for click_lcp)
-#' @param col `character`. The colour to use for plotting interactive features.
+#' @param col `character`. The colour to use for plotting least cost paths.
 #' @param ... Additional arguments passed to `plot.geoglist()`.
-#' @return No return value
+#' @return No return value.
 #' @import terra sf
 #' @export
 #'

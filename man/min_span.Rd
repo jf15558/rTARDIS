@@ -7,39 +7,40 @@
 min_span(tardis, weights = "gdist", points, verbose = TRUE)
 }
 \arguments{
-\item{tardis}{\code{tardis}. The output of \code{build_tardis()} or \code{weight_tardis()}.}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
 
-\item{weights}{\code{character}. The name of the weighting scheme column in
-\code{tardis$edges} to use. By default these are true geographic distances
-(\code{"gdist"}). Alternatively, the name of a weighting scheme added to the tardis
-object with \code{weight_tardis()}.}
+\item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
+use for distance calculation. By default these are true geographic distances
+(\code{"gdist"}). Alternatively, the name of another weighting scheme added to
+\code{tardis} using \code{weight_tardis()}.}
 
-\item{points}{\code{SpatVector}. The output of \code{point_check()}, denoting the points
-to be linked.}
+\item{points}{\code{SpatVector}. The output of \code{point_check()}, denoting the
+points to be linked.}
 
 \item{verbose}{\code{logical} Should function progress be reported to the user?}
 }
 \value{
-An \code{SpatVector} of time-discrete lines representing the branches of
+A \code{SpatVector} of time-discrete lines representing the branches of
 the minimum spanning arborescence between each point in \code{points}, recording
 which overall branch they belong to (\verb{$feature}), the costs along each line
-(\verb{$cost}) and their geographic distances (\verb{$distance}, identical if \code{weights = gdist}).
+(\verb{$cost}) and their geographic distances (\verb{$distance}, identical if
+\code{weights = "gdist"}).
 }
 \description{
-Determine the least cost minimum spanning arborescence between a set of points
-in a spatiotemporal landscape graph. Least cost paths are identified between
-pairs of points using Djikstra's algorithm, then the minimum spanning
+Determine the least cost minimum spanning arborescence between a set of
+points in a spatiotemporal landscape graph. Least cost paths are identified
+between pairs of points using Djikstra's algorithm, then the minimum spanning
 arborescence selected from these sets of pairwise distances.
 }
 \details{
 If geographic distances are used (default), then there will be a single least
-cost path between any two points and the minimum spanning arborescence will be
-equivalent to a minimum spanning tree. However, as rTARDIS graphs are
+cost path between any two points and the minimum spanning arborescence will
+be equivalent to a minimum spanning tree. However, as \code{rTARDIS} graphs are
 directed, it is possible that the shortest path from A to B may not be the
 same as the shortest path from B to A depending on the weighting scheme,
 hence why minimum spanning arborescence is used as the more general case.
-Note that the time directionality in the TARDIS graph will also affect the
-minimum spanning arborescence structure.
+Note that the time directionality in \code{tardis} will also affect the minimum
+spanning arborescence structure.
 }
 \examples{
 \donttest{

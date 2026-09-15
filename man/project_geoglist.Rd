@@ -9,19 +9,19 @@ project_geoglist(geog, crs, ...)
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{crs}{\code{character}. A valid crs character string to which the geoglist
-will be transformed}
+\item{crs}{\code{character}. A valid CRS character string to which \code{geog}
+will be transformed.}
 
 \item{...}{Additional arguments passed to \code{terra::project} to control how
-the raster grid is resampled to the new grid geometry.}
+the grid is resampled to the new CRS geometry.}
 }
 \value{
-\code{geoglist}. The input geoglist transformed to the target crs.
+\code{geoglist}. The input \code{geoglist} transformed to the target CRS.
 }
 \description{
-Transform a geoglist and its links to a CRS other than lon-lat. This may be
-desirable for plotting purposes, but will render the resulting geoglist
-incompatible with most rTARDIS functions.
+Transform a \code{geoglist} and its links to a coordinate reference system (CRS)
+other than lon-lat. This may be desirable for plotting purposes, but will
+render the \code{geoglist} incompatible with most \code{rTARDIS} functions.
 }
 \examples{
 \donttest{

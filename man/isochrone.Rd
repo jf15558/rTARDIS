@@ -7,27 +7,28 @@
 isochrone(tardis, weights = "gdist", origin, cost = 1e+05, verbose = TRUE)
 }
 \arguments{
-\item{tardis}{\code{tardis}. The output of \code{build_tardis()} or \code{weight_tardis()}.}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
 
-\item{weights}{\code{character}. The name of the weighting scheme column in
-\code{tardis$edges} to use. By default these are true geographic distances
-(\code{"gdist"}). Alternatively, the name of a weighting scheme added to the tardis
-object with \code{weight_tardis()}.}
+\item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
+use for distance calculation. By default these are true geographic distances
+(\code{"gdist"}). Alternatively, the name of another weighting scheme added to
+\code{tardis} using \code{weight_tardis()}.}
 
-\item{origin}{\code{SpatVector}. The output of \code{point_check()}, denoting the points
-around which to calculate isochrones.}
+\item{origin}{\code{SpatVector}. The output of \code{point_check()}, denoting the
+points around which to calculate isochrones.}
 
-\item{cost}{The maximum cumulative cost of below which cells will be
-included within the isochrone in a point's time-specific origin landscape
-layer, either a single number or a vector with as many elements as points in
-origin to enable different costs for each point. By default, this value is
-in metres, corresponding to the rTARDIS default weighting scheme.}
+\item{cost}{The maximum cumulative cost up to which cells will be included
+within the isochrone around a point. Either a single number or a vector with
+as many elements as points in \code{origin} to enable different costs for each
+point. By default, this value assumed to be in metres, corresponding to the
+\code{rTARDIS} default weighting scheme.}
 
 \item{verbose}{\code{logical} Should function progress be reported to the user?}
 }
 \value{
-A \code{SpatVector} containing isochrone polygons, recording to which input
-point in \code{origin} they correspond to (\verb{$feature}) and their time layer (\verb{$layer})
+A \code{SpatVector} containing isochrone polygons, recording to which
+input point in \code{origin} they correspond to (\verb{$feature}) and their time layer
+(\verb{$layer}).
 }
 \description{
 Calculate a cost isochrone around a point, that is all cells in the same

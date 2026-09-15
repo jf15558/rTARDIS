@@ -7,15 +7,15 @@
 optim_route(tardis, weights = "gdist", points, loop = FALSE, verbose = TRUE)
 }
 \arguments{
-\item{tardis}{\code{tardis}. The output of \code{build_tardis()} or \code{weight_tardis()}.}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
 
-\item{weights}{\code{character}. The name of the weighting scheme column in
-\code{tardis$edges} to use. By default these are true geographic distances
-(\code{"gdist"}). Alternatively, the name of a weighting scheme added to the tardis
-object with \code{weight_tardis()}.}
+\item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
+use for distance calculation. By default these are true geographic distances
+(\code{"gdist"}). Alternatively, the name of another weighting scheme added to
+\code{tardis} using \code{weight_tardis()}.}
 
-\item{points}{\code{SpatVector}. The output of \code{point_check()}, denoting the points
-to be linked.}
+\item{points}{\code{SpatVector}. The output of \code{point_check()}, denoting the
+points to be linked.}
 
 \item{loop}{\code{logical}. Should the optimal route additionally be closed from
 end point to start point to return a polygon? Defaults to \code{FALSE}.}
@@ -26,7 +26,7 @@ end point to start point to return a polygon? Defaults to \code{FALSE}.}
 An \code{SpatVector} of time-discrete lines representing the optimal paths
 between each point in \code{points}, recording which overall path they belong
 to (\verb{$feature}), the costs along each line (\verb{$cost}) and their geographic
-distances (\verb{$distance}, identical if \code{weights = gdist}).
+distances (\verb{$distance}, identical if \code{weights = "gdist"}).
 }
 \description{
 Determine the optimal sequence in which to visit a set of points (the

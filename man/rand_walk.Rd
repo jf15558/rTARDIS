@@ -16,49 +16,50 @@ rand_walk(
 )
 }
 \arguments{
-\item{tardis}{\code{tardis}. The output of \code{build_tardis()} or \code{weight_tardis()}.}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
 
-\item{weights}{\code{character}. The name of the weighting scheme column in
-\code{tardis$edges} to use. By default these are true geographic distances
-(\code{"gdist"}). Alternatively, the name of a weighting scheme added to the tardis
-object with \code{weight_tardis()}.}
+\item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
+use for distance calculation. By default these are true geographic distances
+(\code{"gdist"}). Alternatively, the name of another weighting scheme added to
+\code{tardis} using \code{weight_tardis()}.}
 
 \item{origin}{\code{SpatVector}. The output of \code{point_check()}, denoting the
-starting points for the random walks.}
+starting points for the random walk(s).}
 
-\item{mode}{\code{character}. The nature of the random walk, either the number of 'steps' to
-take or the 'cost' in terms of the cumulative weight of the edges traversed.}
+\item{mode}{\code{character}. The nature of the random walk, either the number of
+\code{"steps"} to take or the \code{"cost"} in terms of the cumulative weight of the
+edges traversed.}
 
-\item{rwlen}{The length of the random walk as selected by @param mode, either
-a single number or a vector with as many elements as origin points, to enable
-different walk lengths for each point. When weights = NULL and mode = 'cost',
-this  can be directly interpreted as metres covered by the random walk, but
-may also be expressed in relation to a user-supplied weighting scheme.}
+\item{rwlen}{\code{numeric}. The length of the random walk as selected by \code{mode}.
+Either a single number or a vector with as many elements as origin points,
+enabling different walk lengths for each point. When \code{weights = NULL} and
+\code{mode = "cost"}, this  can be directly interpreted as metres covered by the
+random walk, but may also be expressed in relation to a user-supplied
+weighting scheme.}
 
-\item{restrict}{A logical indicating whether the random walk should be
-constrained to the same time layer as its origin. TRUE by default.}
+\item{restrict}{\code{logical}. Should the random walk should be constrained to
+the same time layer as its origin. \code{TRUE} by default.}
 
-\item{trials}{An integer indicating the number of random walk trials to
-conduct before quitting, if mode = "cost" and the random walk length proves
-insufficient to reach to cost value.}
+\item{trials}{\code{integer}. The number of random walk trials to conduct before
+quitting, if \code{mode = "cost"} and the random walk length proves insufficient
+to reach the cost value.}
 
-\item{verbose}{A logical indicating whether function progress should be
-reported to the user.}
+\item{verbose}{\code{logical}. Should function progress be reported to the user?}
 }
 \value{
-If restrict = TRUE (default), then a SpatRaster with each stack
-#' layer recording the frequencies of cell visits. If restrict = FALSE,
-a list of SpatRasters, with each named layer recording the frequencies of
-cells visited in each landscape layer through time
+If \code{restrict = TRUE} (default), then a \code{SpatRaster} with each
+layer recording the frequencies of cell visits. If \code{restrict = FALSE},
+a list of \code{SpatRaster} objects, each recording the frequencies of cells
+visited by each random walk in each landscape layer through time.
 }
 \description{
-Conduct random walks within a tardis graph. Full traverses in time and space
-are possible, but as walks in both these dimensions not are not necessarily
-easy to interpret, walks are restricted to the time layer in which they
-originate as a default. Walk lengths can be specified by the number of
-steps or a target distance to traverse. In the case of the latter, the
-walk is terminated at the closest distance to the target as the walks will
-not necessarily be able to precisely hit the target distance.
+Conduct random walks within a \code{tardis} graph. Walk lengths can be specified
+by the number of steps or a target distance to traverse. In the case of the
+latter, the walk is terminated at the closest distance to the target as the
+walks will not necessarily be able to precisely hit the target distance. Full
+traverses in time and space are possible, but as walks in both these
+dimensions not are not necessarily easy to interpret, so walks are restricted
+to the time layer in which they originate as a default.
 }
 \examples{
 \donttest{

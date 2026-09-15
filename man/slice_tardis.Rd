@@ -7,26 +7,30 @@
 slice_tardis(tardis, times = NULL, layers = NULL)
 }
 \arguments{
-\item{tardis}{\code{tardis}. The output of \code{build_tardis()} or \code{weight_tardis()}.}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
 
-\item{times}{\code{numeric}. A vector of two positive numbers denoting the desired time range
-to subset from tardis. Either this or 'layers' must be specified}
+\item{times}{\code{numeric}. A single positive number giving the age of the layer
+to subset from \code{tardis}, or vector of two positive numbers denoting layer
+age range to subset. One of \code{times} or \code{layers} must be specified.}
 
-\item{layers}{\code{numeric}. A vector of two positive numbers denoting the desired range of
-layers to subset from tardis. Either this or 'times' must be specified}
+\item{layers}{\code{numeric}. A single positive integer giving the layer to subset
+from \code{tardis} or a vector of two positive integers denoting the layer range
+to subset. One of \code{times} or \code{layers} must be specified.}
 }
 \value{
-A \code{tardis} object comprising the requested layers
+A \code{tardis} graph of the requested subset of layers.
 }
 \description{
-Temporally subset a tardis graph to a range of layers.
+Subset a tardis graph to a contiguous range of layers. Unlike with
+\code{slice_geoglist()}, the range must be contiguous to retain full temporal
+connectivity between layers.
 }
 \details{
-This function was developed for instances where successive analyses do not require
-the entire graph, in which case it is more efficient to weight and analyse subsets,
-rather than operate on the entire graph or create subsets from scratch. Note that
-layers are counted in decreasing age order, so the oldest time layer will be 1
-and so forth.
+This function was developed for instances where successive analyses do not
+require the entire \code{tardis} graph, in which case it is more efficient to
+weight and analyse subsets, rather than operate on the entire graph or create
+subsets from scratch. Note that layers are counted in decreasing age order,
+so the oldest time layer will be 1 and so forth.
 }
 \examples{
 \donttest{

@@ -1,15 +1,14 @@
 #' click_to_snip
 #'
-#' Interactively remove links from a geoglist by drawing lines across them.
-#' Lines are drawn by clicking their start and end points on the geog layer
-#' plotted in the plotting window.
+#' Interactively remove links from a `geoglist` by drawing lines through them
+#' in the plotting window. Lines are drawn by clicking their start and end
+#' points in the plotting window.
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.
-#' @param layer `numeric`. The layer in the geoglist to be plotted, along with
+#' @param layer `numeric`. The layer in the `geoglist` to be plotted, along with
 #' its links.
 #' @param nsnips `numeric`. The number of snipping lines you wish to generate.
-#' Simply rerun the function if you need to remove more lines, or add unwanted
-#' remaining lines such that they do not intersect any links.
+#' Simply rerun the function if you need to remove more lines.
 #' @param ... Additional arguments passed to `plot.geoglist()`
 #' @return The input `geoglist` with the snipped links removed.
 #' @import terra sf h3jsr

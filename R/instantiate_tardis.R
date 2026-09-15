@@ -1,17 +1,18 @@
 #' instantiate_tardis
 #'
-#' Take a tardis object and generate a graph compatible with functions from the
-#' `rcppRouting` package. This function is primarily called internally by other
-#' rTARDIS package functions, but it may be useful for the user to be able to
-#' directly interact with this graph themselves, or to supply a pre-instantiated
-#' `tardis` object within a loop to avoid repeated calls to this function.
+#' Take a `tardis` object and generate a graph compatible with functions from
+#' the `rcppRouting` package. This function is primarily called internally by
+#' other `rTARDIS` package functions, but it may be useful for the user to be
+#' able to directly interact with this graph themselves, or to supply a
+#' pre-instantiated `tardis` object within a loop to avoid repeated calls to
+#' this function.
 #'
-#' @param tardis `tardis`. The output of `build_tardis()` or `weight_tardis()`.
-#' @param weights `character`. The name of the weighting scheme column in
-#' `tardis$edges` to use. By default these are true geographic distances
-#' (`"gdist"`). Alternatively, the name of a weighting scheme added to the tardis
-#' object with `weight_tardis()`.
-#' @return. The input `tardis` object with the additional element, `tgraph`.
+#' @param tardis `tardis`. The output of `build_tardis()`.
+#' @param weights `character`. The name of the weighting scheme in `tardis` to
+#' use for distance calculation. By default these are true geographic distances
+#' (`"gdist"`). Alternatively, the name of another weighting scheme added to
+#' `tardis` using `weight_tardis()`.
+#' @return. The input `tardis` object with the additional element, `$tgraph`.
 #' @export
 #'
 #' @examples

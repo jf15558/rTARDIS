@@ -23,50 +23,54 @@ plot_globe(
 \arguments{
 \item{x}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{y}{\code{numeric}. The layer in the geoglist to be plotted, along with
-its links. Defaults to 1 (the first layer).}
+\item{y}{\code{numeric}. The layer in the \code{x} to be plotted, along with its links.
+Defaults to \code{1} (the first layer).}
 
 \item{range}{\code{vector}. If not \code{NULL}, the minimum and maximum values to be
 plotted.}
 
-\item{pal}{\code{vector}. A vector of colours to be used for plotting layer values,
-such as those returned by an R colour palette. The length of this colour palette
-will also correspond to the number of breaks used when plotting a geoglist
-with continuous values.}
+\item{pal}{\code{vector}. A vector of colours to be used for plotting layer
+values, such as those returned by an R colour palette. The length of this
+colour palette will also correspond to the number of breaks used when
+plotting, if \code{x} contains continuous values.}
 
 \item{links}{\code{logical}. Should mask links be plotted, if available?}
 
-\item{lcol}{\code{character} or \code{integer}. The colour to be used for plotting links.}
+\item{lcol}{\code{character} or \code{integer}. The colour to be used for plotting
+links.}
 
 \item{lwd}{\code{integer}. The line width to be used for plotting links.}
 
 \item{lty}{\code{integer}. The line type to be used for plotting links.}
 
-\item{bg}{\code{character} or \code{integer}. The colour to use for the globe background.}
+\item{bg}{\code{character} or \code{integer}. The colour to use for the globe
+background.}
 
-\item{graticule}{\code{logical}. Should a lon-lat graticular be added to the sphere?
-Defaults to \code{TRUE}.}
+\item{graticule}{\code{logical}. Should a lon-lat graticule be added to the
+sphere? Defaults to \code{TRUE}.}
 
-\item{grat.col}{\code{character} or \code{integer}. The colour to be used for the graticule lines.}
+\item{grat.col}{\code{character} or \code{integer}. The colour to be used for the
+graticule lines.}
 
-\item{add}{\code{logical}. Should the geoglist data be added to an existing rgl window?}
+\item{add}{\code{logical}. Should \code{x} be added to an existing \code{rgl} window?}
 
 \item{...}{Other arguments passed to \code{rgl} primitive plotting functions. Note
-that some of these are set internally and so using this argument may cause errors.
-Defaults to \code{FALSE}, which will intiate plotting on a blank sphere in a new
-rgl window.}
+that some of these are set internally and so using this argument may cause
+errors. Defaults to \code{FALSE}, which will initiate plotting on a blank sphere
+in a new \code{rgl} window.}
 }
 \value{
-None.
+No return value.
 }
 \description{
-Plot a geoglist on a 3D interactive globe. Geoglists of any spatial scale can
-be plotted, but is primarily intended for those which cover the total surface
-of the Earth or at least a decent portion of one of its hemispheres.
+Plot a \code{geoglist} on a 3D interactive globe. A \code{geoglist} of any spatial
+scale can be plotted, but the function is primarily intended for those which
+cover the total surface of the Earth or at least a decent portion of one of
+its hemispheres.
 }
 \details{
-Longitude-latitude coordinates are converted to spherical coordinates internally
-as follows, using an authalic Earth radius of 6371.007 km
+Longitude-latitude coordinates are converted to spherical coordinates
+internally as follows, using an authalic Earth radius of 6371.007 km.
 
 \code{radius <- 6371.007}
 \code{x <- radius * cos(lat) * cos(long)}
@@ -74,7 +78,7 @@ as follows, using an authalic Earth radius of 6371.007 km
 \code{z <- radius * sin(lat)}
 
 The background sphere is produced using a slightly smaller radius to prevent
-occulusion and artefacts in features plotted onto its surface
+occlusion and artefacts in features plotted onto its surface.
 }
 \examples{
 \donttest{

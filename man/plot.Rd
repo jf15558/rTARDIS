@@ -27,55 +27,60 @@
 \arguments{
 \item{x}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{y}{\code{numeric}. The layer in the geoglist to be plotted, along with
-its links. Defaults to 1 (the first layer).}
+\item{y}{\code{numeric}. The layer in \code{x} to be plotted, along with
+its links. Defaults to \code{1} (the first layer).}
 
-\item{pal}{\code{vector}. A vector of colours to be used for plotting layer values,
-such as those returned by an R colour palette.}
+\item{pal}{\code{vector}. A vector of colours to be used for plotting layer
+values, such as those returned by an R colour palette. The length of this
+colour palette will also correspond to the number of breaks used when
+plotting, if \code{x} contains continuous values.}
 
 \item{links}{\code{logical}. Should mask links be plotted, if available?}
 
-\item{lcol}{\code{character} or \code{integer}. The colour to be used for plotting links}
+\item{lcol}{\code{character} or \code{integer}. The colour to be used for plotting
+links.}
 
 \item{lwd}{\code{integer}. The line width to be used for plotting links.}
 
 \item{lty}{\code{integer}. The line type to be used for plotting links.}
 
-\item{hex.border}{\code{character} or \code{integer}. The colour to be used for plotting
-hexagonal grids. By default none.}
+\item{hex.border}{\code{character} or \code{integer}. The colour to be used for
+plotting hexagonal grids. By default none.}
 
 \item{legend}{\code{logical}. Should a legend be added to the plot? Defaults to
 \code{TRUE}.}
 
 \item{axes}{\code{logical}. Should axes be added to the plot? These will look
-sensible for lon-lat geoglists, but may look odd for other projection systems.}
+sensible for lon-lat geoglists, but may look odd for other projection
+systems.}
 
 \item{bg}{\code{character} or \code{integer}. The colour to use for the map background.
 \code{NA} (no colour) by default.}
 
-\item{add}{\code{logical}. Should the geoglist layer be added to an existing plot?
-\code{FALSE} by default.}
+\item{add}{\code{logical}. Should \code{x} be added to an existing plot? \code{FALSE} by
+default.}
 
 \item{xlim}{\code{numeric}. If not \code{NULL}, then a vector of two numbers to set the
 minimum and maximum x extent of the plot in terms of the projection system in
-\code{geoglist}.}
+\code{x}.}
 
 \item{ylim}{\code{numeric}. If not \code{NULL}, then a vector of two numbers to set the
 minimum and maximum y extent of the plot in terms of the projection system in
-\code{geoglist}.}
+\code{x}.}
 
-\item{par.reset}{\code{logical}. Should default plotting parameters be restored on function
-exit? Defaults to TRUE to meet CRAN requirements, but can be toggled to allow
-interactive clicking functions to operate, or to allow other features to be
-easily added within the plot axis limits (e.g., with \code{add = TRUE}).}
+\item{par.reset}{\code{logical}. Should default plotting parameters be restored on
+function exit? Defaults to TRUE to meet CRAN requirements, but can be toggled
+to allow interactive clicking functions to operate, or to allow other
+features to be easily added within the plot axis limits (e.g., with
+\code{add = TRUE}).}
 
 \item{...}{Other arguments passed to \code{terra::plot()}.}
 }
 \value{
-None.
+No return value.
 }
 \description{
-Plotting method for a geoglist layer. If the geoglist contains multiple
+Plotting method for a \code{geoglist}. If the \code{geoglist} contains multiple
 layers, then default behaviour is to plot the first one.
 }
 \examples{

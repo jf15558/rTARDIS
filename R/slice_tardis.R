@@ -1,21 +1,25 @@
 #' slice_tardis
 #'
-#' Temporally subset a tardis graph to a range of layers.
+#' Subset a tardis graph to a contiguous range of layers. Unlike with
+#' `slice_geoglist()`, the range must be contiguous to retain full temporal
+#' connectivity between layers.
 #'
-#' @param tardis `tardis`. The output of `build_tardis()` or `weight_tardis()`.
-#' @param times `numeric`. A vector of two positive numbers denoting the desired time range
-#' to subset from tardis. Either this or 'layers' must be specified
-#' @param layers `numeric`. A vector of two positive numbers denoting the desired range of
-#' layers to subset from tardis. Either this or 'times' must be specified
-#' @return A `tardis` object comprising the requested layers
+#' @param tardis `tardis`. The output of `build_tardis()`.
+#' @param times `numeric`. A single positive number giving the age of the layer
+#' to subset from `tardis`, or vector of two positive numbers denoting layer
+#' age range to subset. One of `times` or `layers` must be specified.
+#' @param layers `numeric`. A single positive integer giving the layer to subset
+#' from `tardis` or a vector of two positive integers denoting the layer range
+#' to subset. One of `times` or `layers` must be specified.
+#' @return A `tardis` graph of the requested subset of layers.
 #' @export
 #'
 #' @details
-#' This function was developed for instances where successive analyses do not require
-#' the entire graph, in which case it is more efficient to weight and analyse subsets,
-#' rather than operate on the entire graph or create subsets from scratch. Note that
-#' layers are counted in decreasing age order, so the oldest time layer will be 1
-#' and so forth.
+#' This function was developed for instances where successive analyses do not
+#' require the entire `tardis` graph, in which case it is more efficient to
+#' weight and analyse subsets, rather than operate on the entire graph or create
+#' subsets from scratch. Note that layers are counted in decreasing age order,
+#' so the oldest time layer will be 1 and so forth.
 #'
 #' @examples
 #' \donttest{
@@ -60,8 +64,8 @@ slice_tardis <- function(tardis, times = NULL, layers = NULL) {
   # check times
   if(!is.null(times)) {
 
-    if(!is.numeric(times) | length(times) != 2) {
-      stop("Please supply times as a vector of 2 numbers denoting the desired temporal subset of the graph")
+    if(!is.numeric(times) | length(times) > 2) {
+      stop("Times cannot contain more than two values")
     }
     if(any(is.na(times))) {
       stop("times cannot contain NA values")

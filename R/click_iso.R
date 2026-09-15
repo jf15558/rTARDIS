@@ -1,21 +1,21 @@
 #' click_iso
 #'
-#' Interactively calculate and plot an isochrone around a clicked point on the
-#' landscape displayed by the function. Clicked points falling in masked regions are automatically resolved to the nearest available
-#' cell.
+#' Interactively calculate and display an isochrone around a clicked point on
+#' the landscape plotted by the function. Clicked points falling in masked
+#' regions are automatically resolved to the nearest available cell.
 #'
-#' interactive function under development
-#' @param tardis `tardis`. An object of class 'tardis', produced by create_tardis
-#' @param weights `character`. The name of the weighting scheme column in
-#' `tardis$edges` to use. By default these are true geographic distances
-#' (`"gdist"`). Alternatively, the name of a weighting scheme added to the tardis
-#' @param geog `geoglist`. A geoglist
-#' @param time `integer`. The tardis time slice to plot and interact with.
-#' Defaults to `NULL`, in which case the first slice is used
-#' @param col `character`. The colour to use for plotting interactive features.
-#' @param cost `numeric`. the maximum cost for calculating the isochrone.
-#' @param ... Additional arguments passed to `plot.geoglist()`
-#' @return No return value
+#' @param tardis `tardis`. The output of `build_tardis()`.
+#' @param weights `character`. The name of the weighting scheme in `tardis` to
+#' use for distance calculation. By default these are true geographic distances
+#' (`"gdist"`). Alternatively, the name of another weighting scheme added to
+#' `tardis` using `weight_tardis()`.
+#' @param geog `geoglist`. The `geoglist` used to build `tardis`.
+#' @param time `integer`. The `tardis` time slice to plot and interact with.
+#' Defaults to `NULL`, in which case the first slice is used.
+#' @param col `character`. The colour to use for plotting the isochrone.
+#' @param cost `numeric`. The maximum cost for calculating the isochrone.
+#' @param ... Additional arguments passed to `plot.geoglist()`.
+#' @return No return value.
 #' @import terra sf
 #' @importFrom scales alpha
 #' @export

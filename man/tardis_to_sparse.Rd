@@ -7,20 +7,30 @@
 tardis_to_sparse(tardis, weights = "gdist", mode = "adjacency")
 }
 \arguments{
-\item{tardis}{A tardis graph}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
 
-\item{weights}{\code{character}. A character string denoting the weighting scheme to use. By
-default these are true geographic distances (gdist). Alternatively, the name
-of a weighting scheme added to the tardis object with weight_tardis().}
+\item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
+use for distance calculation. By default these are true geographic distances
+(\code{"gdist"}). Alternatively, the name of another weighting scheme added to
+\code{tardis} using \code{weight_tardis()}.}
 
-\item{mode}{\code{character}. One of "adjacency" or "transition".}
+\item{mode}{\code{character}. One of \code{"adjacency"} or \code{"transition"}.}
 }
 \value{
-\code{matrix} A \code{Matrix::sparseMatrix} adjacency or transition probability matrix.
+\code{matrix} A \code{Matrix::sparseMatrix} adjacency or transition probability
+matrix.
 }
 \description{
 Create either a sparse weighted adjacency or transition probability matrix
-from a tardis graph.
+from a \code{tardis} graph.
+}
+\details{
+Thix function produces a matrix representation of the edgelist in \code{tardis},
+hence why it is sparse (see \code{get_cost()} for creating dense matrices). For
+the adjacency matrix, the weights in the desired weighting scheme are taken
+directly. For the probability matrix, however, the weights are normalised so
+that they sum to one. As such, a huge weight for one edge versus a tiny
+weight for another edge could end up with a similar proportional probability.
 }
 \examples{
 \donttest{

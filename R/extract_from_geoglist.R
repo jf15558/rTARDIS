@@ -1,21 +1,21 @@
 #' extract_from_geoglist
 #'
-#' Extract values from the layers in a geoglist object, using an sf geometry
-#' collection. This geometry is expected to be from another TARDIS function
-#' (e.g, `least_cost()`, `isochrone()`, ect), but could also be a user-designed
-#' geometry.
+#' Extract values from the layers in a `geoglist` using a terra R package
+#' `SpatVector` containing one or several geometries. This will typically come
+#' from another `rTARDIS` function (e.g, `least_cost()`, `isochrone()`, ect),
+#' but could instead be user-designed.
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.
-#' @param geom `SpatVector`. A SpatVector geometry which
-#' will be used to extract values from geog.
-#' @param layer `numeric`. If not NULL, then an integer specifying from which
-#' layer in `geog` values are to be extracted. This argument is intended for
-#' use with user-designed `geom` objects which do not already contain layer
-#' assigments, unlike returns from other rTARDIS functions.
-#' @return `SpatVector`. A SpatVector of points
-#' corresponding to the centroids of all cells in geog intersected by an input
-#' geometry (denoted by `$feature`) in its specified layer (`$layer`), and the
-#' value present at that point (`$value`).
+#' @param geom `SpatVector`. The geometry or geometries which will be used to
+#' extract values from `geog`.
+#' @param layer `numeric`. If not `NULL`, then an integer specifying the layer
+#' in `geog` from which values are to be extracted. This argument is primarily
+#' intended for use with user-designed `geom` objects which do not contain layer
+#' assignments, unlike returns from other `rTARDIS` functions.
+#' @return `SpatVector`. A `SpatVector` of points corresponding to the centroids
+#' of all cells in `geog` intersected by each geometry in `geom` (denoted by
+#' `$feature`), the layers of each intersected cell (`$layer`), and the cell
+#' values (`$value`).
 #' @import terra h3jsr
 #' @export
 #'

@@ -1,15 +1,15 @@
 #' cumulative_cost
 #'
-#' From a given starting point, calculate the cost of reaching every other location
-#' in the same time slice in a tardis graph and return the cumulative cost surface
+#' From a given starting cell, calculate the cost of reaching every other
+#' location in the same time slice in a `tardis` graph.
 #'
-#' @param tardis `tardis`. The output of `build_tardis()` or `weight_tardis()`.
-#' @param weights `character`. The name of the weighting scheme column in
-#' `tardis$edges` to use. By default these are true geographic distances
-#' (`"gdist"`). Alternatively, the name of a weighting scheme added to the tardis
-#' object with `weight_tardis()`.
+#' @param tardis `tardis`. The output of `build_tardis()`.
+#' @param weights `character`. The name of the weighting scheme in `tardis` to
+#' use for distance calculation. By default these are true geographic distances
+#' (`"gdist"`). Alternatively, the name of another weighting scheme added to
+#' `tardis` using `weight_tardis()`.
 #' @param origin `SpatVector`. The output of `point_check()`, denoting the point
-#' from which to calculate cumulative costs
+#' from which to calculate cumulative costs.
 #' @param verbose `logical` Should function progress be reported to the user?
 #' @return A `geoglist` recording the costs required to reach, from the origin
 #' point, each cell in the same time slice as that point.

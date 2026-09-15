@@ -1,40 +1,45 @@
 #' plot.geoglist
 #'
-#' Plotting method for a geoglist layer. If the geoglist contains multiple
+#' Plotting method for a `geoglist`. If the `geoglist` contains multiple
 #' layers, then default behaviour is to plot the first one.
 #'
 #' @name plot
 #' @method plot geoglist
 #' @param x `geoglist`. The output of `rast_to_geoglist()`.
-#' @param y `numeric`. The layer in the geoglist to be plotted, along with
-#' its links. Defaults to 1 (the first layer).
-#' @param pal `vector`. A vector of colours to be used for plotting layer values,
-#' such as those returned by an R colour palette.
+#' @param y `numeric`. The layer in `x` to be plotted, along with
+#' its links. Defaults to `1` (the first layer).
+#' @param pal `vector`. A vector of colours to be used for plotting layer
+#' values, such as those returned by an R colour palette. The length of this
+#' colour palette will also correspond to the number of breaks used when
+#' plotting, if `x` contains continuous values.
 #' @param links `logical`. Should mask links be plotted, if available?
-#' @param lcol `character` or `integer`. The colour to be used for plotting links
+#' @param lcol `character` or `integer`. The colour to be used for plotting
+#' links.
 #' @param lwd `integer`. The line width to be used for plotting links.
 #' @param lty `integer`. The line type to be used for plotting links.
-#' @param hex.border `character` or `integer`. The colour to be used for plotting
-#' hexagonal grids. By default none.
+#' @param hex.border `character` or `integer`. The colour to be used for
+#' plotting hexagonal grids. By default none.
 #' @param legend `logical`. Should a legend be added to the plot? Defaults to
 #' `TRUE`.
 #' @param axes `logical`. Should axes be added to the plot? These will look
-#' sensible for lon-lat geoglists, but may look odd for other projection systems.
+#' sensible for lon-lat geoglists, but may look odd for other projection
+#' systems.
 #' @param bg `character` or `integer`. The colour to use for the map background.
 #' `NA` (no colour) by default.
-#' @param add `logical`. Should the geoglist layer be added to an existing plot?
-#' `FALSE` by default.
-#' @return None.
+#' @param add `logical`. Should `x` be added to an existing plot? `FALSE` by
+#' default.
+#' @return No return value.
 #' @param xlim `numeric`. If not `NULL`, then a vector of two numbers to set the
 #' minimum and maximum x extent of the plot in terms of the projection system in
-#' `geoglist`.
+#' `x`.
 #' @param ylim `numeric`. If not `NULL`, then a vector of two numbers to set the
 #' minimum and maximum y extent of the plot in terms of the projection system in
-#' `geoglist`.
-#' @param par.reset `logical`. Should default plotting parameters be restored on function
-#' exit? Defaults to TRUE to meet CRAN requirements, but can be toggled to allow
-#' interactive clicking functions to operate, or to allow other features to be
-#' easily added within the plot axis limits (e.g., with `add = TRUE`).
+#' `x`.
+#' @param par.reset `logical`. Should default plotting parameters be restored on
+#' function exit? Defaults to TRUE to meet CRAN requirements, but can be toggled
+#' to allow interactive clicking functions to operate, or to allow other
+#' features to be easily added within the plot axis limits (e.g., with
+#' `add = TRUE`).
 #' @param ... Other arguments passed to `terra::plot()`.
 #' @import sf terra
 #' @importFrom graphics par

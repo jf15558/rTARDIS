@@ -9,15 +9,14 @@ click_points(geog, layer = 1, points = 1, print.only = TRUE, ...)
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
-\item{layer}{\code{numeric}. The layer in the geoglist to be plotted, along with
+\item{layer}{\code{numeric}. The layer in the \code{geoglist} to be plotted, along with
 its links.}
 
-\item{points}{\code{numeric}. The number of links you wish to generate.
-Simply rerun the function if you need to add more lines.}
+\item{points}{\code{numeric}. The number of points you wish to generate.}
 
-\item{print.only}{\code{logical}. Defaults to \code{TRUE} and the cell indices and values
-are only printed to the console. If \code{FALSE}, then those points are returned
-as a \code{SpatVector} object.}
+\item{print.only}{\code{logical}. Defaults to \code{TRUE}, printing cell indices and
+values to the console only. If \code{FALSE}, then those points are returned as a
+\code{SpatVector} object.}
 
 \item{...}{Additional arguments passed to \code{plot.geoglist()}}
 }
@@ -25,7 +24,7 @@ as a \code{SpatVector} object.}
 Either \code{NULL} (default) or a \code{SpatVector} of the clicked points.
 }
 \description{
-Click locations on a geoglist layer and return the coordinates and cell IDs
+Click locations on a \code{geoglist} layer and return the coordinates and cell IDs
 of those locations. All locations are resolved to the nearest available
 cell, including any which fall outside of unmasked areas of the layer.
 }

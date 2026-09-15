@@ -5,20 +5,20 @@
 #' all pairs of input points using Djikstra's algorithm, then the optimal route
 #' identified from these sets of pairwise distances.
 #'
-#' @param tardis `tardis`. The output of `build_tardis()` or `weight_tardis()`.
-#' @param weights `character`. The name of the weighting scheme column in
-#' `tardis$edges` to use. By default these are true geographic distances
-#' (`"gdist"`). Alternatively, the name of a weighting scheme added to the tardis
-#' object with `weight_tardis()`.
-#' @param points `SpatVector`. The output of `point_check()`, denoting the points
-#' to be linked.
+#' @param tardis `tardis`. The output of `build_tardis()`.
+#' @param weights `character`. The name of the weighting scheme in `tardis` to
+#' use for distance calculation. By default these are true geographic distances
+#' (`"gdist"`). Alternatively, the name of another weighting scheme added to
+#' `tardis` using `weight_tardis()`.
+#' @param points `SpatVector`. The output of `point_check()`, denoting the
+#' points to be linked.
 #' @param loop `logical`. Should the optimal route additionally be closed from
 #' end point to start point to return a polygon? Defaults to `FALSE`.
 #' @param verbose `logical`. Should function progress be reported to the user?
 #' @return An `SpatVector` of time-discrete lines representing the optimal paths
 #' between each point in `points`, recording which overall path they belong
 #' to (`$feature`), the costs along each line (`$cost`) and their geographic
-#' distances (`$distance`, identical if `weights = gdist`).
+#' distances (`$distance`, identical if `weights = "gdist"`).
 #' @importFrom igraph graph_from_adjacency_matrix
 #' @importFrom igraph as_edgelist
 #' @importFrom igraph E

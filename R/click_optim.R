@@ -1,23 +1,25 @@
 #' click_optim
 #'
-#' Interactively calculate and plot an isochrone around a clicked point on the
-#' landscape displayed by the function. Clicked points falling in masked regions are automatically resolved to the nearest available
+#' Interactively calculate and display the optimal travel path linking a set of
+#' points by clicking on the landscape plotted by the function. Clicked points
+#' falling in masked regions are automatically resolved to the nearest available
 #' cell.
 #'
-#' @param tardis `tardis`. An object of class 'tardis', produced by create_tardis
-#' @param weights `character`. The name of the weighting scheme column in
-#' `tardis$edges` to use. By default these are true geographic distances
-#' (`"gdist"`). Alternatively, the name of a weighting scheme added to the tardis
-#' @param geog `geoglist`. A geoglist
-#' @param time `integer`. The tardis time slice to plot and interact with.
+#' @param tardis `tardis`. The output of `build_tardis()`.
+#' @param weights `character`. The name of the weighting scheme in `tardis` to
+#' use for distance calculation. By default these are true geographic distances
+#' (`"gdist"`). Alternatively, the name of another weighting scheme added to
+#' `tardis` using `weight_tardis()`.
+#' @param geog `geoglist`. The `geoglist` used to build `tardis`.
+#' @param time `integer`. The `tardis` time slice to plot and interact with.
 #' Defaults to `NULL`, in which case the first slice is used.
-#' @param n `integer`. the number of points to link with an optimal path. This
+#' @param n `integer`. The number of points to link with an optimal path. This
 #' should be greater than 2.
 #' @param loop `logical`. Should the optimal route additionally be closed from
 #' end point to start point to return a polygon? Defaults to `FALSE`.
-#' @param col `character`. The colour to use for plotting interactive features.
+#' @param col `character`. The colour to use for plotting the optimal path.
 #' @param ... Additional arguments passed to `plot.geoglist()`
-#' @return No return value
+#' @return No return value.
 #' @import terra sf
 #' @export
 #'

@@ -1,40 +1,44 @@
 #' plot_globe
 #'
-#' Plot a geoglist on a 3D interactive globe. Geoglists of any spatial scale can
-#' be plotted, but is primarily intended for those which cover the total surface
-#' of the Earth or at least a decent portion of one of its hemispheres.
+#' Plot a `geoglist` on a 3D interactive globe. A `geoglist` of any spatial
+#' scale can be plotted, but the function is primarily intended for those which
+#' cover the total surface of the Earth or at least a decent portion of one of
+#' its hemispheres.
 #'
 #' @param x `geoglist`. The output of `rast_to_geoglist()`.
-#' @param y `numeric`. The layer in the geoglist to be plotted, along with
-#' its links. Defaults to 1 (the first layer).
+#' @param y `numeric`. The layer in the `x` to be plotted, along with its links.
+#' Defaults to `1` (the first layer).
 #' @param range `vector`. If not `NULL`, the minimum and maximum values to be
 #' plotted.
-#' @param pal `vector`. A vector of colours to be used for plotting layer values,
-#' such as those returned by an R colour palette. The length of this colour palette
-#' will also correspond to the number of breaks used when plotting a geoglist
-#' with continuous values.
+#' @param pal `vector`. A vector of colours to be used for plotting layer
+#' values, such as those returned by an R colour palette. The length of this
+#' colour palette will also correspond to the number of breaks used when
+#' plotting, if `x` contains continuous values.
 #' @param links `logical`. Should mask links be plotted, if available?
-#' @param lcol `character` or `integer`. The colour to be used for plotting links.
+#' @param lcol `character` or `integer`. The colour to be used for plotting
+#' links.
 #' @param lwd `integer`. The line width to be used for plotting links.
 #' @param lty `integer`. The line type to be used for plotting links.
-#' @param bg `character` or `integer`. The colour to use for the globe background.
-#' @param graticule `logical`. Should a lon-lat graticular be added to the sphere?
-#' Defaults to `TRUE`.
-#' @param grat.col `character` or `integer`. The colour to be used for the graticule lines.
-#' @param add `logical`. Should the geoglist data be added to an existing rgl window?
+#' @param bg `character` or `integer`. The colour to use for the globe
+#' background.
+#' @param graticule `logical`. Should a lon-lat graticule be added to the
+#' sphere? Defaults to `TRUE`.
+#' @param grat.col `character` or `integer`. The colour to be used for the
+#' graticule lines.
+#' @param add `logical`. Should `x` be added to an existing `rgl` window?
 #' @param ... Other arguments passed to `rgl` primitive plotting functions. Note
-#' that some of these are set internally and so using this argument may cause errors.
-#' Defaults to `FALSE`, which will intiate plotting on a blank sphere in a new
-#' rgl window.
-#' @return None.
+#' that some of these are set internally and so using this argument may cause
+#' errors. Defaults to `FALSE`, which will initiate plotting on a blank sphere
+#' in a new `rgl` window.
+#' @return No return value.
 #' @import sf terra rgl h3jsr
 #' @importFrom  h3r cellToBoundary
 #' @importFrom  h3r cellToLatLng
 #' @export
 #'
 #' @details
-#' Longitude-latitude coordinates are converted to spherical coordinates internally
-#' as follows, using an authalic Earth radius of 6371.007 km
+#' Longitude-latitude coordinates are converted to spherical coordinates
+#' internally as follows, using an authalic Earth radius of 6371.007 km.
 #'
 #' `radius <- 6371.007`
 #' `x <- radius * cos(lat) * cos(long)`
@@ -42,7 +46,7 @@
 #' `z <- radius * sin(lat)`
 #'
 #' The background sphere is produced using a slightly smaller radius to prevent
-#' occulusion and artefacts in features plotted onto its surface
+#' occlusion and artefacts in features plotted onto its surface.
 
 #' @examples
 #' \donttest{

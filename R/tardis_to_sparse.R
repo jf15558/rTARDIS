@@ -1,16 +1,27 @@
 #' tardis_to_sparse
 #'
 #' Create either a sparse weighted adjacency or transition probability matrix
-#' from a tardis graph.
+#' from a `tardis` graph.
 #'
-#' @param tardis A tardis graph
-#' @param weights `character`. A character string denoting the weighting scheme to use. By
-#' default these are true geographic distances (gdist). Alternatively, the name
-#' of a weighting scheme added to the tardis object with weight_tardis().
-#' @param mode `character`. One of "adjacency" or "transition".
-#' @return `matrix` A `Matrix::sparseMatrix` adjacency or transition probability matrix.
+#' @param tardis `tardis`. The output of `build_tardis()`.
+#' @param weights `character`. The name of the weighting scheme in `tardis` to
+#' use for distance calculation. By default these are true geographic distances
+#' (`"gdist"`). Alternatively, the name of another weighting scheme added to
+#' `tardis` using `weight_tardis()`.
+#' @param mode `character`. One of `"adjacency"` or `"transition"`.
+#' @return `matrix` A `Matrix::sparseMatrix` adjacency or transition probability
+#' matrix.
 #' @import cppRouting Matrix
 #' @export
+#'
+#' @details
+#' Thix function produces a matrix representation of the edgelist in `tardis`,
+#' hence why it is sparse (see `get_cost()` for creating dense matrices). For
+#' the adjacency matrix, the weights in the desired weighting scheme are taken
+#' directly. For the probability matrix, however, the weights are normalised so
+#' that they sum to one. As such, a huge weight for one edge versus a tiny
+#' weight for another edge could end up with a similar proportional probability.
+#'
 #'
 #' @examples
 #' \donttest{

@@ -7,35 +7,35 @@
 least_cost(tardis, weights = "gdist", origin, dest, verbose = TRUE)
 }
 \arguments{
-\item{tardis}{\code{tardis}. The output of \code{build_tardis()} or \code{weight_tardis()}.}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
 
-\item{weights}{\code{character}. The name of the weighting scheme column in
-\code{tardis$edges} to use. By default these are true geographic distances
-(\code{"gdist"}). Alternatively, the name of a weighting scheme added to the tardis
-object with \code{weight_tardis()}.}
+\item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
+use for distance calculation. By default these are true geographic distances
+(\code{"gdist"}). Alternatively, the name of another weighting scheme added to
+\code{tardis} using \code{weight_tardis()}.}
 
 \item{origin}{\code{SpatVector}. The output of \code{point_check()}, denoting the
 starting points of the least cost paths.}
 
 \item{dest}{\code{SpatVector}. The output of \code{point_check()}, denoting the
-destination points of the least cost paths. The user should be careful to ensure
-that the time ordering of point pairs matches the time linking mode if
-tardis contains multiple layers (i.e., points in older layers cannot be
-accessed from points in younger layers if the linking mode is forwards in time
-(\code{tlink = 1}).}
+destination points of the least cost paths. The time ordering of point pairs
+must match the time linking mode if it is unidirectional (i.e., points in
+older layers cannot be accessed from points in younger layers if the linking
+mode is forwards in time (\code{tlink = 1}).}
 
 \item{verbose}{\code{logical}. Should function progress be reported to the user?}
 }
 \value{
-An \code{SpatVector} of time-discrete lines representing the least
+A \code{SpatVector} of time-discrete lines representing the least
 cost paths between each point pair, recording which overall path they belong
-to (\verb{$feature}), the costs along each line (\verb{$cost}) and their geographic
-distances (\verb{$distance}, identical if \code{weights = gdist}).
+to (\verb{$feature}), the layer the path segment occupies (\verb{$layer}), the costs
+along each segment (\verb{$cost}) and their geographic distances (\verb{$distance},
+identical if \code{weights = "gdist"}).
 }
 \description{
-Determine least cost paths between pairs of origin and destination coordinates
-using Djikstra's algorithm. Costs are either geographic distances or a custom
-weighting scheme supplied by the user.
+Determine least cost paths between pairs of origin and destination
+coordinates using Djikstra's algorithm. Costs are either geographic distances
+or a custom weighting scheme supplied by the user.
 }
 \examples{
 \donttest{
@@ -46,7 +46,7 @@ gal <- galapagos()
 gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 
 rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
-rlink <- link_islands(rasts)
+rasts <- link_islands(rasts)
 rtd <- build_tardis(rasts)
 pts <- rbind(c(-89.78873, -1.420627, 2),
              c(-88.70836, -0.2627832, 2))

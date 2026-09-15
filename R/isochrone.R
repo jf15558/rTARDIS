@@ -3,21 +3,22 @@
 #' Calculate a cost isochrone around a point, that is all cells in the same
 #' time layer which fall within a certain cost of access of that point.
 #'
-#' @param tardis `tardis`. The output of `build_tardis()` or `weight_tardis()`.
-#' @param weights `character`. The name of the weighting scheme column in
-#' `tardis$edges` to use. By default these are true geographic distances
-#' (`"gdist"`). Alternatively, the name of a weighting scheme added to the tardis
-#' object with `weight_tardis()`.
-#' @param origin `SpatVector`. The output of `point_check()`, denoting the points
-#' around which to calculate isochrones.
-#' @param cost The maximum cumulative cost of below which cells will be
-#' included within the isochrone in a point's time-specific origin landscape
-#' layer, either a single number or a vector with as many elements as points in
-#' origin to enable different costs for each point. By default, this value is
-#' in metres, corresponding to the rTARDIS default weighting scheme.
+#' @param tardis `tardis`. The output of `build_tardis()`.
+#' @param weights `character`. The name of the weighting scheme in `tardis` to
+#' use for distance calculation. By default these are true geographic distances
+#' (`"gdist"`). Alternatively, the name of another weighting scheme added to
+#' `tardis` using `weight_tardis()`.
+#' @param origin `SpatVector`. The output of `point_check()`, denoting the
+#' points around which to calculate isochrones.
+#' @param cost The maximum cumulative cost up to which cells will be included
+#' within the isochrone around a point. Either a single number or a vector with
+#' as many elements as points in `origin` to enable different costs for each
+#' point. By default, this value assumed to be in metres, corresponding to the
+#' `rTARDIS` default weighting scheme.
 #' @param verbose `logical` Should function progress be reported to the user?
-#' @return A `SpatVector` containing isochrone polygons, recording to which input
-#' point in `origin` they correspond to (`$feature`) and their time layer (`$layer`)
+#' @return A `SpatVector` containing isochrone polygons, recording to which
+#' input point in `origin` they correspond to (`$feature`) and their time layer
+#' (`$layer`).
 #' @import terra sf h3jsr
 #' @export
 #'
