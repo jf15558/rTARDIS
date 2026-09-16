@@ -74,10 +74,10 @@ slice_tardis <- function(tardis, times = NULL, layers = NULL) {
       stop("times must only contain values >= 0")
     }
     times <- times[order(times, decreasing = T)]
-    if(times[1] > tardis$tdat[1] | times[2] < tardis$tdat[length(tardis$tdat)]) {
+    if(times[1] > tardis$tdat[1] | times[length(times)] < tardis$tdat[length(tardis$tdat)]) {
       stop("times must fall within the temporal range of the TARDIS graph")
     }
-    layers <- c(sum(times[1] <= tardis$tdat), sum(times[2] < tardis$tdat))
+    layers <- c(sum(times[1] <= tardis$tdat), sum(times[length(times)] < tardis$tdat))
   }
 
   # check layers
@@ -93,13 +93,13 @@ slice_tardis <- function(tardis, times = NULL, layers = NULL) {
       stop("layers must only contain positive integers")
     }
     layers <- layers[order(layers, decreasing = F)]
-    if(layers[1] > length(tardis$tdat) - 1 | layers[2] > length(tardis$tdat) - 1) {
+    if(layers[1] > length(tardis$tdat) - 1 | layers[length(layers)] > length(tardis$tdat) - 1) {
       stop("The values in layers cannot exceed the number of layers in the TARDIS graph")
     }
   }
 
   # get the cell id range for the requested layer range
-  cls <- as.character(((layers[1] * tardis$gdat[5]) - tardis$gdat[5] + 1):(layers[2] * tardis$gdat[5]))
+  cls <- as.character(((layers[1] * tardis$gdat[5]) - tardis$gdat[5] + 1):(layers[length(layers)] * tardis$gdat[5]))
 
   # subset edges and dict
   valid <- tardis$tgraph$src %in% cls & tardis$tgraph$dst %in% cls

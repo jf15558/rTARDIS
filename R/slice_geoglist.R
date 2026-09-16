@@ -58,10 +58,10 @@ slice_geoglist <- function(geog, times = NULL, layers = NULL) {
       stop("times must only contain values >= 0")
     }
     times <- times[order(times, decreasing = T)]
-    if(times[1] > geog$tdat[1] | times[length(layers)] < geog$tdat[length(geog$tdat)]) {
+    if(times[1] > geog$tdat[1] | times[length(times)] < geog$tdat[length(geog$tdat)]) {
       stop("times must fall within the temporal range of geog")
     }
-    layers <- c(sum(times[1] <= geog$tdat), sum(times[2] < geog$tdat))
+    layers <- c(sum(times[1] <= geog$tdat), sum(times[length(times)] < geog$tdat))
   }
 
   # check layers
