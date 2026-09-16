@@ -65,7 +65,7 @@ slice_tardis <- function(tardis, times = NULL, layers = NULL) {
   if(!is.null(times)) {
 
     if(!is.numeric(times) | length(times) > 2) {
-      stop("Times cannot contain more than two values")
+      stop("times must be a single age, or a vector of two numbers defining an age range")
     }
     if(any(is.na(times))) {
       stop("times cannot contain NA values")
@@ -83,8 +83,8 @@ slice_tardis <- function(tardis, times = NULL, layers = NULL) {
   # check layers
   if(!is.null(layers)) {
 
-    if(!is.numeric(layers) | length(layers) != 2) {
-      stop("Please supply layers as a vector of 2 integers denoting the range of desired graph layers")
+    if(!is.numeric(layers) | length(layers) > 2) {
+      stop("layers must be a single integer, or a vector of two integers defining a layer range")
     }
     if(any(is.na(layers))) {
       stop("layers cannot contain NA values")

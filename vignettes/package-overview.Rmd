@@ -25,9 +25,9 @@ library(rTARDIS)
 
 rTARDIS - *Terrains And Routes Directed In Spacetime* - is an R package for analysing distances and routes in spatially heterogeneous and potentially temporally varying geographic spaces. It was initially developed to be Google Maps for palaeobiologists, although it is applicable in any domains where complex geographic connectivity or temporal changes in those connections are important to the biological question at hand.
 
-`rTARDIS` uses raster datasets, which are widely available for modern and palaeogeographic spaces, to quantify connectivity between geographic locations. Cells in a raster are represented as nodes in a geospatial graph, with their interconnections forming edges in that graph, and edge weights describing the difficulty of moving between cells. This makes `rTARDIS` similar to the R package `gdistance`, in contrast to packages like `sfnetworks`, `grainscape` or `geonetwork` which use vector representations of specific geographic features to construct a geospatial graph instead. The principle of the geospatial graph, however, is what underlies any mapping and routing software, from Google Maps to ArcGIS Spatial Analyst.
+`rTARDIS` uses raster datasets, which are widely available for modern and palaeogeographic spaces, to quantify connectivity between geographic locations. Cells in a raster are represented as nodes in a geospatial graph, with their interconnections forming edges in that graph, and edge weights describing the difficulty of moving between cells. This makes `rTARDIS` more similar to the R package `gdistance`, compared to packages like `sfnetworks`, `grainscape` or `geonetwork` which use vector representations of specific geographic features to construct a geospatial graph instead. The principle of the geospatial graph, however, is what underlies any mapping and routing software, from Google Maps to ArcGIS Spatial Analyst.
 
-Together, what makes distinguishes `rTARDIS` within this ecosystem of geospatial graph packages are: 1. the option for hexagonal re-gridding to optimise spatial representation at global scales; 2. principled connectivity schemes for heterogeneous, fragmented geographic spaces; 3. weighting of graph edges by factors other than geographic distance, and; 4. the capacity to link graphs through time.\
+Together, what distinguishes `rTARDIS` within this ecosystem of geospatial graph packages are: 1. the option for hexagonal re-gridding to optimise spatial representation at global scales; 2. principled connectivity schemes for fragmented geographic spaces; 3. weighting of graph edges by factors other than geographic distance, and; 4. the capacity to link graphs through time.\
 
 ## Rectangular and hexagonal grids
 
@@ -48,7 +48,7 @@ plot(foo2, values = foo2$area, range = c(0,1), breaks = 20, legend = F, xlim = c
 legend_cont("topleft", legend = c(0, 1))
 ```
 
-### Adjacency
+* **Adjacency**
 
 For a rectangular grid, `rTARDIS` assumes connections between between orthogonally and diagonally adjacent cells (variously named king's, 8-degree or Moore adjacency) in contrast to orthogonal-only adjacency (a.k.a. rook's, 4-degree or von Neumann adjacency). By geometric necessity, orthogonal neighbours lie slightly closer to the focal cell than diagonal neighbours. In a hexagonal grid, each cell has six neighbours instead, all equally distant from the focal cell, with the exception of the 12 pentagonal cells in the grid where five equidistant neighbours are present.
 
@@ -59,13 +59,19 @@ plot(cell_to_polygon(get_ring(suppressMessages(point_to_cell(c(10, -40), 2)))), 
 plot(cell_to_polygon(suppressMessages(point_to_cell(c(10, -40), 2))), add = T, col =5)
 ```
 
-### Resolution
+* **Resolution**
 
-Rectangular grids can take any resolution. Hexagonal grids (not just those from H3), however, are constrained to particular resolutions according to their degree of tessellation. As such (and as with resampling of any kind), hexagonal re-gridding approximates the original rectangular data and may induce sampling artefacts, particularly if a coarser resolution is used. H3 offers 15 resolution levels, with finest offering ~1 metre resolution.
+Rectangular grids can take any resolution. Hexagonal grids (not just those from H3), however, are constrained to particular resolutions according to their degree of tessellation (resolutions 3 and 4 shown below as an example). As such (and as with resampling of any kind), hexagonal re-gridding approximates the original rectangular data and may induce sampling artefacts, particularly if a coarser resolution is used. H3 offers 15 resolution levels, with finest (15) offering ~1 metre resolution.
 
-### Ordering
+```{r, echo=F, fig.width=9.5, dev="svg", include=F}
+plot(vect(cell_to_polygon(point_to_cell(cbind(40, -15), 3))), xlim = c(39, 40.6), ylim = c(-16.3, -14.8))
+plot(vect(cell_to_polygon(get_children(point_to_cell(cbind(40, -15), 3), 4)[[1]])), add = T, border = 2)
+legend(39, -14.8, c("H3 res. 3", "H3 res. 4"), pch = 1, col = c(1, 2), bty = "n")
+```
 
-A rectangular grid as defined by `terra` (the `SpatRaster` class) consists of contiguous grid cells in row-major order (i.e., the top left cell is cell 1, the one immediately to its right is cell 2, and so forth). By contract, there is no clear basis for ordering cells from H3 based on their spatial position. At local scales the cells will form a staggered row and column structure, but this breaks down at global scales. As such, cell order is not spatially intuitive, although in practice this does not matter to how `rTARDIS` works. Cell ordering for the two grid systems is displayed below.
+* **Ordering**
+
+A rectangular grid as defined by `terra` (the `SpatRaster` class) consists of contiguous grid cells in row-major order (i.e., the top left cell is cell 1, the one immediately to its right is cell 2, and so forth). By contract, there is no clear basis for ordering cells from H3 based on their spatial position. At local scales the cells will form a staggered row and column structure, but this breaks down at global scales. As such, cell order is not spatially intuitive, although in practice this does not matter to how `rTARDIS` works. Cell ordering for the two grid systems is displayed below in dark to light colours.
 
 ```{r, echo=F, fig.width=9.5, fig.height=4.5, dev="svg"}
 foo <- st_sf(cell_to_polygon(polygon_to_cells(
@@ -109,7 +115,7 @@ rasts <- link_islands(rasts, klink = 1)
 plot(rasts, legend = F)
 ```
 
-By default, the edges in a `rTARDIS` geospatial graph correspond to the geographic distances between grid cells, as in `gdistance`. These are calculated as great circle distances, additionally adjusted for changes in elevation between cells provided that rasters with elevation data are used for graph construction. We may, however, expect factors other than geographic distance to control how we move through a given geographic space. Besides rasters representing elevation above/below sea level, one could also supply data on properties like climate, ocean currents, or vegetation. A custom (user-written) weighting function can then be used to change the cost of movement through geographic space according to those alternative properties, also like `gdistance` (see vignette *Geographic distance and reweighting*).
+By default, the edges in a `rTARDIS` geospatial graph correspond to the geographic distances between grid cells, as in `gdistance`. These are calculated as great circle distances, additionally adjusted for changes in elevation between cells provided that rasters with elevation data are used for graph construction. We may, however, expect factors other than geographic distance to control how we move through a given geographic space. Besides rasters representing elevation above/below sea level, one could also supply data on properties like climate, ocean currents, or vegetation. A custom (user-written) weighting function can then be used to change the cost of movement through geographic space according to those alternative properties, also like `gdistance` (see vignette *Geographic Distance and Re-weighting*).
 
 ## Geographic space through time
 
@@ -136,4 +142,4 @@ plot(pts, col = "gold", add = T)
 plot(lcp, col = "gold", add = T, lwd = 2)
 ```
 
-Functions are mostly designed for scripting, but a few also have wrappers to allow a user to interactively edit or query properties of a landscape. The full range of functions offered are covered in later vignettes.\
+Functions are mostly designed for scripting, but a few also have wrappers to allow a user to interactively edit or query properties of a landscape. The full range of functions offered will be covered in later vignettes.\
