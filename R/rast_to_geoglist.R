@@ -89,7 +89,7 @@ rast_to_geoglist <- function(geog, mask = NULL, times = NULL, as.hex = FALSE, he
   #gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T), right = F)
 
   #geog  = cret
-  #mask = cret_l
+  #mask = NULL
   #as.hex = T
   #times = NULL
   #hex = 2
@@ -166,7 +166,7 @@ rast_to_geoglist <- function(geog, mask = NULL, times = NULL, as.hex = FALSE, he
       mask <- disagg(mask, 2)
       grid <- lapply(mask, function(x) {xyFromCell(x, which(x[] == 1))})
     } else {
-      mask <- disagg(geog[[1]])
+      mask <- disagg(geog[[1]], 2)
       grid <- lapply(1:length(geog), function(x) {xyFromCell(mask, 1:ncell(mask))})
     }
 

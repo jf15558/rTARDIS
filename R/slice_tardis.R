@@ -39,9 +39,9 @@
 
 slice_tardis <- function(tardis, times = NULL, layers = NULL) {
 
-  # tardis <- rtd
-  # times <- NULL
-  # layers <- c(2, 2)
+  tardis <- rtd
+  times <- NULL
+  layers <- 4
 
   if (!exists("tardis")) {
     stop("Supply tardis as the output of create_tardis")
@@ -50,7 +50,7 @@ slice_tardis <- function(tardis, times = NULL, layers = NULL) {
     stop("Supply tardis as the output of create_tardis")
   }
   if(is.null(tardis$tdat)) {
-    stop("Temporal subsetting can only be applied to TARDIS graphs with multiple layers")
+    stop("Temporal subsetting can only be applied to tardis objects with multiple layers")
   }
 
   # check subsetting conflict
@@ -75,7 +75,7 @@ slice_tardis <- function(tardis, times = NULL, layers = NULL) {
     }
     times <- times[order(times, decreasing = T)]
     if(times[1] > tardis$tdat[1] | times[length(times)] < tardis$tdat[length(tardis$tdat)]) {
-      stop("times must fall within the temporal range of the TARDIS graph")
+      stop("times must fall within the temporal range of tardis")
     }
     layers <- c(sum(times[1] <= tardis$tdat), sum(times[length(times)] < tardis$tdat))
   }
@@ -94,7 +94,7 @@ slice_tardis <- function(tardis, times = NULL, layers = NULL) {
     }
     layers <- layers[order(layers, decreasing = F)]
     if(layers[1] > length(tardis$tdat) - 1 | layers[length(layers)] > length(tardis$tdat) - 1) {
-      stop("The values in layers cannot exceed the number of layers in the TARDIS graph")
+      stop("The values in layers cannot exceed the number of layers in tardis")
     }
   }
 
