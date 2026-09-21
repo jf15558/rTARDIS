@@ -167,7 +167,7 @@ rast_to_geoglist <- function(geog, mask = NULL, times = NULL, as.hex = FALSE, he
       grid <- lapply(mask, function(x) {xyFromCell(x, which(x[] == 1))})
     } else {
       mask <- disagg(geog[[1]], 2)
-      grid <- lapply(1:length(geog), function(x) {xyFromCell(mask, 1:ncell(mask))})
+      grid <- lapply(1:nlyr(geog), function(x) {xyFromCell(mask, 1:ncell(mask))})
     }
 
     clist <- get_grid(as.vector(ext(geog)), hex)
