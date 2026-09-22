@@ -39,9 +39,9 @@
 
 slice_tardis <- function(tardis, times = NULL, layers = NULL) {
 
-  tardis <- rtd
-  times <- NULL
-  layers <- 4
+  #tardis <- rtd
+  #times <- NULL
+  #layers <- 4
 
   if (!exists("tardis")) {
     stop("Supply tardis as the output of create_tardis")
