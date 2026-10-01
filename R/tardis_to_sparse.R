@@ -112,8 +112,8 @@ tardis_to_sparse <- function(tardis, weights = "gdist", mode = "adjacency",
     stop("mode should be one of 'adjacency' or 'transition'")
   }
 
-  if(!is.logical(raw.weights) | length(raw.weights) != 1) {
-    stop("raw.weights should be a single logical value")
+  if(!is.logical(raw.weight) | length(raw.weight) != 1) {
+    stop("raw.weight should be a single logical value")
   }
 
   if(jump.dir != "auto") {
@@ -121,10 +121,11 @@ tardis_to_sparse <- function(tardis, weights = "gdist", mode = "adjacency",
       stop("If not 'auto', then hex should be a an integer denoting the jump direction cardinality")
     }
   } else {
-
-    cat(paste0("Autoselecting jump.dir from grid type"))
-    jump.dir <- 8
-    if(!is.na(tardis$gdat[7])) {jump.dir <- 6}
+    if(!raw.weight) {
+      cat(paste0("Autoselecting jump.dir from grid type"))
+      jump.dir <- 8
+      if(!is.na(tardis$gdat[7])) {jump.dir <- 6}
+    }
   }
 
   tardis <- instantiate_tardis(tardis = tardis, weights = weights)
@@ -134,7 +135,6 @@ tardis_to_sparse <- function(tardis, weights = "gdist", mode = "adjacency",
                         j = tardis$tgraph$data$to + 1,
                         x = tardis$tgraph$data$dist)
   } else {
-
 
     if(raw.weight) {
 
