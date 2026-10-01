@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+oldpar <- par(no.readonly = TRUE)
 ```
 
 ```{r setup, include=F}
@@ -160,9 +161,15 @@ plot(dm, add = T, border = "grey")
 
 While full Voronoi linkage creates a more densely connected neighbourhood, it only produces single connections between islands, which may still be quite restrictive. Besides multiple islands lying at potentially similar distances to one another, there may be multiple, similarly spaced points between the boundaries of neighbouring islands between which linkage would be reasonable. The final core method of linkage uses a different function, `link_delaunay()` to connect individual boundary cells to their neighbours, based on Delaunay triangulation:
 
-```{r, fig.width=9.5, fig.height=10, dev="svg"}
+```{r, eval = F}
 # link then plot
 rst <- link_delaunay(rst)
+plot(rst)
+```
+
+```{r, echo = F, fig.width=9.5, fig.height=10, dev="svg"}
+# link then plot
+rst$links <- readRDS(system.file("extdata", "dlinks.RData", package = "rTARDIS"))
 plot(rst)
 ```
 
@@ -188,7 +195,7 @@ Thus far, we have built our models of geographic space directly from a rectangul
 
 Hexagonal gridding is implemented in `rast_to_geoglist()` by setting `as.hex = T`. By default, the function will choose the H3 resolution level which most closely matches the resolution of the input raster (`hex = "auto"`). In practice, this grid could be a little finer than the input and result in quite a large grid. As such, you can alternatively select the resolution directly (e.g., `hex = 6`). We will use a different dataset this time, of the topography and bathymetry of the Earth in the late Cretaceous:
 
-```{r, include=FALSE}
+```{r, fig.width=9.5, fig.height=4.5, dev="svg"}
 # load the dataset and select the first time slice
 cret <- cretaceous()[[1]]
 
@@ -199,12 +206,7 @@ cret_l <- classify(cret, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T),
 h2 <- rast_to_geoglist(cret, cret_l, as.hex = T, hex = 2)
 h3 <- rast_to_geoglist(cret, cret_l, as.hex = T, hex = 3)
 
-# plot to compare (zlim set to)
-plot(h2)
-plot(h3)
-```
-
-```{r, fig.width=9.5, fig.height=4.5, dev="svg"}
+# plot to compare
 plot(h2)
 plot(h3)
 ```
@@ -332,3 +334,7 @@ cbind(smp, tmp, spt, crds)[1:10,]
 ```
 
 Now that we can parameterise the connectivity of a geographic space, we can think about altering this connectivity according to other spatially varying properties or calculating distances and routes within its structure using other functions from `rTARDIS`. These are covered by other vignettes.\
+
+```{r, include = F}
+par(oldpar)
+```

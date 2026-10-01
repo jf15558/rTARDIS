@@ -4,17 +4,17 @@
 \alias{regions}
 \title{regions}
 \usage{
-regions(geog, bounds.only = T, use.links = F)
+regions(geog, bounds.only = TRUE, use.links = FALSE)
 }
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
 
 \item{bounds.only}{\code{logical}. Should only the boundary cells of regions be
-returned?}
+returned? Defaults to \code{TRUE}.}
 
 \item{use.links}{\code{logical}. Should links in \code{geog} be accounted for when
-determining cell connectivity and so region membership? This argument will
-have no effect if \code{geog} does not contain any links.}
+determining cell connectivity and so region membership? Defaults to \code{TRUE}.
+This argument will have no effect if \code{geog} does not contain any links.}
 }
 \value{
 A \code{geoglist} recording the region affinity of the cells in each
@@ -30,8 +30,9 @@ library(terra)
 library(rTARDIS)
 
 gal <- cretaceous()
-gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
-rasts <- rast_to_geoglist(gal, gal_m, times = c(112.5, 110, 107.5))
+gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+                  byrow = TRUE), right = FALSE)
+rasts <- rast_to_geoglist(gal[[1]], gal_m[[1]])
 
 regs <- regions(rasts)
 plot(regs)

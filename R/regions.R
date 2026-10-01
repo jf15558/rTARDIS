@@ -5,10 +5,10 @@
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.
 #' @param bounds.only `logical`. Should only the boundary cells of regions be
-#' returned?
+#' returned? Defaults to `TRUE`.
 #' @param use.links `logical`. Should links in `geog` be accounted for when
-#' determining cell connectivity and so region membership? This argument will
-#' have no effect if `geog` does not contain any links.
+#' determining cell connectivity and so region membership? Defaults to `TRUE`.
+#' This argument will have no effect if `geog` does not contain any links.
 #' @return A `geoglist` recording the region affinity of the cells in each
 #' layer.
 #' @import sf terra
@@ -22,15 +22,16 @@
 #' library(rTARDIS)
 #'
 #' gal <- cretaceous()
-#' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
-#' rasts <- rast_to_geoglist(gal, gal_m, times = c(112.5, 110, 107.5))
+#' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+#'                   byrow = TRUE), right = FALSE)
+#' rasts <- rast_to_geoglist(gal[[1]], gal_m[[1]])
 #'
 #' regs <- regions(rasts)
 #' plot(regs)
 #' }
 
-regions <- function(geog, bounds.only = T, use.links = F) {
-  #
+regions <- function(geog, bounds.only = TRUE, use.links = FALSE) {
+
    #geog = rasts
    #bounds.only = F
    #use.links = T

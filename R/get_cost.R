@@ -30,7 +30,8 @@
 #' library(rTARDIS)
 #'
 #' gal <- galapagos()
-#' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
+#' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+#'                   byrow = TRUE), right = FALSE)
 #'
 #' hexes <- rast_to_geoglist(gal[[1]], gal_m[[1]], as.hex = TRUE, hex = 6)
 #' hexes <- link_islands(hexes)
@@ -38,7 +39,8 @@
 #' htd <- build_tardis(hexes)
 #' pairs <- get_cost(htd, origin = "19", dest = "1806")
 #' one_to_many <- get_cost(htd, origin = "19", dest = c("19", "23", "26", "31"))
-#' many_to_many <- get_cost(htd, origin = c("19", "23", "26", "31"), dest = c("19", "23", "26", "31"))
+#' many_to_many <- get_cost(htd, origin = c("19", "23", "26", "31"),
+#'                               dest = c("19", "23", "26", "31"))
 #'}
 
 get_cost <- function(tardis, weights = "gdist", origin, dest) {

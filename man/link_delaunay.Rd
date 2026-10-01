@@ -56,10 +56,11 @@ library(rTARDIS)
 gal <- galapagos()
 
 # create a land-sea mask from the archipelago raster set
-gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
+gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+                  byrow = TRUE), right = FALSE)
 
 # create a geoglist with hexagonal resampling and mask the sea
-hexes <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
+hexes <- rast_to_geoglist(gal[[1]], gal_m[[1]], as.hex = TRUE, hex = 6)
 hexes <- link_delaunay(hexes)
 
 # plot the first layer of the geoglist with island links

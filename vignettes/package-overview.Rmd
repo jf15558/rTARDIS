@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+oldpar <- par(no.readonly = TRUE)
 ```
 
 ```{r setup, include=F}
@@ -143,3 +144,7 @@ plot(lcp, col = "gold", add = T, lwd = 2)
 ```
 
 Functions are mostly designed for scripting, but a few also have wrappers to allow a user to interactively edit or query properties of a landscape. The full range of functions offered will be covered in later vignettes.\
+
+```{r, include = F}
+par(oldpar)
+```

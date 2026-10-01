@@ -54,12 +54,12 @@ Defaults to \code{"mean"}.}
 }
 \value{
 A \code{geoglist} with four list elements. \verb{$gdat} records spatial
-properties of the input rasters used throughout downstream TARDIS functions.
+properties of the input rasters used throughout downstream \code{rTARDIS} functions.
 \verb{$tdat} records the temporal extent of each layer, or is \code{NULL} if this
 information was omitted in the function run. \verb{$layers} is a set of geographic
 layers, either as a standard \code{SpatRaster}, or a \code{SpatVectorCollection} of
 hexagonal polygons if resampling was implemented. \verb{$links} is a \code{NULL}
-placeholder slot for storing the output of linking functions used later on.
+placeholder slot for storing the output of downstream linking functions.
 }
 \description{
 Convert a set of rasters to an S3 class \code{geoglist} object compatible with
@@ -98,12 +98,14 @@ library(rTARDIS)
 gal <- galapagos()
 
 # create a land-sea mask from the archipelago raster set
-gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
+gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+                  byrow = TRUE), right = FALSE)
 
 # create a geoglist from a single raster layer
 rasts <- rast_to_geoglist(gal[[1]], gal_m[[1]])
 
 # create a multi-layer geoglist with hexagonal resampling
-hexes <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
+hexes <- rast_to_geoglist(gal[[1:2]], gal_m[[1:2]], times = c(2.25, 2, 1.75),
+                          as.hex = TRUE, hex = 6)
 }
 }

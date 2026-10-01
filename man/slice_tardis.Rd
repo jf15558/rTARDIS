@@ -38,12 +38,13 @@ library(terra)
 library(rTARDIS)
 
 gal <- galapagos()
-gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
-rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0))
-rasts <- link_islands(rasts)
+gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+                  byrow = TRUE), right = FALSE)
+
+rasts <- rast_to_geoglist(gal[[1:2]], gal_m[[1:2]], times = c(2.25, 2, 1.75))
 rtd <- build_tardis(rasts)
 
-gts <- slice_tardis(rtd, times = c(1.2, 0))
-gts <- slice_tardis(rtd, layers = c(1, 2))
+gts <- slice_tardis(rtd, times = c(2.2, 1.8))
+gts <- slice_tardis(rtd, layers = 2)
 }
 }

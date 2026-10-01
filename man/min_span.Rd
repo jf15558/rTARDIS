@@ -48,9 +48,11 @@ library(terra)
 library(rTARDIS)
 
 gal <- galapagos()
-gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
+gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+                  byrow = TRUE), right = FALSE)
 
-hexes <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 7)
+hexes <- rast_to_geoglist(gal[[1:2]], gal_m[[1:2]], times = c(2.25, 2, 1.75),
+                          as.hex = TRUE, hex = 6)
 hexes <- link_islands(hexes)
 
 htd <- build_tardis(hexes)
@@ -63,7 +65,9 @@ org <- rbind(c(-89.78873, -1.420627, 2),
 hpts <- point_check(htd, org)
 hmca <- min_span(htd, points = hpts)
 
-plot(hexes)
-plot(hmca, add = TRUE)
+oldpar <- par(no.readonly = TRUE)
+plot(hexes, par.reset = FALSE)
+plot(hmca, add = TRUE, col = "gold", lwd = 2)
+par(oldpar)
 }
 }

@@ -35,12 +35,12 @@
 #' @param ... Additional arguments passed internally to
 #' `exactextractr::exact_extract()` for resampling of raster grids.
 #' @return A `geoglist` with four list elements. `$gdat` records spatial
-#' properties of the input rasters used throughout downstream TARDIS functions.
+#' properties of the input rasters used throughout downstream `rTARDIS` functions.
 #' `$tdat` records the temporal extent of each layer, or is `NULL` if this
 #' information was omitted in the function run. `$layers` is a set of geographic
 #' layers, either as a standard `SpatRaster`, or a `SpatVectorCollection` of
 #' hexagonal polygons if resampling was implemented. `$links` is a `NULL`
-#' placeholder slot for storing the output of linking functions used later on.
+#' placeholder slot for storing the output of downstream linking functions.
 #' @import terra exactextractr h3jsr
 #' @export
 #'
@@ -74,14 +74,16 @@
 #' gal <- galapagos()
 #'
 #' # create a land-sea mask from the archipelago raster set
-#' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
+#' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+#'                   byrow = TRUE), right = FALSE)
 #'
 #' # create a geoglist from a single raster layer
 #' rasts <- rast_to_geoglist(gal[[1]], gal_m[[1]])
 #'
 #' # create a multi-layer geoglist with hexagonal resampling
-#' hexes <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
-#' }
+#' hexes <- rast_to_geoglist(gal[[1:2]], gal_m[[1:2]], times = c(2.25, 2, 1.75),
+#'                           as.hex = TRUE, hex = 6)
+#'}
 
 rast_to_geoglist <- function(geog, mask = NULL, times = NULL, as.hex = FALSE, hex = "auto", method = "mean", verbose = TRUE, ...) {
 

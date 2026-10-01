@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+oldpar <- par(no.readonly = TRUE)
 ```
 
 ```{r setup}
@@ -245,3 +246,6 @@ wfun <- function(origin, dest) {
 rtd <- weight_tardis(rtd, name = "elev", vars = wvars, wfun = wfun)
 ```
 
+```{r, include = F}
+par(oldpar)
+```

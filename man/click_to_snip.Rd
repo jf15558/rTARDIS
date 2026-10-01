@@ -26,7 +26,7 @@ in the plotting window. Lines are drawn by clicking their start and end
 points in the plotting window.
 }
 \examples{
-\donttest{
+if(interactive()){
 library(terra)
 library(rTARDIS)
 

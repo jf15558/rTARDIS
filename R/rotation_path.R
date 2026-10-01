@@ -23,7 +23,7 @@
 #' returned as line objects? These may be convenient for plotting purposes.
 #' `FALSE` by default.
 #' @return A `SpatVector` of points or lines. Both record the input point from
-#' which they are derived (`$feature`). For points, the corresponding cell ID 
+#' which they are derived (`$feature`). For points, the corresponding cell ID
 #' (`$cell`) and graph layer (`$layer`) are recorded for each row-wise shift.
 #' For lines, their start cell (`$from`), end (`$to`) cell, start layer (`$srt`)
 #' and end layer (`$end`) are recorded instead.
@@ -36,17 +36,19 @@
 #' library(rTARDIS)
 #'
 #' gal <- galapagos()
-#' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
+#' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+#'                   byrow = TRUE), right = FALSE)
 #'
-#' hexes <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
+#' hexes <- rast_to_geoglist(gal[[1:2]], gal_m[[1:2]], times = c(2.25, 2, 1.75),
+#'                           as.hex = TRUE, hex = 6)
 #' hexes <- link_islands(hexes)
 #'
 #' htd <- build_tardis(hexes)
-#' org <- rbind(c(-89.78873, -1.420627, 2),
-#'              c(-89.58525, -1.473917, 2))
+#' org <- rbind(c(-89.78873, -1.420627, 2.2),
+#'              c(-89.58525, -1.473917, 2.2))
 #' hpts <- point_check(htd, org)
 #'
-#' hpts2 <- rotation_path(htd, hpts, time = 0)
+#' hpts2 <- rotation_path(htd, hpts, time = 1.8)
 #' }
 
 rotation_path <- function(tardis, points, layer, time = NULL, as.lines = F) {
@@ -162,7 +164,7 @@ rotation_path <- function(tardis, points, layer, time = NULL, as.lines = F) {
         rt <- rot[which(((rot[,2] %/% tardis$gdat[5]) + 1) == k),2:1]
       }
       pt <- rt[match(pt, rt[,1]),2]
-      
+
       # if not NA, add to rotation path
       if(!is.na(pt)) {
         pth1 <- c(pth1, pt)
@@ -186,7 +188,7 @@ rotation_path <- function(tardis, points, layer, time = NULL, as.lines = F) {
       geoms$to <- pth1[-1]
       geoms$srt <- bns[1:length(geoms)]
       geoms$end <- bns[(1:length(geoms)) + 1]
-      
+
     } else {
       geoms <- vect(crd)
       geoms$feature <- i

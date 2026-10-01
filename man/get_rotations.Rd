@@ -48,7 +48,7 @@ do exceed this resolution can become prohibitively computationally expensive
 to work with.
 }
 \examples{
-\dontrun{
+\donttest{
 library(terra)
 library(rTARDIS)
 

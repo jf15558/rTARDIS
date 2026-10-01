@@ -27,11 +27,12 @@
 #' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
 #'
 #' # make geoglist and add links
-#' rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0))
+#' rasts <- rast_to_geoglist(gal[[1]], gal_m[[1]])
 #' rlink <- link_islands(rasts)
 #'
 #' rtd <- build_tardis(rasts)
-#' cost_surface(rtd)
+#' cs <- cost_surface(rtd)
+#' plot(cs)
 #' }
 
 cost_surface <- function(tardis, weights = "gdist", exclude.links = FALSE, verbose = TRUE) {

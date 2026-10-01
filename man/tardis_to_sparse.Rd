@@ -4,10 +4,17 @@
 \alias{tardis_to_sparse}
 \title{tardis_to_sparse}
 \usage{
-tardis_to_sparse(tardis, weights = "gdist", mode = "adjacency")
+tardis_to_sparse(
+  tardis,
+  weights = "gdist",
+  mode = "adjacency",
+  raw.weight = TRUE,
+  jump.dir = "auto"
+)
 }
 \arguments{
-\item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
+\item{tardis}{\code{tardis}. The output of \code{build_tardis()}. This can only contain
+a single time slice, so \code{slice_tardis()} may need to be used first.}
 
 \item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
 use for distance calculation. By default these are true geographic distances
@@ -15,6 +22,16 @@ use for distance calculation. By default these are true geographic distances
 \code{tardis} using \code{weight_tardis()}.}
 
 \item{mode}{\code{character}. One of \code{"adjacency"} or \code{"transition"}.}
+
+\item{raw.weight}{\code{logical}. If creating a transition matrix, should island
+link probabilities be calculated from their raw weights (default) or instead
+adjusted to approximate a jump-diffusion process (see details).}
+
+\item{jump.dir}{\code{numeric} or \code{"auto"}. The stepwise cardinality if
+approximating jump-diffusion probabilities. By default \code{"auto"}, in which
+case the cardinality is selected based on the \code{tardis} landscape type.
+Otherwise a suitable integer. Only relevant when \verb{mode = "transition} and
+\code{raw.weight = F} (see details for guidance).}
 }
 \value{
 \code{matrix} A \code{Matrix::sparseMatrix} adjacency or transition probability
@@ -22,15 +39,42 @@ matrix.
 }
 \description{
 Create either a sparse weighted adjacency or transition probability matrix
-from a \code{tardis} graph.
+from a layer of a \code{tardis} graph.
 }
 \details{
-Thix function produces a matrix representation of the edgelist in \code{tardis},
+This function produces a matrix representation of the edgelist in \code{tardis},
 hence why it is sparse (see \code{get_cost()} for creating dense matrices). For
 the adjacency matrix, the weights in the desired weighting scheme are taken
-directly. For the probability matrix, however, the weights are normalised so
-that they sum to one. As such, a huge weight for one edge versus a tiny
-weight for another edge could end up with a similar proportional probability.
+directly.
+
+For the probability matrix, by default, the reciprocals of weights are
+normalised so that they sum to one. As such, a huge weight for one edge
+versus a tiny weight for another, unrelated edge could end up with similar
+proportional probabilities. This behaviour is important for island links,
+which will naturally be longer than links between adjacent cells.
+
+Island link probabilities will be proportionally smaller than other
+transition probabilities from their starting cell, but can often display
+higher probabilities for that single jump due to stepwise multiplication of
+probabilities along alternative routes through unmasked space. This can be
+accounted for by setting \code{jump = T}. Instead of using the proportional weight
+directly, that weight is instead expressed as a multiple of the mean weights
+for non-jump links from the focal cell (e.g., a link is 8.3 times the mean
+non-link weight). A naive transition probability is then raised to the power
+of this multiplier (m). By default this transition probability is selected
+based on the structure of \code{tardis}. For a \code{tardis} built from a rectangular
+raster grid, each grid cell has 8 neighbours, so the naive cost of moving in
+any direction is 1/8 (= 0.125), raised to the power of m equivalent steps
+along the link. For a hexagonally resampled \code{tardis}, unmasked cells have 6
+neighbours. In this way, movement along the link is approximated as though it
+were a series of direct steps through continuous space, where
+other movement directions are probable but unrealised.
+
+8 and 6 are sensible defaults for rectangular and hexagonal grids
+respectively, but other values may be justified. For example \code{jump.dir = 2}
+would approximate a scenario where a particle may move forwards or backwards
+along a link with equal probability, but not deviate from the line of the
+link itself, unlike with higher cardinalities.
 }
 \examples{
 \donttest{
@@ -38,13 +82,14 @@ library(terra)
 library(rTARDIS)
 
 gal <- galapagos()
-gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
+gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+                  byrow = TRUE), right = FALSE)
 
 hexes <- rast_to_geoglist(gal[[1]], gal_m[[1]], as.hex = TRUE, hex = 6)
 hexes <- link_islands(hexes)
 
 htd <- build_tardis(hexes)
-cs <- tardis_to_sparse(htd, mode = "transition")
+tr <- tardis_to_sparse(htd, mode = "transition")
 aj <- tardis_to_sparse(htd, mode = "adjacency")
 }
 }

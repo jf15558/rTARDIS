@@ -29,7 +29,7 @@ of those locations. All locations are resolved to the nearest available
 cell, including any which fall outside of unmasked areas of the layer.
 }
 \examples{
-\donttest{
+if(interactive()){
 library(terra)
 library(rTARDIS)
 

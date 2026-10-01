@@ -17,7 +17,7 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' if(interactive()){
 #' library(terra)
 #' library(rTARDIS)
 #'

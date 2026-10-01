@@ -20,7 +20,7 @@
   add = FALSE,
   xlim = NULL,
   ylim = NULL,
-  par.reset = T,
+  par.reset = TRUE,
   ...
 )
 }
@@ -89,7 +89,8 @@ library(rTARDIS)
 library(terra)
 
 gal <- cretaceous()
-gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
+gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+                  byrow = TRUE), right = FALSE)
 rasts <- rast_to_geoglist(gal, gal_m, times = c(112.5, 110, 107.5))
 rasts <- link_islands(rasts, klink = 1)
 

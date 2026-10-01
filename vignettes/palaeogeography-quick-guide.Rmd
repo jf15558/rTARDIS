@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+oldpar <- par(no.readonly = TRUE)
 ```
 
 ```{r setup, echo=F}
@@ -112,15 +113,22 @@ Over geological timescales, locations on Earth's surface have shifted substantia
 
 Quite a specific data structure is requiree. It must be a list with `nlayers - 1` elements relative to the accompanying `geoglist`. Each list element is a two-column matrix of cell IDs describing pairs of cells to link between successive time layers. These IDs should be spatial, i.e., row-major raster numeric index or hexagonal grid numeric index, rather than full spatiotemporal indexes. This is to permit more intuitive construction of these matrices if desired, with temporal information added automatically during graph construction.
 
-In practice, these lists may be quite complicated to construct by hand, particularly for plate tectonic rotation models. `rTARDIS` provides a function to automate this procedure called `get_rotations()`. This takes a `geoglist`, its accompanying time vector and a plate rotation model name as its principle arguments, then uses the `palaeoverse` R package function `palaeorotate()` to calculate rotations between cells in each successive pair of geoglist layers. The user is directed to the documentation for `palaeorotate()` for more detailed information on what plate rotation models are available. Crucially, however, this should match the palaeogeographic data used to construct the `geoglist`.
+In practice, these lists may be quite complicated to construct by hand, particularly for plate tectonic rotation models. `rTARDIS` provides a function to automate this procedure called `get_rotations()`. This takes a `geoglist`, its accompanying time vector and a plate rotation model name as its principle arguments, then uses the `palaeoverse` R package function `palaeorotate()` to calculate rotations between cells in each successive pair of `geoglist` layers. The user is directed to the documentation for `palaeorotate()` for more detailed information on what plate rotation models are available. Crucially, however, this should match the palaeogeographic data used to construct the `geoglist`. This function may take a little while to run for high resolution grids and relies
+on an API call, which may further affect run times.
 
 We will implement this workflow below. The Devonian dataset contains 4 time layers, based on the PALEOMAP plate rotation model, at 5 million-year intervals. Firstly, we will resample to hexagons, both to better represent global geography and to speed up downstream function runs. We will derive rotations for the `geoglist`, using its vector of interval times. Note that the function also requires that times are ordered forwards in time:
 
-```{r}
+```{r, eval = F}
 # get rotations for the PALEOMAP model
 rots <- get_rotations(hexes, hexes$tdat, "PALEOMAP")
 
 # interrogate the output
+length(rots)
+head(rots[[1]])
+```
+
+```{r, echo = F}
+rots <- readRDS(system.file("extdata", "rots.RData", package = "rTARDIS"))
 length(rots)
 head(rots[[1]])
 ```
@@ -133,3 +141,7 @@ htd <- build_tardis(hexes, rotations = rots)
 ```
 
 We now have a temporally varying palaeogeography model which we can analyse using other functions from `rTARDIS`. These are covered by other vignettes.\
+
+```{r, include = F}
+par(oldpar)
+```

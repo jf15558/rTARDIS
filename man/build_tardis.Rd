@@ -62,21 +62,20 @@ library(rTARDIS)
 gal <- galapagos()
 
 # create a land-sea mask from the archipelago raster set
-gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE), right = FALSE)
+gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+byrow = TRUE), right = FALSE)
 
 # create a geoglist with hexagonal resampling and mask the sea
-hexes <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0), as.hex = TRUE, hex = 6)
-hexes <- link_islands(hexes)
+hexes <- rast_to_geoglist(gal[[1:2]], gal_m[[1:2]], times = c(2.25, 2, 1.75),
+                          as.hex = TRUE, hex = 6)
 
 # build a tardis with hexagonal cells
 htd <- build_tardis(hexes)
 
 # create a single layer geoglist in raster format and mask the sea
 rasts <- rast_to_geoglist(gal[[1]], gal_m[[1]])
-rasts <- link_islands(rasts)
 
 # build a tardis from raster cells
 rtd <- build_tardis(rasts)
 }
-
 }

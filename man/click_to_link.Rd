@@ -26,7 +26,7 @@ points in the plotting window. Clicked locations are automatically resolved
 to the nearest cell bordering masked space in the \code{geoglist}.
 }
 \examples{
-\donttest{
+if(interactive()){
 library(terra)
 library(rTARDIS)
 

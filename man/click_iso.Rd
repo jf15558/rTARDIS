@@ -42,7 +42,7 @@ the landscape plotted by the function. Clicked points falling in masked
 regions are automatically resolved to the nearest available cell.
 }
 \examples{
-\donttest{
+if(interactive()){
 library(terra)
 library(rTARDIS)
 
