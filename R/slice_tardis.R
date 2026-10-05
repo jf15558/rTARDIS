@@ -11,6 +11,11 @@
 #' @param layers `numeric`. A single positive integer giving the layer to subset
 #' from `tardis` or a vector of two positive integers denoting the layer range
 #' to subset. One of `times` or `layers` must be specified.
+#' @param adjust `logical`. Should cell IDs be adjusted so that they correspond
+#' to the new layer numbering of the subsetted `tardis` object? Defaults to
+#' `TRUE`. Otherwise, this argument may be useful when working with single
+#' layers from a `tardis` object, but where retaining original spatiotemporal
+#' indexing is desirable.
 #' @return A `tardis` graph of the requested subset of layers.
 #' @export
 #'
@@ -20,6 +25,10 @@
 #' weight and analyse subsets, rather than operate on the entire graph or create
 #' subsets from scratch. Note that layers are counted in decreasing age order,
 #' so the oldest time layer will be 1 and so forth.
+#'
+#' When adjusting cell IDs (default behaviour), all cells in the first selected
+#' layer will be adjusted to the range `1:tardis$gdat["ncell"]`. Cells in the
+#' second layer start from `tardis$gdat["ncell"] + 1` and so forth.
 #'
 #' @examples
 #' \donttest{
@@ -108,14 +117,17 @@ slice_tardis <- function(tardis, times = NULL, layers = NULL) {
   tardis$edges <- tardis$edges[valid,]
   tardis$tgraph$dict <- tardis$tgraph$dict[which(tardis$tgraph$dict$ref %in% c(tardis$tgraph$src, tardis$tgraph$dst)),]
 
-  # adjust cell id parameters
-  tardis$edges[,1:2] <- tardis$edges[,1:2] - (as.numeric(cls[1]) - 1)
+  # adjust tardis graph parameters
   tardis$tdat <- tardis$tdat[layers[1]:(layers[length(layers)] + 1)]
   tardis$tgraph$nbnode <- nrow(tardis$tgraph$dict)
   tardis$tgraph$dict$id <- (1:tardis$tgraph$nbnode) - 1
-  tardis$tgraph$dict$ref <- as.character(as.numeric(tardis$tgraph$dict$ref) - (as.numeric(cls[1]) - 1))
-  tardis$tgraph$src <- as.character(as.numeric(tardis$tgraph$src) - (as.numeric(cls[1]) - 1))
-  tardis$tgraph$dst <- as.character(as.numeric(tardis$tgraph$dst) - (as.numeric(cls[1]) - 1))
+
+  if(adjust) {
+    tardis$edges[,1:2] <- tardis$edges[,1:2] - (as.numeric(cls[1]) - 1)
+    tardis$tgraph$dict$ref <- as.character(as.numeric(tardis$tgraph$dict$ref) - (as.numeric(cls[1]) - 1))
+    tardis$tgraph$src <- as.character(as.numeric(tardis$tgraph$src) - (as.numeric(cls[1]) - 1))
+    tardis$tgraph$dst <- as.character(as.numeric(tardis$tgraph$dst) - (as.numeric(cls[1]) - 1))
+  }
 
   # return
   return(tardis)

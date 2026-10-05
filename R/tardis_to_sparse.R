@@ -174,7 +174,7 @@ tardis_to_sparse <- function(tardis, weights = "gdist", mode = "adjacency",
       jump_probs <- (1 / jump.dir) ^ stepmult
 
       # get remaining probability to distribute among adjacent cells:
-      # (1 - sum of jump -probs, adjacent links having been zeroed)
+      # (1 - sum of jump_probs, adjacent links having been zeroed)
       jump_probs[jump_probs == 1 / jump.dir] <- 0
       remainder <- tapply(jump_probs, ed[,1], function(x) {1 - sum(x)})
 
@@ -190,8 +190,8 @@ tardis_to_sparse <- function(tardis, weights = "gdist", mode = "adjacency",
       # restore jump probabilities to the values calculated earlier
       final[final == 0] <- jump_probs[final == 0]
 
-      # validate all sets sum to 1
-      if(!all(tapply(final, ed[,1], sum) == 1)) {
+      # validate all sets sum to 1 (can fail at minute tolerances)
+      if(!all(round(tapply(final, ed[,1], sum), 12) == 1)) {
         stop("Error during jump probability calculation - there is a bug to squash")
       }
 
