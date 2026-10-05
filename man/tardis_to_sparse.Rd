@@ -14,7 +14,7 @@ tardis_to_sparse(
 }
 \arguments{
 \item{tardis}{\code{tardis}. The output of \code{build_tardis()}. This can only contain
-a single time slice, so \code{slice_tardis()} may need to be used first.}
+a single time slice, so you may need to use \code{slice_tardis()} first.}
 
 \item{weights}{\code{character}. The name of the weighting scheme in \code{tardis} to
 use for distance calculation. By default these are true geographic distances

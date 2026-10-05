@@ -16,6 +16,12 @@ age range to subset. One of \code{times} or \code{layers} must be specified.}
 \item{layers}{\code{numeric}. A single positive integer giving the layer to subset
 from \code{tardis} or a vector of two positive integers denoting the layer range
 to subset. One of \code{times} or \code{layers} must be specified.}
+
+\item{adjust}{\code{logical}. Should cell IDs be adjusted so that they correspond
+to the new layer numbering of the subsetted \code{tardis} object? Defaults to
+\code{TRUE}. Otherwise, this argument may be useful when working with single
+layers from a \code{tardis} object, but where retaining original spatiotemporal
+indexing is desirable.}
 }
 \value{
 A \code{tardis} graph of the requested subset of layers.
@@ -31,6 +37,10 @@ require the entire \code{tardis} graph, in which case it is more efficient to
 weight and analyse subsets, rather than operate on the entire graph or create
 subsets from scratch. Note that layers are counted in decreasing age order,
 so the oldest time layer will be 1 and so forth.
+
+When adjusting cell IDs (default behaviour), all cells in the first selected
+layer will be adjusted to the range \code{1:tardis$gdat["ncell"]}. Cells in the
+second layer start from \code{tardis$gdat["ncell"] + 1} and so forth.
 }
 \examples{
 \donttest{
