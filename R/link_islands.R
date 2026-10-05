@@ -68,10 +68,10 @@
 link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
   #
   #
-  #geog <- out
+  #geog = rasts
   #klink = 1
   #verbose = T
-
+  #replace = F
 
   if(!exists("geog")) {
     stop("Supply geog as a geoglist from rast_to_geoglist()")
@@ -109,7 +109,7 @@ link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
       z <- na.omit(z, field = names(z)[1])
       bar <- relate(z, z, "intersects", pairs = T)
       z$patches <- components(graph_from_edgelist(bar))$membership
-      z2 <- centroids(z[which(table(bar[,1]) != 7)])
+      z2 <- terra::centroids(z[which(table(bar[,1]) != 7)])
       list(z, aggregate(z2, by = "patches"))
     })
     islands <- lapply(dat, `[[`, 1)
@@ -251,7 +251,9 @@ link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
       cls2 <- cls[,c(2, 1, 3, 4)]
       colnames(cls2) <- colnames(cls)
 
-      res_list[[i]] <- rbind(cls, cls2)
+      # drop any remaining duplicates and store
+      cls <- rbind(cls, cls2)
+      res_list[[i]] <- cls[!duplicated(st_drop_geometry(cls)),]
     }
   }
 

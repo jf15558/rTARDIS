@@ -4,7 +4,7 @@
 #' from a layer of a `tardis` graph.
 #'
 #' @param tardis `tardis`. The output of `build_tardis()`. This can only contain
-#' a single time slice, so `slice_tardis()` may need to be used first.
+#' a single time slice, so you may need to use `slice_tardis()` first.
 #' @param weights `character`. The name of the weighting scheme in `tardis` to
 #' use for distance calculation. By default these are true geographic distances
 #' (`"gdist"`). Alternatively, the name of another weighting scheme added to
@@ -78,11 +78,11 @@
 tardis_to_sparse <- function(tardis, weights = "gdist", mode = "adjacency",
                              raw.weight = TRUE, jump.dir = "auto") {
 
-  #tardis <- htd
+  #tardis <- slice_tardis(rtd, layer = 1)
   #weights = "gdist"
   #mode = "transition"
-  #jump = F
-  #jump.dir = NULL
+  #raw.weight = F
+  #jump.dir = 6
 
   if (!exists("tardis")) {
     stop("Supply tardis as the output of create_tardis")
@@ -117,7 +117,7 @@ tardis_to_sparse <- function(tardis, weights = "gdist", mode = "adjacency",
   }
 
   if(jump.dir != "auto") {
-    if(!jump.dir %% 1 != 0) {
+    if(jump.dir %% 1 != 0) {
       stop("If not 'auto', then hex should be a an integer denoting the jump direction cardinality")
     }
   } else {
