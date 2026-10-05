@@ -46,7 +46,7 @@
 #' gts <- slice_tardis(rtd, layers = 2)
 #' }
 
-slice_tardis <- function(tardis, times = NULL, layers = NULL) {
+slice_tardis <- function(tardis, times = NULL, layers = NULL, adjust = TRUE) {
 
   #tardis <- rtd
   #times <- NULL
