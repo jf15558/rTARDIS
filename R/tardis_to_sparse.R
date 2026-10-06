@@ -78,11 +78,11 @@
 tardis_to_sparse <- function(tardis, weights = "gdist", mode = "adjacency",
                              raw.weight = TRUE, jump.dir = "auto") {
 
-  #tardis <- slice_tardis(rtd, layer = 1)
-  #weights = "gdist"
-  #mode = "transition"
-  #raw.weight = F
-  #jump.dir = 6
+  tardis <- slice_tardis(rtd, layer = 3)
+  weights = "gdist"
+  mode = "transition"
+  raw.weight = F
+  jump.dir = 6
 
   if (!exists("tardis")) {
     stop("Supply tardis as the output of create_tardis")
@@ -188,7 +188,9 @@ tardis_to_sparse <- function(tardis, weights = "gdist", mode = "adjacency",
       final <- rep(remainder, nedge) * prop_wt
 
       # restore jump probabilities to the values calculated earlier
-      final[final == 0] <- jump_probs[final == 0]
+      if(any(final == 0)) {
+        final[which(final == 0)] <- jump_probs[which(final == 0)]
+      }
 
       # validate all sets sum to 1 (can fail at minute tolerances)
       if(!all(round(tapply(final, ed[,1], sum), 12) == 1)) {

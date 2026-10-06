@@ -4,7 +4,7 @@
 \alias{slice_tardis}
 \title{slice_tardis}
 \usage{
-slice_tardis(tardis, times = NULL, layers = NULL)
+slice_tardis(tardis, times = NULL, layers = NULL, adjust = TRUE)
 }
 \arguments{
 \item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}

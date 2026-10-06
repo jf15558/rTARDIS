@@ -1,6 +1,6 @@
 Package: rTARDIS
 Title: Terrains and Routes Directed in Spacetime
-Version: 2.1.0
+Version: 2.1.1
 Authors@R: 
     person("Joe", "Flannery-Sutherland", , "josephflannerysutherland@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8232-6773"))
