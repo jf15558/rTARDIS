@@ -78,11 +78,11 @@
 tardis_to_sparse <- function(tardis, weights = "gdist", mode = "adjacency",
                              raw.weight = TRUE, jump.dir = "auto") {
 
-  tardis <- slice_tardis(rtd, layer = 3)
-  weights = "gdist"
-  mode = "transition"
-  raw.weight = F
-  jump.dir = 6
+  #tardis <- slice_tardis(rtd, layer = 3)
+  #weights = "gdist"
+  #mode = "transition"
+  #raw.weight = F
+  #jump.dir = 6
 
   if (!exists("tardis")) {
     stop("Supply tardis as the output of create_tardis")
