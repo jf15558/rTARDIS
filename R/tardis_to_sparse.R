@@ -192,6 +192,9 @@ tardis_to_sparse <- function(tardis, weights = "gdist", mode = "adjacency",
         final[which(final == 0)] <- jump_probs[which(final == 0)]
       }
 
+      # for single cell islands, replace the NaN propagated from prop_wt
+      final[!is.finite(final)] <- 1
+
       # validate all sets sum to 1 (can fail at minute tolerances)
       if(!all(round(tapply(final, ed[,1], sum), 12) == 1)) {
         stop("Error during jump probability calculation - there is a bug to squash")
