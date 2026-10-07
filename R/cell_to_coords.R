@@ -42,7 +42,7 @@ cell_to_coords <- function(cellid, gdat) {
     stop("Some cell IDs are not integers")
   }
 
-  if(!inherits(gdat, "tardis") | !inherits(gdat, "geoglist")) {
+  if(!inherits(gdat, "tardis") & !inherits(gdat, "geoglist")) {
     if(!is.vector(gdat)) {
       stop("gdat is not a tardis or geoglist, nor conforms to a $gdat vector")
     }
