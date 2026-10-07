@@ -57,7 +57,7 @@ cell_to_coords <- function(cellid, gdat) {
   lyr <- (cellid %/% gdat[5]) + 1
   if (!is.na(gdat[7])) {
     grid <- get_grid(gdat[1:4], gdat[7])
-    crd <- cell_to_point(grid[pos], gdat[7])
+    crd <- st_coordinates(cell_to_point(grid[pos], gdat[7]))
   } else {
     samprast <- rast(nrows = gdat[5] / gdat[6], ncols = gdat[6], ext = ext(gdat[1:4]))
     crd <- xyFromCell(samprast, pos)
