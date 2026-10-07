@@ -65,5 +65,6 @@ cell_to_coords <- function(cellid, gdat) {
 
   res <- cbind.data.frame(crd, pos, lyr)
   colnames(res) <- c("lon", "lat", "cell", "layer")
+  rownames(res) <- cellid
   return(res)
 }
