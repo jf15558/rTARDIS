@@ -17,8 +17,7 @@
 #' @export
 #'
 #' @examples
-#'
-#' load galapagos dataset
+#' # load galapagos dataset
 #' gal <- galapagos()
 #' gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T), right = F)
 #'
