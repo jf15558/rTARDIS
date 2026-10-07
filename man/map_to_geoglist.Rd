@@ -4,7 +4,7 @@
 \alias{map_to_geoglist}
 \title{map_to_geoglist}
 \usage{
-map_to_geoglist(geog, values, val.name = "value")
+map_to_geoglist(geog, values, name = "value")
 }
 \arguments{
 \item{geog}{\code{geoglist}. The output of \code{rast_to_geoglist()}.}
