@@ -37,9 +37,9 @@
 
 map_to_geoglist <- function(geog, values, name = "value") {
 
-  geog = rasts
-  values = dsp
-  name = "value"
+  #geog = rasts
+  #values = dsp
+  #name = "value"
 
   if(!exists("geog")) {
     stop("Please supply geog as a geoglist")
