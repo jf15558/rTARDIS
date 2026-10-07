@@ -66,20 +66,20 @@ plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
                           legend = TRUE, axes = TRUE, bg = NA, add = FALSE,
                           xlim = NULL, ylim = NULL, par.reset = TRUE, ...) {
 
-   # x = rasts
-   # y = 1
-   # pal = sf.colors(10)
-   # links = T
-   # lcol = 1
-   # lwd = 1
-   # lty = 1
-   # hex.border = NA
-   # legend = T
-   # axes = T
-   # add = F
-   # bg = NA
-   # xlim = NULL
-   # ylim = NULL
+   #x = foo2
+   #y = 1
+   #pal = sf.colors(10)
+   #links = T
+   #lcol = 1
+   #lwd = 1
+   #lty = 1
+   #hex.border = NA
+   #legend = T
+   #axes = T
+   #add = F
+   #bg = NA
+   #xlim = NULL
+   #ylim = NULL
    # #xlim = c(-91, -89.5)
    # #ylim = c(-1.5, 0)
    # #xlim = c(-91, 50)

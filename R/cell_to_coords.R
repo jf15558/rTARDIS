@@ -6,7 +6,7 @@
 #' structure. See `point_check()` instead if you are trying to resolve numeric
 #' coordinates to within a specific landscape.
 #'
-#' @param cellid `vector`. A vector of integers, either numeric or character.
+#' @param cellid `vector`. A vector of cell IDs, either numeric or character.
 #' @param gdat Either a vector in gdat format, or an object containing this
 #' information (i.e., `tardis` or `geoglist`).
 #' @return A `data.frame` recordin the lon-lat coordinates, spatial cell
@@ -38,7 +38,7 @@ cell_to_coords <- function(cellid, gdat) {
   if(any(is.na(cellid))) {
     stop("Some cell IDs are not, or cannot be coerced to numeric")
   }
-  if(any(!is.integer(cellid))) {
+  if(!all(cellid %% 1 == 0)) {
     stop("Some cell IDs are not integers")
   }
 
@@ -59,7 +59,7 @@ cell_to_coords <- function(cellid, gdat) {
     grid <- get_grid(gdat[1:4], gdat[7])
     crd <- cell_to_point(grid[pos], gdat[7])
   } else {
-    samprast <- rast(nrows = gdat[5] / gdat[6], ncols = gdat[6], ext = ext(dat[1:4]))
+    samprast <- rast(nrows = gdat[5] / gdat[6], ncols = gdat[6], ext = ext(gdat[1:4]))
     crd <- xyFromCell(samprast, pos)
   }
 

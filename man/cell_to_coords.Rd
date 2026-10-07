@@ -7,7 +7,7 @@
 cell_to_coords(cellid, gdat)
 }
 \arguments{
-\item{cellid}{\code{vector}. A vector of integers, either numeric or character.}
+\item{cellid}{\code{vector}. A vector of cell IDs, either numeric or character.}
 
 \item{gdat}{Either a vector in gdat format, or an object containing this
 information (i.e., \code{tardis} or \code{geoglist}).}

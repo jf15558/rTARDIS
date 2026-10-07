@@ -105,6 +105,7 @@ slice_geoglist <- function(geog, times = NULL, layers = NULL) {
   }
   if(!is.null(geog$links)) {
     geog$links <- geog$links[which(geog$links$layer %in% unique(layers))]
+    geog$links$layer <- geog$links$layer - (min(geog$links$layer) - 1)
   }
   if(layers[length(layers)] - layers[1] != length(layers) - 1){
     warning("Requested layer set is not temporally contiguous. Temporal information will be discarded")
