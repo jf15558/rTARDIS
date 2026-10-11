@@ -17,7 +17,7 @@
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'
@@ -29,7 +29,7 @@
 #' rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0))
 #'
 #' # click to get two points
-#' #click_points(rasts, points = 2)
+#' click_points(rasts, points = 2)
 #' }
 
 click_points <- function(geog, layer = 1, points = 1, print.only = TRUE, ...) {
@@ -38,6 +38,9 @@ click_points <- function(geog, layer = 1, points = 1, print.only = TRUE, ...) {
   # layer = 1
   # points = 2
   #
+
+  if(interactive()) {
+
   if(!exists("geog")) {
     stop("Supply geog as a geoglist from rast_to_geoglist()")
   }
@@ -112,5 +115,6 @@ click_points <- function(geog, layer = 1, points = 1, print.only = TRUE, ...) {
     print(as.data.frame(lnk))
   } else {
     return(lnk)
+  }
   }
 }

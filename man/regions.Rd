@@ -21,7 +21,7 @@ A \code{geoglist} recording the region affinity of the cells in each
 layer.
 }
 \description{
-Classify all cells in the layers of a  geoglist   by which region they belong
+Classify all cells in the layers of a  geoglist by which region they belong
 to. Optionally, only the boundary cells of these regions may be returned.
 }
 \examples{

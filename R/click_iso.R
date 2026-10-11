@@ -21,7 +21,7 @@
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'
@@ -33,7 +33,7 @@
 #' htd <- build_tardis(hexes)
 #'
 #' # click a point on the map
-#' #click_iso(tardis = htd, geog = hexes, time = 2, cost = 1e5)
+#' click_iso(tardis = htd, geog = hexes, time = 2, cost = 1e5)
 #' }
 
 click_iso <- function(tardis, weights = "gdist", geog, time = NULL, cost = 1e6, col = "gold", ...) {
@@ -45,29 +45,31 @@ click_iso <- function(tardis, weights = "gdist", geog, time = NULL, cost = 1e6, 
    #n = 1
    #col = "gold"
    #cost = 1e5
+  if(interactive()) {
 
-  if(is.null(time)) {
-    if(!is.null(tardis$tdat)) {
-      time <- sum(tardis$tdat[1:2]) / 2
+    if(is.null(time)) {
+      if(!is.null(tardis$tdat)) {
+        time <- sum(tardis$tdat[1:2]) / 2
+      }
+      bin <- 1
+    } else {
+      if(time > tardis$tdat[1] | time < tardis$tdat[length(tardis$tdat)]) {
+        stop("Time falls outside the range of tardis")
+      }
+      bin <- sum(time < tardis$tdat)
     }
-    bin <- 1
-  } else {
-    if(time > tardis$tdat[1] | time < tardis$tdat[length(tardis$tdat)]) {
-      stop("Time falls outside the range of tardis")
-    }
-    bin <- sum(time < tardis$tdat)
+
+    oldpar <- par(no.readonly = TRUE)
+    on.exit(par(oldpar))
+    plot.geoglist(geog, bin, par.reset = F, ...)
+
+    org <- cbind(click(n = 1), rep(time, 1))
+
+    hpts <- point_check(tardis, org)
+
+    hlcp <- isochrone(tardis, origin = hpts, cost = cost)
+
+    plot(hpts, col = col, pch = 16, add = T)
+    plot(hlcp, add = T, border = col, col = scales::alpha(col, 0.2), lwd = 2)
   }
-
-  oldpar <- par(no.readonly = TRUE)
-  on.exit(par(oldpar))
-  plot.geoglist(geog, bin, par.reset = F, ...)
-
-  org <- cbind(click(n = 1), rep(time, 1))
-
-  hpts <- point_check(tardis, org)
-
-  hlcp <- isochrone(tardis, origin = hpts, cost = cost)
-
-  plot(hpts, col = col, pch = 16, add = T)
-  plot(hlcp, add = T, border = col, col = scales::alpha(col, 0.2), lwd = 2)
 }

@@ -24,7 +24,7 @@
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'
@@ -36,10 +36,11 @@
 #' htd <- build_tardis(hexes)
 #'
 #' # click a point on the map
-#' #click_iso(tardis = htd, geog = hexes, time = 2, cost = 1e5)
+#' click_iso(tardis = htd, geog = hexes, time = 2, cost = 1e5)
 #' }
 
 click_optim <- function(tardis, weights = "gdist", geog, time = NULL, n = 3, loop = FALSE, col = "gold", ...) {
+
 
   # tardis = rtd
   # geog = rasts
@@ -48,6 +49,8 @@ click_optim <- function(tardis, weights = "gdist", geog, time = NULL, n = 3, loo
   # n = 3
   # col = "gold"
   # cost = 1e7
+
+  if(interactive()) {
 
   if(n < 3) {
     stop("n should be greater than 2")
@@ -76,4 +79,5 @@ click_optim <- function(tardis, weights = "gdist", geog, time = NULL, n = 3, loo
 
   plot(hpts, col = col, pch = 16, add = T)
   plot(hlcp, add = T, col = col, lwd = 2)
+  }
 }

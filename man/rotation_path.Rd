@@ -4,7 +4,7 @@
 \alias{rotation_path}
 \title{rotation_path}
 \usage{
-rotation_path(tardis, points, layer, time = NULL, as.lines = F)
+rotation_path(tardis, points, layer, time = NULL, as.lines = FALSE)
 }
 \arguments{
 \item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}

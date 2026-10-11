@@ -1,6 +1,6 @@
 #' regions
 #'
-#' Classify all cells in the layers of a  geoglist   by which region they belong
+#' Classify all cells in the layers of a  geoglist by which region they belong
 #' to. Optionally, only the boundary cells of these regions may be returned.
 #'
 #' @param geog `geoglist`. The output of `rast_to_geoglist()`.

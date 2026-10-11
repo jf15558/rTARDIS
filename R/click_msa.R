@@ -23,7 +23,7 @@
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'
@@ -35,7 +35,7 @@
 #' htd <- build_tardis(hexes)
 #'
 #' # click a point on the map
-#' #click_iso(tardis = htd, geog = hexes, time = 2, cost = 1e5)
+#' click_iso(tardis = htd, geog = hexes, time = 2, cost = 1e5)
 #' }
 
 click_msa <- function(tardis, weights = "gdist", geog, time = NULL, n = 1, col = "gold", ...) {
@@ -45,6 +45,8 @@ click_msa <- function(tardis, weights = "gdist", geog, time = NULL, n = 1, col =
   # time = 2
   # col = "gold"
   # n = 1
+  if(interactive()) {
+
 
   if(is.null(time)) {
     if(!is.null(tardis$tdat)) {
@@ -70,4 +72,5 @@ click_msa <- function(tardis, weights = "gdist", geog, time = NULL, n = 1, col =
   plot(hpts, col = col, pch = 16, add = T)
   plot(hlcp, add = T, col = col, lwd = 2)
   #plot(st_wrap_dateline(hlcp$geometry, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180")), add = T, col = col, lwd = 2)
+  }
 }

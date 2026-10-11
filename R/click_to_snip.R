@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'
@@ -28,7 +28,7 @@
 #' rasts <- link_islands(rasts)
 #'
 #' # click to either side of a link to remove it
-#' #click_to_snip(rasts)
+#' click_to_snip(rasts)
 #' }
 
 click_to_snip <- function(geog, layer = 1, nsnips = 1, ...) {
@@ -36,6 +36,7 @@ click_to_snip <- function(geog, layer = 1, nsnips = 1, ...) {
    #geog = rasts
    #layer = 1
    #nsnips = 1
+  if(interactive()) {
 
   if(!exists("geog")) {
     stop("Supply geog as a geoglist with rast_to_geoglist()")
@@ -90,4 +91,6 @@ click_to_snip <- function(geog, layer = 1, nsnips = 1, ...) {
     }
   }
   return(geog)
+
+  }
 }

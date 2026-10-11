@@ -51,7 +51,7 @@
 #' hpts2 <- rotation_path(htd, hpts, time = 1.8)
 #' }
 
-rotation_path <- function(tardis, points, layer, time = NULL, as.lines = F) {
+rotation_path <- function(tardis, points, layer, time = NULL, as.lines = FALSE) {
 
    #tardis = htd
    #points = hpts

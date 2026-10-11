@@ -28,21 +28,22 @@ from functions involving \code{tardis} objects and their derivatives, unlike
 \code{rast_to_geoglist()} which creates their structure from scratch.
 }
 \examples{
+library(terra)
+library(rTARDIS)
 
-load galapagos dataset
+# load galapagos dataset
 gal <- galapagos()
-gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = T), right = F)
+gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3,
+                  byrow = TRUE), right = FALSE)
 
-# hex-gridded tardis
-rasts <- rast_to_geoglist(gal[[1]], gal_m[[1]], as.hex = T, hex = 6)
-rasts <- link_islands(rasts, klink = NULL)
+# hex gridded tardis
+rasts <- rast_to_geoglist(gal[[1:2]], gal_m[[1:2]], times = c(2.25, 2, 1.75),
+                          as.hex = TRUE, hex = 6)
 rtd <- build_tardis(rasts)
 
-# small analysis
-smc <- tardis_to_samc(tardis = rtd, absorption = 0.001)
-dsp <- dispersal(smc, dest = smc@names[1], time = 1000)
-names(dsp) <- foo@names
+# map two random values to cell
+nt <- c(1034, 983)
+names(nt) <- c("19", "987")
 
-foo <- map_to_geoglist(rasts, dsp)
-plot(foo)
+foo <- map_to_geoglist(rasts, nt)
 }

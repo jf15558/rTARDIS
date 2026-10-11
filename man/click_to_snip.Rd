@@ -26,7 +26,7 @@ in the plotting window. Lines are drawn by clicking their start and end
 points in the plotting window.
 }
 \examples{
-if(interactive()){
+\donttest{
 library(terra)
 library(rTARDIS)
 
@@ -39,6 +39,6 @@ rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0))
 rasts <- link_islands(rasts)
 
 # click to either side of a link to remove it
-#click_to_snip(rasts)
+click_to_snip(rasts)
 }
 }

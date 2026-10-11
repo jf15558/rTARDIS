@@ -42,7 +42,7 @@ the landscape plotted by the function. Clicked points falling in masked
 regions are automatically resolved to the nearest available cell.
 }
 \examples{
-if(interactive()){
+\donttest{
 library(terra)
 library(rTARDIS)
 
@@ -53,6 +53,6 @@ hlink <- link_islands(hexes)
 htd <- build_tardis(hexes)
 
 # click a point on the map
-#click_iso(tardis = htd, geog = hexes, time = 2, cost = 1e5)
+click_iso(tardis = htd, geog = hexes, time = 2, cost = 1e5)
 }
 }

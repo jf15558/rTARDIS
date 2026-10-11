@@ -29,7 +29,7 @@ of those locations. All locations are resolved to the nearest available
 cell, including any which fall outside of unmasked areas of the layer.
 }
 \examples{
-if(interactive()){
+\donttest{
 library(terra)
 library(rTARDIS)
 
@@ -41,6 +41,6 @@ gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE)
 rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0))
 
 # click to get two points
-#click_points(rasts, points = 2)
+click_points(rasts, points = 2)
 }
 }

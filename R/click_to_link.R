@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-#' if(interactive()){
+#' \donttest{
 #' library(terra)
 #' library(rTARDIS)
 #'
@@ -27,7 +27,7 @@
 #' rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0))
 #'
 #' # click the start and end points for two links
-#' #click_to_link(rasts, nlinks = 2)
+#' click_to_link(rasts, nlinks = 2)
 #' }
 
 click_to_link <- function(geog, layer = 1, nlinks = 1, ...) {
@@ -36,6 +36,9 @@ click_to_link <- function(geog, layer = 1, nlinks = 1, ...) {
    #layer = 1
    #nlinks = 1
   #
+
+  if(interactive()) {
+
   if(!exists("geog")) {
     stop("Supply geog as a geoglist from rast_to_geoglist()")
   }
@@ -141,4 +144,6 @@ click_to_link <- function(geog, layer = 1, nlinks = 1, ...) {
     }
   }
   return(geog)
+
+  }
 }

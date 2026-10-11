@@ -26,7 +26,7 @@ points in the plotting window. Clicked locations are automatically resolved
 to the nearest cell bordering masked space in the \code{geoglist}.
 }
 \examples{
-if(interactive()){
+\donttest{
 library(terra)
 library(rTARDIS)
 
@@ -38,6 +38,6 @@ gal_m <- classify(gal, matrix(c(-Inf, 0, NA, 0, Inf, 1), ncol = 3, byrow = TRUE)
 rasts <- rast_to_geoglist(gal, gal_m, times = c(seq(2.25, 0, -0.5), 0))
 
 # click the start and end points for two links
-#click_to_link(rasts, nlinks = 2)
+click_to_link(rasts, nlinks = 2)
 }
 }
