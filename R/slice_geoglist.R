@@ -110,6 +110,8 @@ slice_geoglist <- function(geog, times = NULL, layers = NULL) {
   if(layers[length(layers)] - layers[1] != length(layers) - 1){
     warning("Requested layer set is not temporally contiguous. Temporal information will be discarded")
     geog$tdat <- NULL
+  } else {
+    geog$tdat <- geog$tdat[c(layers, layers + 1)]
   }
   return(geog)
 }

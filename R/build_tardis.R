@@ -245,8 +245,8 @@ build_tardis <- function(geog, tlink = 1, rotations = NULL, verbose = TRUE) {
     glinked[[i]] <- edge[complete.cases(edge), ]
   }
 
-  if (!is.null(geog$tdat)) {
-    for (i in 1:length(rotations)) {
+  if(length(geog$tdat) > 2) {
+    for(i in 1:length(rotations)) {
       glinked[[i + 1]][, 1:2] <- glinked[[i + 1]][, 1:2] + (i * geog$gdat[5])
       ob <- rotations[[i]]
 
