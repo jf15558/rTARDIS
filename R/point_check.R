@@ -47,13 +47,11 @@
 
 point_check <- function(tardis, points, max.dist = NULL, verbose = TRUE) {
 
-
-  #org <- hpts[1,]
-  #dst <- hpts[2,]
-  #tardis = htd
-  #points = org
-  #verbose = T
+  #tardis <- td
+  #points <- occ[,c("p_lng", "p_lat", "bin_midpoint")]
   #max.dist = NULL
+  #verbose = TRUE
+
 
   if (!exists("tardis")) {
     stop("Supply tardis as the output of build_tardis")
@@ -79,12 +77,15 @@ point_check <- function(tardis, points, max.dist = NULL, verbose = TRUE) {
     }
   }
 
-  if(is.null(tardis$tdat)) {
-    points <- cbind(points, rep(0.5, nrow(points)))
+  if(length(tardis$tdat) < 3) {
+    points <- cbind(points[,1:2], rep(0.5, nrow(points)))
     tardis$tdat <- c(1, 0)
   }
   if(length(tardis$tdat) > 2 & ncol(points) < 3) {
     stop("If tardis contains multiple time layers, then points should contain longitude, latitude and time columns")
+  }
+  if(is.null(tardis$tdat) & ncol(points) > 2) {
+    stop("If tardis consists of one layer, then points should contain longitude and latitude columns only")
   }
   if(!is.na(tardis$gdat[7])) {
 
