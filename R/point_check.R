@@ -54,7 +54,7 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
   #tardis <- ob
   #points <-  occs[,c("p_lng", "p_lat", "bin_midpoint")]
   #max.dist = NULL
-  #round <- 2
+  #round = 2
   #verbose = TRUE
 
   if (!exists("tardis")) {
@@ -115,6 +115,11 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
     stop("If tardis consists of one layer, then points should contain longitude and latitude columns only")
   }
 
+  # time order for convenience
+  ord <- 1:nrow(points)
+  new_ord <- ord[order(points[,3], decreasing = T)]
+  points <- points[new_ord,]
+
   # trim to unique points, with rounding if selected
   if(!is.null(round)) {points[,1:2] <- round(points[,1:2], round)}
   id <- paste(match(points[,1], unique(points[,1])),
@@ -152,7 +157,7 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
     if (verbose) {
       cat(paste0("Resolving discrepant points [", counter, "/", length(to_do), "]\r"))
       if (i == rev(unique(tms))[1]) {
-        cat("\n")
+        cat(paste0("Resolving discrepant points [", length(to_do), "/", length(to_do), "]\n"))
       }
     }
 
@@ -213,5 +218,5 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
 
   # expand to original input and return
   geom <- geom[match(id, id2)]
-  return(geom[,c(3,2,4,5)])
+  return(geom[order(new_ord),c(3,2,4,5)])
 }

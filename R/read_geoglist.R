@@ -50,9 +50,9 @@ read_geoglist <- function(path) {
 
     pl <- lapply(1:ncol(geog$layers), function(x) {
 
-      cat(paste0("Retrieving layers [", x, "/", ncol(geog$layers), "]"))
-      if(x != ncol(geog$layers)) {
-        cat("\r")
+      cat(paste0("Retrieving layers [", x, "/", ncol(geog$layers), "]\r"))
+      if(x == ncol(geog$layers)) {
+        cat("\n")
       }
 
       # build layer
