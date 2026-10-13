@@ -88,6 +88,9 @@ read_geoglist <- function(path) {
     geog$links <- lnk
   }
 
+  # seems to help
+  suppressMessages(gc())
+
   # return geoglist
   return(geog)
 }
