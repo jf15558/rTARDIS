@@ -88,8 +88,8 @@ read_geoglist <- function(path) {
     geog$links <- lnk
   }
 
-  # seems to help
-  gc(verbose = F)
+  # useful due to large vectors generated internally
+  on.exit(gc(verbose = F))
 
   # return geoglist
   return(geog)

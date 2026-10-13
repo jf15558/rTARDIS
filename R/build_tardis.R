@@ -299,7 +299,8 @@ build_tardis <- function(geog, tlink = 1, rotations = NULL, verbose = TRUE) {
                             attrib = list(aux = NULL, cap = NULL, alpha = NULL, beta = NULL),
                             src = src, dst = dst))
   class(out) <- "tardis"
+
+  # useful due to large vectors generated internally
+  on.exit(gc(verbose = F))
   return(out)
-
-
 }
