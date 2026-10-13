@@ -89,7 +89,7 @@ read_geoglist <- function(path) {
   }
 
   # seems to help
-  suppressMessages(gc())
+  gc(verbose = F)
 
   # return geoglist
   return(geog)
