@@ -24,7 +24,7 @@
 #' to in case points were discarded (`$feature`), the ID of the `tardis` cell
 #' they fall into (`$cell`), the layer to which they belong (`$layer`) and their
 #' adjusted distance (`$adj`).
-#' @import geosphere terra sf h3jsr
+#' @import terra h3jsr
 #' @export
 #'
 #' @examples
