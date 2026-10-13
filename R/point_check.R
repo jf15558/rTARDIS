@@ -1,11 +1,12 @@
 #' point_check
 #'
-#' Check a set of coordinates to determine whether they fall within an
-#' accessible cell within a `tardis` object. Discrepant points are adjusted to
-#' their nearest accessible cell based on great circle distance.
+#' Resolve a set of coordinates to accessible cells in a `tardis` object.
+#' Discrepant points are adjusted to their nearest accessible cell based on
+#' great circle distance, with the option to cap the distance tolerated. Checks
+#' are performed on unique coordinate sets internally for efficiency.
 #'
 #' @param tardis `tardis`. The output of `build_tardis()` or `weight_tardis()`.
-#' @param points `matrix` or `data.frame`. A two or three column matrix or
+#' @param points `matrix` or `data.frame`. A two or three column `matrix` or
 #' `data.frame` of coordinates. Column ordering is assumed to be longitude
 #' (decimal degrees), latitude (decimal degrees) and time (positive, time before
 #' present). The time column is only required if `tardis` contains multiple
@@ -14,6 +15,9 @@
 #' adjusting points to accessible cells. Points with adjustments above this
 #' threshold will be discarded. `NULL` by default, meaning that no points are
 #' discarded.
+#' @param round `integer`. If not `NULL`, then the number of decimal places to
+#' which longitudes and latitudes will be rounded. This can speed up function
+#' progress when dealing with large numbers of input points.
 #' @param verbose `logical` Should function progress be reported to the user?
 #' @return A `SpatVector` of points, recording which input point they correspond
 #' to in case points were discarded (`$feature`), the ID of the `tardis` cell
@@ -45,13 +49,13 @@
 #' hpts <- point_check(htd, org)
 #' }
 
-point_check <- function(tardis, points, max.dist = NULL, verbose = TRUE) {
+point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose = TRUE) {
 
-  #tardis <- td
-  #points <- occ[,c("p_lng", "p_lat", "bin_midpoint")]
+  #tardis <- ob
+  #points <-  occs[,c("p_lng", "p_lat", "bin_midpoint")]
   #max.dist = NULL
+  #round <- 2
   #verbose = TRUE
-
 
   if (!exists("tardis")) {
     stop("Supply tardis as the output of build_tardis")
@@ -76,10 +80,33 @@ point_check <- function(tardis, points, max.dist = NULL, verbose = TRUE) {
       stop("If not NULL, max.dist should be a single positive numeric")
     }
   }
+  if(!is.null(round)) {
+    if(!is.atomic(round) | length(round) != 1) {
+      stop("If not NULL, round should be a single positive integer")
+    }
+    if(!is.numeric(round)) {
+      stop("If not NULL, round should be a single positive integer")
+    }
+    if(round <= 0 | round %% 1 != 0) {
+      stop("If not NULL, round should be a single positive round")
+    }
+  }
 
   if(length(tardis$tdat) < 3) {
     points <- cbind(points[,1:2], rep(0.5, nrow(points)))
     tardis$tdat <- c(1, 0)
+  }
+  if(any(is.na(points))) {
+    stop("NA values are not permitted in points")
+  }
+  if(any(points[,1] > 180 | points[,1] < -180)) {
+    stop("The first two columns in points must be in decimal degrees")
+  }
+  if(any(points[,2] > 90 | points[,2] < -90)) {
+    stop("The first two columns in points must be in decimal degrees")
+  }
+  if(any(points[,3] < 0)) {
+    stop("If supplied, the time column in points must only contain positive values")
   }
   if(length(tardis$tdat) > 2 & ncol(points) < 3) {
     stop("If tardis contains multiple time layers, then points should contain longitude, latitude and time columns")
@@ -87,72 +114,84 @@ point_check <- function(tardis, points, max.dist = NULL, verbose = TRUE) {
   if(is.null(tardis$tdat) & ncol(points) > 2) {
     stop("If tardis consists of one layer, then points should contain longitude and latitude columns only")
   }
-  if(!is.na(tardis$gdat[7])) {
 
+  # trim to unique points, with rounding if selected
+  if(!is.null(round)) {points[,1:2] <- round(points[,1:2], round)}
+  id <- paste(match(points[,1], unique(points[,1])),
+              match(points[,2], unique(points[,2])),
+              match(points[,3], unique(points[,3])), sep = "_")
+  id2 <- unique(id)
+  points <- unique(points)
+
+  # resolve coordinates to grid
+  if(!is.na(tardis$gdat[7])) {
     grid <- get_grid(tardis$gdat[1:4], tardis$gdat[7])
     pcell <- suppressMessages(point_to_cell(points[, 1:2, drop = F], tardis$gdat[7]))
     pcell <- match(pcell, grid)
-    pt <- unlist(lapply(points[, 3], function(y) {
-      sum(y < tardis$tdat[-1]) * tardis$gdat[5]
-    }))
-    pt[which(points[, 3] > tardis$tdat[1] | points[, 3] < tardis$tdat[length(tardis$tdat)])] <- NA
-    ptcell <- pcell + pt
-    pmod <- rep(0, length(ptcell))
 
   } else {
     samprast <- rast(nrows = tardis$gdat[5] / tardis$gdat[6], ncols = tardis$gdat[6],
                      ext = ext(tardis$gdat[1:4]))
     pcell <- cellFromXY(samprast, points[, 1:2, drop = F])
-    pt <- unlist(lapply(points[, 3], function(y) {
-      sum(y < tardis$tdat[-1]) * tardis$gdat[5]
-    }))
-    pt[which(points[, 3] > tardis$tdat[1] | points[, 3] < tardis$tdat[length(tardis$tdat)])] <- NA
-    ptcell <- pcell + pt
-    pmod <- rep(0, length(ptcell))
   }
+  pt <- sapply(points[, 3], function(y) {sum(y < tardis$tdat)})
+  pt[which(points[, 3] > tardis$tdat[1] | points[, 3] < tardis$tdat[length(tardis$tdat)])] <- NA
+  ptcell <- pcell + ((pt - 1) * tardis$gdat[5])
+  pmod <- rep(0, length(ptcell))
 
-  for (i in 1:length(ptcell)) {
+  # get cells to resolve
+  to_do <- which(!ptcell %in% tardis$edges[,1] & !is.na(ptcell))
+  tms <- pt[to_do]
+
+  # resolve per time slice
+  counter <- 0
+  for(i in unique(tms)) {
+
+    # set to do
+    pos <- to_do[which(tms == i)]
     if (verbose) {
-      cat(paste0("Checking point [", i, "/", length(ptcell), "]\r"))
-      if (i == length(ptcell)) {
+      cat(paste0("Resolving discrepant points [", counter, "/", length(to_do), "]\r"))
+      if (i == rev(unique(tms))[1]) {
         cat("\n")
       }
     }
-    if(!is.na(ptcell[i])) {
-      if(!ptcell[i] %in% tardis$edges[, 1]) {
 
-        cls <- (pt[i] + 1):(pt[i] + tardis$gdat[5])
-        cls <- cls[cls %in% tardis$edges[, 1]] - pt[i]
-
-        if(!is.na(tardis$gdat[7])) {
-          cls <- grid[cls]
-          cpt <- st_coordinates(cell_to_point(cls))
-          dists <- distGeo(points[i,1:2], cpt)
-          pmod[i] <- min(dists)
-          pcell[i] <- match(suppressMessages(point_to_cell(cpt[which.min(dists),], tardis$gdat[7])), grid)
-          ptcell[i] <- pcell[i] + pt[i]
-
-        } else {
-
-          tmprast <- samprast
-          tmprast[cls] <- 1
-          cpt <- xyFromCell(tmprast, which(tmprast[] == 1))
-          dists <- distGeo(points[i,1:2], cpt)
-          pmod[i] <- min(dists)
-          pcell[i] <- cellFromXY(tmprast, cpt[which.min(dists),,drop = F])
-          ptcell[i] <- pcell[i] + pt[i]
-        }
-      }
+    # get border cells
+    cls <- tardis$edges[which(tardis$edges[,1] %/% tardis$gdat[5] == (i - 1) & tardis$edges[,3] == 0),1]
+    cls <- table(cls)
+    if(!is.null(tardis$gdat[7])) {
+      cls <- names(cls[cls < 6])
+    } else {
+      cls <- names(cls[cls < 8])
     }
+
+    # create point sets
+    crd <- cell_to_coords(cls, tardis)
+    crd <- vect(crd[,1:2], crs = "+proj=lonlat")
+    crd2 <- vect(points[pos,1:2, drop = F], crs = "+proj=lonlat")
+
+    # get nearest
+    nr <- nearest(crd2, crd)
+    dst <- nr$distance
+    nr <- cls[nr$to_id]
+
+    # add in new cells
+    pmod[pos] <- dst
+    ptcell[pos] <- nr
+    counter <- counter + length(pos)
   }
 
-  if (all(is.na(ptcell))) {
+  if(!is.null(max.dist)) {
+    ptcell[pmod > max.dist] <- NA
+  }
+
+  if(all(is.na(ptcell))) {
     stop("No points could be matched to accessible cells in tardis")
   }
-  if (any(as.logical(pmod))) {
+  if(any(as.logical(pmod))) {
     warning("Some points were translated to accessible cells in tardis")
   }
-  if (any(is.na(pt))) {
+  if(any(is.na(pt))) {
     warning("Some points fell outside the temporal bounds of tardis and were discarded")
   }
   out <- cbind.data.frame(point = which(!is.na(ptcell)),
@@ -172,11 +211,7 @@ point_check <- function(tardis, points, max.dist = NULL, verbose = TRUE) {
   geom$layer <- out$bin
   geom$adj <- out$mod
 
-  if(!is.null(max.dist)) {
-    if(any(geom$adj > max.dist)) {
-      warning("Some point adjustments exceeded max.dist and were discarded")
-    }
-    geom <- geom[which(geom$adj <= max.dist)]
-  }
+  # expand to original input and return
+  geom <- geom[match(id, id2)]
   return(geom[,c(3,2,4,5)])
 }
