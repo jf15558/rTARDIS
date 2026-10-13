@@ -17,7 +17,8 @@
 #' discarded.
 #' @param round `integer`. If not `NULL`, then the number of decimal places to
 #' which longitudes and latitudes will be rounded. This can speed up function
-#' progress when dealing with large numbers of input points.
+#' progress when dealing with large numbers of input points and should be
+#' selected according to the resolution of the `tardis` grid.
 #' @param verbose `logical` Should function progress be reported to the user?
 #' @return A `SpatVector` of points, recording which input point they correspond
 #' to in case points were discarded (`$feature`), the ID of the `tardis` cell
