@@ -67,10 +67,10 @@
 
 min_span <- function(tardis, weights = "gdist", points, verbose = TRUE) {
 
-  tardis = ob
-  weights = "gdist"
-  points = tx
-  verbose = TRUE
+  #tardis = ob
+  #weights = "gdist"
+  #points = tx
+  #verbose = TRUE
 
 
   if (!exists("tardis")) {
