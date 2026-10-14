@@ -209,7 +209,7 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
 
   # add data fields
   geom$h3_address <- NULL
-  geom$feature <- valid
+  geom$feature <- id2[valid]
   geom$cell <- ptcell[valid]
   geom$layer <- pt[valid]
   geom$adj <- pmod[valid]
