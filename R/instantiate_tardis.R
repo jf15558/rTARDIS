@@ -40,6 +40,9 @@
 
 instantiate_tardis <- function(tardis, weights = "gdist") {
 
+  #tardis = ob
+  #weights = "gdist"
+
   if(!exists("tardis")) {
     stop("Supply tardis as a tardis object")
   }
@@ -47,37 +50,42 @@ instantiate_tardis <- function(tardis, weights = "gdist") {
     stop("Supply tardis as a tardis object")
   }
 
-  if(!is.atomic(weights) | length(weights) != 1) {
-    stop("weights should only contain one element")
-  }
-  if(!is.character(weights)) {
-    stop("weights should be a character string")
-  }
-  if(!weights %in% colnames(tardis$edges)) {
-    stop("weights should be a column name in tardis$edges")
-  }
+  # check if already instantiated
+  if(is.null(tardis$tgraph$src)) {
+    return(tardis)
+  } else {
+    if(!is.atomic(weights) | length(weights) != 1) {
+      stop("weights should only contain one element")
+    }
+    if(!is.character(weights)) {
+      stop("weights should be a character string")
+    }
+    if(!weights %in% colnames(tardis$edges)) {
+      stop("weights should be a column name in tardis$edges")
+    }
 
-  if(!is.numeric(tardis$edges[,weights])) {
-    stop("Some weights are not numeric")
-  }
-  if(any(is.infinite(tardis$edges[,weights]) | tardis$edges[,weights] < 0 | is.nan(tardis$edges[,weights]))) {
-    stop("All weights must be positive, finite numerics, NA, or zero")
-  }
+    if(!is.numeric(tardis$edges[,weights])) {
+      stop("Some weights are not numeric")
+    }
+    if(any(is.infinite(tardis$edges[,weights]) | tardis$edges[,weights] < 0 | is.nan(tardis$edges[,weights]))) {
+      stop("All weights must be positive, finite numerics, NA, or zero")
+    }
 
-  weights <- tardis$edges[,weights]
-  if(any(is.na(weights))) {
-    tardis$tgraph$src <- tardis$tgraph$src[which(!is.na(weights))]
-    tardis$tgraph$dst <- tardis$tgraph$dst[which(!is.na(weights))]
-    tardis$edges <- tardis$edges[which(!is.na(weights)),]
-    tardis$tgraph$dict <- tardis$tgraph$dict[which(tardis$tgraph$dict$ref %in%
-                                                     c(tardis$tgraph$src, tardis$tgraph$dst))]
-    tardis$tgraph$id <- 0:(length(tardis$tgraph$dict$ref) - 1)
-    tardis$tgraph$nbnode <- length(tardis$tgraph$id)
+    weights <- tardis$edges[,weights]
+    if(any(is.na(weights))) {
+      tardis$tgraph$src <- tardis$tgraph$src[which(!is.na(weights))]
+      tardis$tgraph$dst <- tardis$tgraph$dst[which(!is.na(weights))]
+      tardis$edges <- tardis$edges[which(!is.na(weights)),]
+      tardis$tgraph$dict <- tardis$tgraph$dict[which(tardis$tgraph$dict$ref %in%
+                                                       c(tardis$tgraph$src, tardis$tgraph$dst))]
+      tardis$tgraph$id <- 0:(length(tardis$tgraph$dict$ref) - 1)
+      tardis$tgraph$nbnode <- length(tardis$tgraph$id)
+    }
+    tardis$tgraph$attrib$aux <- tardis$edges[!is.na(weights), "gdist"]
+    tardis$tgraph$data <- data.frame(from = tardis$tgraph$dict$id[match(tardis$tgraph$src,
+                                                                        tardis$tgraph$dict$ref)], to = tardis$tgraph$dict$id[match(tardis$tgraph$dst,
+                                                                                                                                   tardis$tgraph$dict$ref)], dist = weights[!is.na(weights)])
+    tardis$tgraph <- tardis$tgraph[1:5]
+    return(tardis)
   }
-  tardis$tgraph$attrib$aux <- tardis$edges[!is.na(weights), "gdist"]
-  tardis$tgraph$data <- data.frame(from = tardis$tgraph$dict$id[match(tardis$tgraph$src,
-                                                                      tardis$tgraph$dict$ref)], to = tardis$tgraph$dict$id[match(tardis$tgraph$dst,
-                                                                                                                                 tardis$tgraph$dict$ref)], dist = weights[!is.na(weights)])
-  tardis$tgraph <- tardis$tgraph[1:5]
-  return(tardis)
 }
