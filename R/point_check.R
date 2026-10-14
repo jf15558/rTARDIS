@@ -166,9 +166,9 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
     cls <- tardis$edges[which(tardis$edges[,1] %/% tardis$gdat[5] == (i - 1) & tardis$edges[,3] == 0),1]
     cls <- table(cls)
     if(!is.null(tardis$gdat[7])) {
-      cls <- names(cls[cls < 6])
+      cls <- as.numeric(names(cls[cls < 6]))
     } else {
-      cls <- names(cls[cls < 8])
+      cls <- as.numeric(names(cls[cls < 8]))
     }
 
     # create point sets
@@ -178,15 +178,10 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
 
     # get nearest
     nr <- nearest(crd2, crd)
-    dst <- nr$distance
-    nr <- cls[nr$to_id]
-
-    # add in new cells
-    pmod[pos] <- dst
-    ptcell[pos] <- nr
+    pmod[pos] <- nr$distance
+    ptcell[pos] <- cls[nr$to_id]
     counter <- counter + length(pos)
   }
-
   if(!is.null(max.dist)) {
     ptcell[pmod > max.dist] <- NA
   }
@@ -194,30 +189,32 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
   if(all(is.na(ptcell))) {
     stop("No points could be matched to accessible cells in tardis")
   }
-  if(any(as.logical(pmod))) {
-    warning("Some points were translated to accessible cells in tardis")
-  }
   if(any(is.na(pt))) {
     warning("Some points fell outside the temporal bounds of tardis and were discarded")
   }
-  out <- cbind.data.frame(point = which(!is.na(ptcell)),
-                          bin = pt[!is.na(ptcell)] %/% tardis$gdat[5] + 1,
-                          mod = pmod[!is.na(ptcell)])
+  if(any(as.logical(pmod))) {
+    warning("Some points were translated to accessible cells in tardis")
+  }
 
+  # get coordinates for valid cells
+  valid <- which(!is.na(ptcell))
+  pcell <- ptcell %% tardis$gdat[5]
   if(!is.na(tardis$gdat[7])) {
-    geom <- vect(cell_to_point(grid[pcell], tardis$gdat[7]))
-    geom$cell <- match(geom$h3_address, grid)
+    geom <- vect(cell_to_point(grid[pcell[valid]], tardis$gdat[7]))
 
   } else {
     samprast <- rast(nrows = tardis$gdat[5] / tardis$gdat[6], ncols = tardis$gdat[6], ext = ext(tardis$gdat[1:4]))
-    geom <- vect(xyFromCell(samprast, pcell))
-    geom$cell <- ptcell
+    geom <- vect(xyFromCell(samprast, pcell[valid]))
   }
-  geom$feature <- out$point
-  geom$layer <- out$bin
-  geom$adj <- out$mod
+
+  # add data fields
+  geom$h3_address <- NULL
+  geom$feature <- valid
+  geom$cell <- ptcell[valid]
+  geom$layer <- pt[valid]
+  geom$adj <- pmod[valid]
 
   # expand to original input and return
   geom <- geom[match(id, id2)]
-  return(geom[order(new_ord),c(3,2,4,5)])
+  return(geom[order(new_ord)])
 }

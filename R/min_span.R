@@ -67,10 +67,11 @@
 
 min_span <- function(tardis, weights = "gdist", points, verbose = TRUE) {
 
-  # tardis = rtd
-  # weights = "gdist"
-  # points = pt
-  # verbose = TRUE
+  tardis = ob
+  weights = "gdist"
+  points = tx
+  verbose = TRUE
+
 
   if (!exists("tardis")) {
     stop("Supply tardis as the output of create_tardis")
