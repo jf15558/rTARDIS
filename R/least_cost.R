@@ -93,10 +93,10 @@ least_cost <- function(tardis, weights = "gdist", origin, dest, verbose = TRUE) 
 
   }
 
-  if (!all(origin$cell %in% c(tardis$tgraph$src, tardis$tgraph$dst))) {
+  if (!all(origin$cell %in% tardis$tgraph$dict$ref)) {
     stop("One or more points in origin do not correspond to cells in tardis. Ensure that the correct tardis object is supplied for origin")
   }
-  if (!all(dest$cell %in% c(tardis$tgraph$src, tardis$tgraph$dst))) {
+  if (!all(dest$cell %in% tardis$tgraph$dict$ref)) {
     stop("One or more points in dest do not correspond to cells in tardis. Ensure that the correct tardis object is supplied for dest")
   }
   if (any(dest$bin > origin$bin) & tardis$tlink == 2) {

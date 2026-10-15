@@ -51,7 +51,7 @@ instantiate_tardis <- function(tardis, weights = "gdist") {
   }
 
   # check if already instantiated
-  if(FALSE) {
+  if(is.null(tardis$tgraph$src)) {
     return(tardis)
   } else {
     if(!is.atomic(weights) | length(weights) != 1) {

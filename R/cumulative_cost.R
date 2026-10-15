@@ -77,7 +77,7 @@ cumulative_cost <- function(tardis, weights = "gdist", origin, verbose = TRUE) {
       (tardis$gdat[5] * (origin$layer - 1))
   }
 
-  if (!all(origin$cell %in% c(tardis$tgraph$src, tardis$tgraph$dst))) {
+  if (!all(origin$cell %in% tardis$tgraph$dict$ref)) {
     stop("One or more points in origin do not correspond to cells in tardis. Ensure that the correct tardis object is supplied for origin")
   }
   if (verbose) {

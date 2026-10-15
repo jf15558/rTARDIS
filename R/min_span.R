@@ -124,7 +124,7 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
     groups <- as.numeric(as.factor(points[[groups]][,1]))
   }
 
-  if (!all(points$cell %in% ob$tgraph$dict$ref)) {
+  if (!all(points$cell %in% tardis$tgraph$dict$ref)) {
     stop("One or more points in origin do not correspond to cells in tardis. Ensure that the correct tardis object is supplied for origin")
   }
   if (verbose) {
