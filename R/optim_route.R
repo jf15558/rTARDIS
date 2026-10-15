@@ -104,11 +104,11 @@ optim_route <- function(tardis, weights = "gdist", points, loop = FALSE, verbose
     if(!is.atomic(groups) | length(groups) != 1) {
       stop("If not NULL, groups should be a single character string")
     }
-    if(!is.character(weights)) {
+    if(!is.character(groups)) {
       stop("If not NULL, groups should be a single character string")
     }
-    if(!weights %in% names(points)) {
-      stop("If not NULL, weights should be a column name in points")
+    if(!groups %in% names(points)) {
+      stop("If not NULL, groups should be a column name in points")
     }
     if(any(table(points[[groups]][,1]) < 2)) {
       stop("If designating groups, each group must contain at least two points")
