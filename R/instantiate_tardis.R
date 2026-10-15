@@ -51,7 +51,7 @@ instantiate_tardis <- function(tardis, weights = "gdist") {
   }
 
   # check if already instantiated
-  if(!is.null(tardis$tgraph$attrib$beta)) {
+  if(!is.null(tardis$tgraph$attrib$instantiated)) {
     return(tardis)
   } else {
     if(!is.atomic(weights) | length(weights) != 1) {
@@ -82,7 +82,7 @@ instantiate_tardis <- function(tardis, weights = "gdist") {
       tardis$tgraph$nbnode <- length(tardis$tgraph$id)
     }
     tardis$tgraph$attrib$aux <- tardis$edges[!is.na(weights), "gdist"]
-    tardis$tgraph$attrib$beta <- 1
+    tardis$tgraph$attrib$instantiated <- 1
     tardis$tgraph$data <- data.frame(from = tardis$tgraph$dict$id[match(tardis$tgraph$src,
                                                                         tardis$tgraph$dict$ref)], to = tardis$tgraph$dict$id[match(tardis$tgraph$dst,
                                                                                                                                    tardis$tgraph$dict$ref)], dist = weights[!is.na(weights)])
