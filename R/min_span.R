@@ -167,7 +167,7 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
 
     costs <- lapply(1:length(paths), function(x) {
       if (verbose) {
-        cat(paste0("Point group ", i, "/", max(gps), " [", (x / length(paths)) * 100, "%]   ", "\r"))
+        cat(paste0("Point group ", i, "/", max(gps), " [", ceiling((x / length(paths)) * 100), "%]   ", "\r"))
       }
       pth <- paths[[x]]
       wp <- c(get_distance_pair(tardis$tgraph, pth[-length(pth)],
