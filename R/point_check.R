@@ -21,9 +21,8 @@
 #' selected according to the resolution of the `tardis` grid.
 #' @param verbose `logical` Should function progress be reported to the user?
 #' @return A `SpatVector` of points, recording which input point they correspond
-#' to in case points were discarded (`$feature`), the ID of the `tardis` cell
-#' they fall into (`$cell`), the layer to which they belong (`$layer`) and their
-#' adjusted distance (`$adj`).
+#' to (`$feature`), the ID of the `tardis` cell they fall into (`$cell`), the
+#' layer to which they belong (`$layer`) and their adjusted distance (`$adj`).
 #' @import terra h3jsr
 #' @export
 #'
@@ -209,12 +208,12 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
 
   # add data fields
   geom$h3_address <- NULL
-  geom$feature <- id2[valid]
   geom$cell <- ptcell[valid]
   geom$layer <- pt[valid]
   geom$adj <- pmod[valid]
 
   # expand to original input and return
   geom <- geom[match(id, id2)]
-  return(geom[order(new_ord)])
+  geom$feature <- new_ord[match(id, id2)]
+  return(geom[order(new_ord),c(4, 1, 2, 3)])
 }
