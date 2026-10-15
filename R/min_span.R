@@ -107,7 +107,7 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
   }
 
   if(is.null(groups)) {
-    groups <- rep(1, length(points))
+    gps <- rep(1, length(points))
   } else {
     if(!is.atomic(groups) | length(groups) != 1) {
       stop("If not NULL, groups should be a single character string")
@@ -121,7 +121,7 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
     if(any(table(points[[groups]][,1]) < 2)) {
       stop("If designating groups, each group must contain at least two points")
     }
-    groups <- as.numeric(as.factor(points[[groups]][,1]))
+    gps <- as.numeric(as.factor(points[[groups]][,1]))
   }
 
   if (!all(points$cell %in% tardis$tgraph$dict$ref)) {
@@ -133,14 +133,14 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
   tardis <- instantiate_tardis(tardis = tardis, weights = weights)
 
   lst <- list()
-  for(i in sort(unique(groups))) {
+  for(i in sort(unique(gps))) {
 
     if (verbose) {
-      cat(paste0("Point group ", i, "/", max(groups), "\r"))
+      cat(paste0("Point group ", i, "/", max(gps), "\r"))
     }
 
     # distance matrix for points
-    dists <- get_distance_matrix(tardis$tgraph, points$cell[groups == i], points$cell[groups == i])
+    dists <- get_distance_matrix(tardis$tgraph, points$cell[gps == i], points$cell[gps == i])
 
     # set impossible paths to infinite and make get weighted subgraph for the point set
     dists[is.na(dists)] <- Inf
@@ -167,7 +167,7 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
 
     costs <- lapply(1:length(paths), function(x) {
       if (verbose) {
-        cat(paste0("Point group ", i, "/", max(groups), " [", x, "/", length(paths), "]   ", "\r"))
+        cat(paste0("Point group ", i, "/", max(gps), " [", x, "/", length(paths), "]   ", "\r"))
       }
       pth <- paths[[x]]
       wp <- c(get_distance_pair(tardis$tgraph, pth[-length(pth)],
