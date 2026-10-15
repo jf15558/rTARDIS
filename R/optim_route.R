@@ -247,7 +247,7 @@ optim_route <- function(tardis, weights = "gdist", points, loop = FALSE, verbose
     st_geometry(ob) <- st_sfc(unlist(path_groups, recursive = F),
                               crs = "+proj=longlat")
     ob <- st_wrap_dateline(ob, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"))
-    if(verbose) {if(i == max(groups)) {cat("\n")}}
+    if(verbose) {if(i == max(gps)) {cat("\n")}}
     lst[[i]] <- vect(ob)
   }
 

@@ -260,7 +260,7 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
                               crs = "+proj=longlat")
     ob <- st_wrap_dateline(ob, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"))
 
-    if(verbose) {if(i == max(groups)) {cat("\n")}}
+    if(verbose) {if(i == max(gps)) {cat("\n")}}
     lst[[i]] <- vect(ob)
   }
 
