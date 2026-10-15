@@ -155,7 +155,7 @@ optim_route <- function(tardis, weights = "gdist", points, loop = FALSE, verbose
 
     costs <- lapply(1:length(paths), function(x) {
       if (verbose) {
-        cat(paste0("Point group ", i, "/", max(gps), " [", x, "/", length(paths), "]   ", "\r"))
+        cat(paste0("Point group ", i, "/", max(gps), " [", (x / length(paths)) * 100, "%]   ", "\r"))
       }
       pth <- paths[[x]]
       wp <- c(get_distance_pair(tardis$tgraph, pth[-length(pth)],

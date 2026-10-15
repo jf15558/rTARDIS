@@ -48,9 +48,10 @@
 
 slice_tardis <- function(tardis, times = NULL, layers = NULL, adjust = TRUE) {
 
-  #tardis <- rtd
+  #tardis <- ob
   #times <- NULL
-  #layers <- 1
+  #layers <- i
+  #adjust = F
 
   if (!exists("tardis")) {
     stop("Supply tardis as the output of create_tardis")
@@ -108,7 +109,7 @@ slice_tardis <- function(tardis, times = NULL, layers = NULL, adjust = TRUE) {
   }
 
   # get the cell id range for the requested layer range
-  cls <- as.character(((layers[1] * tardis$gdat[5]) - tardis$gdat[5] + 1):(layers[length(layers)] * tardis$gdat[5]))
+  cls <- as.character((((layers[1] - 1) * tardis$gdat[5]) + 1):(layers[length(layers)] * tardis$gdat[5]))
 
   # subset edges and dict
   valid <- tardis$tgraph$src %in% cls & tardis$tgraph$dst %in% cls
