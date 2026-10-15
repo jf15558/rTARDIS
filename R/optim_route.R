@@ -116,7 +116,7 @@ optim_route <- function(tardis, weights = "gdist", points, loop = FALSE, verbose
     groups <- as.numeric(as.factor(points[[groups]][,1]))
   }
 
-  if (!all(points$cell %in% tardis$edges[, 1])) {
+  if (!all(points$cell %in% c(tardis$tgraph$src, tardis$tgraph$dst))) {
     stop("One or more points in origin do not correspond to cells in tardis. Ensure that the correct tardis object is supplied for origin")
   }
   if (verbose) {
@@ -155,7 +155,7 @@ optim_route <- function(tardis, weights = "gdist", points, loop = FALSE, verbose
 
     costs <- lapply(1:length(paths), function(x) {
       if (verbose) {
-        cat(paste0("Point group ", i, "/", max(groups), " [", x, "/", length(paths), "]", "\r"))
+        cat(paste0("Point group ", i, "/", max(groups), " [", x, "/", length(paths), "]   ", "\r"))
       }
       pth <- paths[[x]]
       wp <- c(get_distance_pair(tardis$tgraph, pth[-length(pth)],
@@ -167,11 +167,6 @@ optim_route <- function(tardis, weights = "gdist", points, loop = FALSE, verbose
       }
       else {
         tp <- wp
-      }
-      if (verbose) {
-        if (x == length(paths)) {
-          cat("\n")
-        }
       }
       list(wp, tp)
     })

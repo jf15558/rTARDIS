@@ -71,7 +71,7 @@ get_cost <- function(tardis, weights = "gdist", origin, dest) {
   if(!is.character(origin)) {
     stop("origin should be a character vector of cell IDs")
   }
-  if(!all(origin %in% c(tardis$edges[,1:2]))) {
+  if(!all(origin %in% c(tardis$tgraph$src, tardis$tgraph$dst))) {
     stop("Not all elements of origin are valid cell IDs in tardis")
   }
   if(!is.atomic(dest)) {
@@ -80,7 +80,7 @@ get_cost <- function(tardis, weights = "gdist", origin, dest) {
   if(!is.character(dest)) {
     stop("dest should be a character vector of cell IDs")
   }
-  if(!all(dest %in% c(tardis$edges[,1:2]))) {
+  if(!all(dest %in% c(tardis$tgraph$src, tardis$tgraph$dst))) {
     stop("Not all elements of dest are valid cell IDs in tardis")
   }
 

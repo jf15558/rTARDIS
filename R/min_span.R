@@ -72,10 +72,10 @@
 
 min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose = TRUE) {
 
-  #tardis = htd
+  #tardis = trd
   #weights = "gdist"
-  #points = hpts
-  #groups <- NULL
+  #points = pts
+  #groups <- "tax"
   #verbose = TRUE
 
   if (!exists("tardis")) {
@@ -124,7 +124,7 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
     groups <- as.numeric(as.factor(points[[groups]][,1]))
   }
 
-  if (!all(points$cell %in% tardis$edges[, 1])) {
+  if (!all(points$cell %in% c(tardis$tgraph$src, tardis$tgraph$dst))) {
     stop("One or more points in origin do not correspond to cells in tardis. Ensure that the correct tardis object is supplied for origin")
   }
   if (verbose) {
@@ -133,7 +133,7 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
   tardis <- instantiate_tardis(tardis = tardis, weights = weights)
 
   lst <- list()
-  for(i in unique(groups)) {
+  for(i in sort(unique(groups))) {
 
     if (verbose) {
       cat(paste0("Point group ", i, "/", max(groups), "\r"))
@@ -167,7 +167,7 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
 
     costs <- lapply(1:length(paths), function(x) {
       if (verbose) {
-        cat(paste0("Point group ", i, "/", max(groups), " [", x, "/", length(paths), "]", "\r"))
+        cat(paste0("Point group ", i, "/", max(groups), " [", x, "/", length(paths), "]   ", "\r"))
       }
       pth <- paths[[x]]
       wp <- c(get_distance_pair(tardis$tgraph, pth[-length(pth)],
@@ -179,11 +179,6 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
       }
       else {
         tp <- wp
-      }
-      if (verbose) {
-        if (x == length(paths)) {
-          cat("\n")
-        }
       }
       list(wp, tp)
     })
