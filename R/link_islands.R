@@ -67,10 +67,10 @@
 
 link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
 
-  #geog = geog
-  #klink = 1
-  #verbose = T
-  #replace = F
+  # geog = geog
+  # klink = 1
+  # verbose = T
+  # replace = F
 
   if(!exists("geog")) {
     stop("Supply geog as a geoglist from rast_to_geoglist()")
@@ -114,8 +114,6 @@ link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
     islands <- lapply(dat, `[[`, 1)
     bounds <- lapply(dat, `[[`, 2)
   }
-
-  # 4908, 4909, 4942:4947, 5157, 5169:5173
 
   res_list <- list()
   for (i in 1:length(bounds)) {
@@ -238,7 +236,7 @@ link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
       crd <- geom(dl)
       srt <- which(!duplicated(crd[,1]))
       end <- c(srt[-1] - 1, nrow(crd))
-      crd <- crd[c(rbind(srt, end)),]
+      crd <- crd[c(rbind(srt, end)),3:4]
 
       if(inherits(geog$layers, "SpatRaster")) {
         cl <- cellFromXY(geog$layers[[1]], crd)
