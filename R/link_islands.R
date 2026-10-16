@@ -234,8 +234,7 @@ link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
       }
       dl <- do.call(rbind, to_keep)
 
-
-      # convert linkage coordinates to cell IDs
+      # convert linkage coordinates to cell IDs (first and last coords for each line, in case of antimeridian splits)
       crd <- geom(dl)
       srt <- which(!duplicated(crd[,1]))
       end <- c(srt[-1] - 1, nrow(crd))
