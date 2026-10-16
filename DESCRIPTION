@@ -8,7 +8,6 @@ Description: Implements classes and methods for constructing and analysing graph
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 Depends: 
     R (>= 2.10)
 LazyData: true
@@ -36,3 +35,4 @@ Suggests:
     via
 VignetteBuilder: knitr
 Config/testthat/edition: 3
+Config/roxygen2/version: 8.1.1

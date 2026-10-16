@@ -4,7 +4,7 @@
 \alias{min_span}
 \title{min_span}
 \usage{
-min_span(tardis, weights = "gdist", points, verbose = TRUE)
+min_span(tardis, weights = "gdist", points, groups = NULL, verbose = TRUE)
 }
 \arguments{
 \item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
@@ -15,22 +15,28 @@ use for distance calculation. By default these are true geographic distances
 \code{tardis} using \code{weight_tardis()}.}
 
 \item{points}{\code{SpatVector}. The output of \code{point_check()}, denoting the
-points to be linked.}
+points to be linked, and potentially with a grouping variable added}
+
+\item{groups}{\code{character}. \code{NULL} by default, in which case all entries in
+\code{points} will be linked in a single arborescence. Otherwise a column name in
+\code{points} denoting subsets of points to link. This column can be \code{character}
+or \code{numeric}, but must contain at least two points per group.}
 
 \item{verbose}{\code{logical} Should function progress be reported to the user?}
 }
 \value{
 A \code{SpatVector} of time-discrete lines representing the branches of
-the minimum spanning arborescence between each point in \code{points}, recording
-which overall branch they belong to (\verb{$feature}), the costs along each line
-(\verb{$cost}) and their geographic distances (\verb{$distance}, identical if
-\code{weights = "gdist"}).
+the minimum spanning arborescences, recording their point group (\verb{$group}),
+the branch in the group-wise minimum spanning arboresence to which they
+belong (\verb{$feature}), the costs along each line (\verb{$cost}) and their geographic
+distances (\verb{$distance}, identical if \code{weights = "gdist"}).
 }
 \description{
-Determine the least cost minimum spanning arborescence between a set of
+Determine the least cost minimum spanning arborescence between sets of
 points in a spatiotemporal landscape graph. Least cost paths are identified
 between pairs of points using Djikstra's algorithm, then the minimum spanning
-arborescence selected from these sets of pairwise distances.
+arborescence (see details) selected from these sets of pairwise distances.
+Multiple sets of points may be analysed in one function call.
 }
 \details{
 If geographic distances are used (default), then there will be a single least

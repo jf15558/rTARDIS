@@ -59,7 +59,7 @@
 #' par(oldpar)
 #' }
 
-optim_route <- function(tardis, weights = "gdist", points, loop = FALSE, verbose = TRUE) {
+optim_route <- function(tardis, weights = "gdist", points, groups = NULL, loop = FALSE, verbose = TRUE) {
 
   # tardis = rtd
   # weights = "tdist"
@@ -100,6 +100,9 @@ optim_route <- function(tardis, weights = "gdist", points, loop = FALSE, verbose
 
   if(is.null(groups)) {
     gps <- rep(1, length(points))
+    groups <- "groups123"
+    points$groups123 <- 1
+
   } else {
     if(!is.atomic(groups) | length(groups) != 1) {
       stop("If not NULL, groups should be a single character string")

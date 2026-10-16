@@ -44,34 +44,48 @@ export(weight_tardis)
 import(Matrix)
 import(cppRouting)
 import(exactextractr)
-import(geosphere)
 import(h3jsr)
 import(palaeoverse)
 import(rgl)
 import(rlemon)
 import(sf)
 import(terra)
-importFrom(geosphere,bearing)
-importFrom(geosphere,distGeo)
-importFrom(graphics,axTicks)
-importFrom(graphics,axis)
-importFrom(graphics,par)
+importFrom(geosphere,
+  bearing,
+  distGeo,
+  gcIntermediate
+)
+importFrom(graphics,
+  axTicks,
+  axis,
+  par
+)
 importFrom(h3jsr,cell_to_point)
-importFrom(h3r,cellToBoundary)
-importFrom(h3r,cellToLatLng)
-importFrom(igraph,E)
-importFrom(igraph,as_edgelist)
-importFrom(igraph,components)
-importFrom(igraph,delete_edges)
-importFrom(igraph,get.edge.ids)
-importFrom(igraph,graph_from_adjacency_matrix)
-importFrom(igraph,graph_from_edgelist)
-importFrom(igraph,random_walk)
+importFrom(h3r,
+  cellToBoundary,
+  cellToLatLng
+)
+importFrom(igraph,
+  E,
+  as_edgelist,
+  components,
+  delete_edges,
+  get.edge.ids,
+  graph_from_adjacency_matrix,
+  graph_from_edgelist,
+  random_walk
+)
 importFrom(methods,as)
-importFrom(rlemon,MinCostArborescence)
-importFrom(rlemon,TravellingSalesperson)
+importFrom(rlemon,
+  MinCostArborescence,
+  TravellingSalesperson
+)
 importFrom(scales,alpha)
-importFrom(stats,complete.cases)
-importFrom(stats,setNames)
-importFrom(terra,rast)
-importFrom(terra,xyFromCell)
+importFrom(stats,
+  complete.cases,
+  setNames
+)
+importFrom(terra,
+  rast,
+  xyFromCell
+)

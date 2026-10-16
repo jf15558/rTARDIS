@@ -66,8 +66,7 @@
 #' }
 
 link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
-  #
-  #
+
   #geog = rasts
   #klink = 1
   #verbose = T
@@ -128,7 +127,8 @@ link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
 
       # voronoi tessellation of island patches
       poly <- bounds[[i]]
-      vv <- voronoi(poly, bnd = poly)
+      vv <- makeValid(voronoi(poly))
+      vv <- crop(vv, poly)
 
       if(FALSE) {
         ######## SPHERICAL METHOD (NOT IMPLEMENTED) ########

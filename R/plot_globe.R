@@ -34,6 +34,7 @@
 #' @import sf terra rgl h3jsr
 #' @importFrom  h3r cellToBoundary
 #' @importFrom  h3r cellToLatLng
+#' @importFrom geosphere gcIntermediate
 #' @export
 #'
 #' @details

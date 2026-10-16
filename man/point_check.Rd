@@ -4,12 +4,12 @@
 \alias{point_check}
 \title{point_check}
 \usage{
-point_check(tardis, points, max.dist = NULL, verbose = TRUE)
+point_check(tardis, points, max.dist = NULL, round = NULL, verbose = TRUE)
 }
 \arguments{
 \item{tardis}{\code{tardis}. The output of \code{build_tardis()} or \code{weight_tardis()}.}
 
-\item{points}{\code{matrix} or \code{data.frame}. A two or three column matrix or
+\item{points}{\code{matrix} or \code{data.frame}. A two or three column \code{matrix} or
 \code{data.frame} of coordinates. Column ordering is assumed to be longitude
 (decimal degrees), latitude (decimal degrees) and time (positive, time before
 present). The time column is only required if \code{tardis} contains multiple
@@ -20,18 +20,23 @@ adjusting points to accessible cells. Points with adjustments above this
 threshold will be discarded. \code{NULL} by default, meaning that no points are
 discarded.}
 
+\item{round}{\code{integer}. If not \code{NULL}, then the number of decimal places to
+which longitudes and latitudes will be rounded. This can speed up function
+progress when dealing with large numbers of input points and should be
+selected according to the resolution of the \code{tardis} grid.}
+
 \item{verbose}{\code{logical} Should function progress be reported to the user?}
 }
 \value{
 A \code{SpatVector} of points, recording which input point they correspond
-to in case points were discarded (\verb{$feature}), the ID of the \code{tardis} cell
-they fall into (\verb{$cell}), the layer to which they belong (\verb{$layer}) and their
-adjusted distance (\verb{$adj}).
+to (\verb{$feature}), the ID of the \code{tardis} cell they fall into (\verb{$cell}), the
+layer to which they belong (\verb{$layer}) and their adjusted distance (\verb{$adj}).
 }
 \description{
-Check a set of coordinates to determine whether they fall within an
-accessible cell within a \code{tardis} object. Discrepant points are adjusted to
-their nearest accessible cell based on great circle distance.
+Resolve a set of coordinates to accessible cells in a \code{tardis} object.
+Discrepant points are adjusted to their nearest accessible cell based on
+great circle distance, with the option to cap the distance tolerated. Checks
+are performed on unique coordinate sets internally for efficiency.
 }
 \examples{
 \donttest{

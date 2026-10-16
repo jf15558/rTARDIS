@@ -51,10 +51,10 @@
 
 point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose = TRUE) {
 
-  #tardis <- ob
-  #points <-  occs[,c("p_lng", "p_lat", "bin_midpoint")]
+  #tardis <- rtd
+  #points <-  cbind(0, 0)
   #max.dist = NULL
-  #round = 2
+  #round = NULL
   #verbose = TRUE
 
   if (!exists("tardis")) {
@@ -93,7 +93,7 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
   }
 
   if(length(tardis$tdat) < 3) {
-    points <- cbind(points[,1:2], rep(0.5, nrow(points)))
+    points <- cbind(points[,1:2,drop = F], rep(0.5, nrow(points)))
     tardis$tdat <- c(1, 0)
   }
   if(any(is.na(points))) {
@@ -118,7 +118,7 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
   # time order for convenience
   ord <- 1:nrow(points)
   new_ord <- ord[order(points[,3], decreasing = T)]
-  points <- points[new_ord,]
+  points <- points[new_ord,,drop=F]
 
   # trim to unique points, with rounding if selected
   if(!is.null(round)) {points[,1:2] <- round(points[,1:2], round)}

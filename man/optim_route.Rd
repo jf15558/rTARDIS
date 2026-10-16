@@ -4,7 +4,14 @@
 \alias{optim_route}
 \title{optim_route}
 \usage{
-optim_route(tardis, weights = "gdist", points, loop = FALSE, verbose = TRUE)
+optim_route(
+  tardis,
+  weights = "gdist",
+  points,
+  groups = NULL,
+  loop = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
@@ -17,22 +24,29 @@ use for distance calculation. By default these are true geographic distances
 \item{points}{\code{SpatVector}. The output of \code{point_check()}, denoting the
 points to be linked.}
 
+\item{groups}{\code{character}. \code{NULL} by default, in which case all entries in
+\code{points} will be linked in a single route. Otherwise a column name in
+\code{points} denoting subsets of points to link. This column can be \code{character}
+or \code{numeric}, but must contain at least two points per group.}
+
 \item{loop}{\code{logical}. Should the optimal route additionally be closed from
 end point to start point to return a polygon? Defaults to \code{FALSE}.}
 
 \item{verbose}{\code{logical}. Should function progress be reported to the user?}
 }
 \value{
-An \code{SpatVector} of time-discrete lines representing the optimal paths
-between each point in \code{points}, recording which overall path they belong
-to (\verb{$feature}), the costs along each line (\verb{$cost}) and their geographic
-distances (\verb{$distance}, identical if \code{weights = "gdist"}).
+A \code{SpatVector} of time-discrete lines representing the optimal route
+for each point group (\verb{$group}), recording which overall path they belong
+to (\verb{$feature}), the layer the path segment occupies (\verb{$layer}), the costs
+along each segment (\verb{$cost}) and their geographic distances (\verb{$distance},
+identical if \code{weights = "gdist"}).
 }
 \description{
 Determine the optimal sequence in which to visit a set of points (the
 travelling salesman problem). Least cost paths are identified between
 all pairs of input points using Djikstra's algorithm, then the optimal route
-identified from these sets of pairwise distances.
+identified from these sets of pairwise distances. Multiple sets of points may
+be analysed in one function call.
 }
 \examples{
 \donttest{

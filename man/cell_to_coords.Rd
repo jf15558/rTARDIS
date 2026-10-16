@@ -4,24 +4,40 @@
 \alias{cell_to_coords}
 \title{cell_to_coords}
 \usage{
-cell_to_coords(cellid, gdat)
+cell_to_coords(cellid, gdat, modulo.warning = TRUE)
 }
 \arguments{
-\item{cellid}{\code{vector}. A vector of cell IDs, either numeric or character.}
+\item{cellid}{\code{vector}. A vector of cell integer IDs, either numeric or
+character.}
 
-\item{gdat}{Either a vector in gdat format, or an object containing this
-information (i.e., \code{tardis} or \code{geoglist}).}
+\item{gdat}{Either a vector in gdat format (see examples), or an object
+containing this information (i.e., \code{tardis} or \code{geoglist}).}
+
+\item{modulo.warning}{\code{logical}. Should the function warn the user if zero
+modulo cells are present?}
 }
 \value{
-A \code{data.frame} recordin the lon-lat coordinates, spatial cell
-IDs and layer numbers of the input cell IDs.
+A \code{data.frame} recording the lon-lat coordinates, spatial cell
+IDs and layer numbers of the input cell IDs. Integers which modulo to zero
+will return \code{NA} for their lon-lat coordinates (see details).
 }
 \description{
 Convert a cell integer ID to its lon-lat coordinates, spatial cell ID and
 layer, based on based on the general gridding parameters used by \code{rTARDIS}.
-This will work for any integer and does not utilise any specific landscape
-structure. See \code{point_check()} instead if you are trying to resolve numeric
-coordinates to within a specific landscape.
+This will work for almost any integer (see details) and does not relate to
+any specific landscape structure. See \code{point_check()} instead if you are
+trying to resolve numeric coordinates to cells within a specific landscape.
+}
+\details{
+Spatial cell position is retrieved as the modulo of layer cell count:
+\code{cellid \%\% gdat[5]}. Temporal position is retrieved by integer division of
+the layer cell count: \code{(cellid \%/\% gdat[5]) + 1}.
+
+In very rare cases (one in tens of thousands of cell), the modulo operation
+results in a spatial cell index of zero and will not work. This behavior is
+accounted for in all \code{rTARDIS} functions by masking such cells from the
+landscape. However, lon-lat coordinates for these rare cells cannot be
+derived, hence why they are returned as \code{NA} in the \code{data.frame} output.
 }
 \examples{
 library(terra)

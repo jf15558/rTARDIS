@@ -72,11 +72,11 @@
 
 min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose = TRUE) {
 
-  #tardis = ob
-  #weights = "gdist"
-  #points = pts
-  #groups <- "tax"
-  #verbose = TRUE
+  # tardis = htd
+  # weights = "gdist"
+  # points = hpts
+  # groups <- NULL
+  # verbose = TRUE
 
   if (!exists("tardis")) {
     stop("Supply tardis as the output of create_tardis")
@@ -108,6 +108,9 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
 
   if(is.null(groups)) {
     gps <- rep(1, length(points))
+    groups <- "groups123"
+    points$groups123 <- 1
+
   } else {
     if(!is.atomic(groups) | length(groups) != 1) {
       stop("If not NULL, groups should be a single character string")
@@ -165,6 +168,7 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
     paths <- lapply(suppressMessages(get_path_pair(tardis$tgraph, from = srt, to = end)),
                     function(x) {as.numeric(x)})
 
+    # get costs for those paths
     costs <- lapply(1:length(paths), function(x) {
       if (verbose) {
         cat(paste0("Point group ", i, "/", max(gps), " [", ceiling((x / length(paths)) * 100), "%]   ", "\r"))
