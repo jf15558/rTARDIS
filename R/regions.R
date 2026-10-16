@@ -32,11 +32,9 @@
 
 regions <- function(geog, bounds.only = TRUE, use.links = FALSE) {
 
-
-  #foo <- slice_geoglist(geog, layer = 1)
-   # geog = foo
-   # bounds.only = T
-   # use.links = T
+   #geog = rasts
+   #bounds.only = F
+   #use.links = T
 
   if(!exists("geog")) {
     stop("Supply geog as a geoglist from rast_to_geoglist()")
