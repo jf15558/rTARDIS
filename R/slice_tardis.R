@@ -11,7 +11,7 @@
 #' @param layers `numeric`. A single positive integer giving the layer to subset
 #' from `tardis` or a vector of two positive integers denoting the layer range
 #' to subset. One of `times` or `layers` must be specified.
-#' @param adjust `logical`. Should cell IDs be adjusted so that they correspond
+#' @param adjust.id `logical`. Should cell IDs be adjusted so that they correspond
 #' to the new layer numbering of the subsetted `tardis` object? Defaults to
 #' `TRUE`. Otherwise, this argument may be useful when working with single
 #' layers from a `tardis` object, but where retaining original spatiotemporal
@@ -46,7 +46,7 @@
 #' gts <- slice_tardis(rtd, layers = 2)
 #' }
 
-slice_tardis <- function(tardis, times = NULL, layers = NULL, adjust = TRUE) {
+slice_tardis <- function(tardis, times = NULL, layers = NULL, adjust.id = TRUE) {
 
   #tardis <- ob
   #times <- NULL
@@ -123,7 +123,7 @@ slice_tardis <- function(tardis, times = NULL, layers = NULL, adjust = TRUE) {
   tardis$tgraph$nbnode <- nrow(tardis$tgraph$dict)
   tardis$tgraph$dict$id <- (1:tardis$tgraph$nbnode) - 1
 
-  if(adjust) {
+  if(adjust.id) {
     tardis$edges[,1:2] <- tardis$edges[,1:2] - (as.numeric(cls[1]) - 1)
     tardis$tgraph$dict$ref <- as.character(as.numeric(tardis$tgraph$dict$ref) - (as.numeric(cls[1]) - 1))
     tardis$tgraph$src <- as.character(as.numeric(tardis$tgraph$src) - (as.numeric(cls[1]) - 1))

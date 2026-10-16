@@ -67,7 +67,7 @@
 
 link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
 
-  #geog = rasts
+  #geog = geog
   #klink = 1
   #verbose = T
   #replace = F
@@ -114,6 +114,8 @@ link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
     islands <- lapply(dat, `[[`, 1)
     bounds <- lapply(dat, `[[`, 2)
   }
+
+  # 4908, 4909, 4942:4947, 5157, 5169:5173
 
   res_list <- list()
   for (i in 1:length(bounds)) {
@@ -185,6 +187,7 @@ link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
         ln <- nearest(poly[x[1]], poly[x[2]], centroids = F, lines = T)
         ln[which.min(ln$distance)]
       }))
+      dl <- vect(st_wrap_dateline(st_as_sf(dl), options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180")))
 
       # filter out links which cut across islands other than the voronoi pair
       if(inherits(geog$layers, "SpatRaster")) {
@@ -197,6 +200,7 @@ link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
       } else {
 
         nr <- apply(relate(dl, islands[[i]], "intersects"), 1, which, simplify = F)
+        #nr <- apply(relate(dl, vv, "intersects"), 1, which, simplify = F)
         to_keep <- which(sapply(nr, length) == 2)
         dl <- dl[to_keep]
         ii <- ii[to_keep,,drop = F]
