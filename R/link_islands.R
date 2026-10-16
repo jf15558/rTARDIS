@@ -234,13 +234,19 @@ link_islands <- function(geog, klink = NULL, replace = FALSE, verbose = TRUE) {
       }
       dl <- do.call(rbind, to_keep)
 
+
       # convert linkage coordinates to cell IDs
+      crd <- geom(dl)
+      srt <- which(!duplicated(crd[,1]))
+      end <- c(srt[-1] - 1, nrow(crd))
+      crd <- crd[c(rbind(srt, end)),]
+
       if(inherits(geog$layers, "SpatRaster")) {
-        cl <- cellFromXY(geog$layers[[1]], crds(dl))
+        cl <- cellFromXY(geog$layers[[1]], crd)
         cls <- as.data.frame(matrix(cl, ncol = 2, byrow = T))
 
       } else {
-        cl <- suppressMessages(point_to_cell(crds(dl), res = geog$gdat[7]))
+        cl <- suppressMessages(point_to_cell(crd, res = geog$gdat[7]))
         cl <- match(cl, grid)
         cls <- as.data.frame(matrix(cl, ncol = 2, byrow = T))
       }
