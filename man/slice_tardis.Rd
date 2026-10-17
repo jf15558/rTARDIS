@@ -4,7 +4,7 @@
 \alias{slice_tardis}
 \title{slice_tardis}
 \usage{
-slice_tardis(tardis, times = NULL, layers = NULL, adjust = TRUE)
+slice_tardis(tardis, times = NULL, layers = NULL, adjust.id = TRUE)
 }
 \arguments{
 \item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
@@ -17,7 +17,7 @@ age range to subset. One of \code{times} or \code{layers} must be specified.}
 from \code{tardis} or a vector of two positive integers denoting the layer range
 to subset. One of \code{times} or \code{layers} must be specified.}
 
-\item{adjust}{\code{logical}. Should cell IDs be adjusted so that they correspond
+\item{adjust.id}{\code{logical}. Should cell IDs be adjusted so that they correspond
 to the new layer numbering of the subsetted \code{tardis} object? Defaults to
 \code{TRUE}. Otherwise, this argument may be useful when working with single
 layers from a \code{tardis} object, but where retaining original spatiotemporal

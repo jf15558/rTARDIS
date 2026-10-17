@@ -17,12 +17,17 @@
 #' `points` will be linked in a single arborescence. Otherwise a column name in
 #' `points` denoting subsets of points to link. This column can be `character`
 #' or `numeric`, but must contain at least two points per group.
+#' @param merge `logical`. By default, all branches in an arborescence will
+#' be collapsed into a single geometry. Set to `FALSE` to keep each branch as
+#' as a separate geometry
 #' @param verbose `logical` Should function progress be reported to the user?
-#' @return A `SpatVector` of time-discrete lines representing the branches of
-#' the minimum spanning arborescences, recording their point group (`$group`),
-#' the branch in the group-wise minimum spanning arboresence to which they
-#' belong (`$feature`), the costs along each line (`$cost`) and their geographic
-#' distances (`$distance`, identical if `weights = "gdist"`).
+#' @return A `SpatVector` of geometries representing the time-discrete portions
+#' of the minimum spanning arborescence(s), recording their overall point group
+#' (`$feature`) and time layer (`$layer`) the total cost of each portion
+#' (`$cost`), and the total geographic distance summed in each portion
+#' (`$distance`, identical if `weights = "gdist"`). If `merge = FALSE`, then
+#' individual branches are returned, rather than layer-wise branch aggregates.
+#'
 #' @import terra sf cppRouting rlemon h3jsr
 #' @importFrom igraph graph_from_adjacency_matrix
 #' @importFrom igraph as_edgelist
@@ -70,12 +75,13 @@
 #' par(oldpar)
 #' }
 
-min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose = TRUE) {
+min_span <- function(tardis, weights = "gdist", points, groups = NULL, merge = TRUE, verbose = TRUE) {
 
-  #tardis = trd
+  #tardis = htd
   #weights = "gdist"
-  #points = pts
-  #groups = "tax"
+  #points = hpts
+  #groups = NULL
+  #merge = T
   #verbose = TRUE
 
   if (!exists("tardis")) {
@@ -248,7 +254,7 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
       tvec[[j]] <- dcst[pord]
     }
     path_ids <- unlist(path_ids)
-    ob <- cbind.data.frame(group = unique(points[[groups]][,1])[i], feature = as.numeric(unlist(lapply(strsplit(path_ids,
+    ob <- cbind.data.frame(feature = unique(points[[groups]][,1])[i], group = as.numeric(unlist(lapply(strsplit(path_ids,
                                                                        "_"), function(y) {
                                                                          y[[1]]
                                                                        }))), srt_bin = as.numeric(unlist(lapply(strsplit(path_ids,
@@ -259,13 +265,23 @@ min_span <- function(tardis, weights = "gdist", points, groups = NULL, verbose =
                                                                                                                                                                              y[[3]]
                                                                                                                                                                            }))), distance = unlist(tvec), cost = unlist(wvec))
     ob$layer <- (ob$srt_bin + ob$end_bin) / 2
-    ob <- ob[,c("group", "feature", "layer", "cost", "distance")]
+    ob <- ob[,c("feature", "layer", "cost", "distance")]
     st_geometry(ob) <- st_sfc(unlist(path_groups, recursive = F),
                               crs = "+proj=longlat")
-    ob <- st_wrap_dateline(ob, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"))
+    ob <- vect(st_wrap_dateline(ob, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180")))
 
     if(verbose) {if(i == max(gps)) {cat("\n")}}
-    lst[[i]] <- vect(ob)
+    if(!merge) {
+      lst[[i]] <- ob
+    } else {
+      ob2 <- tapply(ob, ob$layer, aggregate)
+      ob2 <- Reduce(rbind, ob2)
+      ob2$feature <- unique(points[[groups]][,1])[i]
+      ob2$layer <- unique(ob$layer)
+      ob2$cost <- tapply(ob$cost, ob$layer, sum)
+      ob2$dst <- tapply(ob$distance, ob$layer, sum)
+      lst[[i]] <- ob2
+    }
   }
 
   return(do.call(rbind, lst))

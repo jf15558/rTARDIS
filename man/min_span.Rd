@@ -4,7 +4,14 @@
 \alias{min_span}
 \title{min_span}
 \usage{
-min_span(tardis, weights = "gdist", points, groups = NULL, verbose = TRUE)
+min_span(
+  tardis,
+  weights = "gdist",
+  points,
+  groups = NULL,
+  merge = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{tardis}{\code{tardis}. The output of \code{build_tardis()}.}
@@ -22,14 +29,19 @@ points to be linked, and potentially with a grouping variable added}
 \code{points} denoting subsets of points to link. This column can be \code{character}
 or \code{numeric}, but must contain at least two points per group.}
 
+\item{merge}{\code{logical}. By default, all branches in an arborescence will
+be collapsed into a single geometry. Set to \code{FALSE} to keep each branch as
+as a separate geometry}
+
 \item{verbose}{\code{logical} Should function progress be reported to the user?}
 }
 \value{
-A \code{SpatVector} of time-discrete lines representing the branches of
-the minimum spanning arborescences, recording their point group (\verb{$group}),
-the branch in the group-wise minimum spanning arboresence to which they
-belong (\verb{$feature}), the costs along each line (\verb{$cost}) and their geographic
-distances (\verb{$distance}, identical if \code{weights = "gdist"}).
+A \code{SpatVector} of geometries representing the time-discrete portions
+of the minimum spanning arborescence(s), recording their overall point group
+(\verb{$feature}) and time layer (\verb{$layer}) the total cost of each portion
+(\verb{$cost}), and the total geographic distance summed in each portion
+(\verb{$distance}, identical if \code{weights = "gdist"}). If \code{merge = FALSE}, then
+individual branches are returned, rather than layer-wise branch aggregates.
 }
 \description{
 Determine the least cost minimum spanning arborescence between sets of
