@@ -168,10 +168,12 @@ plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
   # mask and crop to plotting bounds (global extent ignored for run speed)
   rst <- x$layers[[y]]
   rbounds <- as.vector(ext(rst))
-  if(rbounds[1] < -179.99) {rbounds[1] <- -179.99}
-  if(rbounds[2] > 179.99) {rbounds[2] <- 179.99}
-  if(rbounds[3] < -89.99) {rbounds[3] <- -89.99}
-  if(rbounds[4] > 89.99) {rbounds[4] <- 89.99}
+  if(is.lonlat(rst)) {
+    if(rbounds[1] < -179.99) {rbounds[1] <- -179.99}
+    if(rbounds[2] > 179.99) {rbounds[2] <- 179.99}
+    if(rbounds[3] < -89.99) {rbounds[3] <- -89.99}
+    if(rbounds[4] > 89.99) {rbounds[4] <- 89.99}
+  }
   crs(rst) <- NA
   if(rbounds[1] < ext(bounds)[1] | rbounds[2] > ext(bounds)[2] | rbounds[3] < ext(bounds)[3] | rbounds[4] > ext(bounds)[4]) {
     rst <- mask(crop(rst, bounds), bounds)
