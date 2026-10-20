@@ -99,6 +99,12 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
   if(any(is.na(points))) {
     stop("NA values are not permitted in points")
   }
+  if(length(tardis$tdat) > 2 & ncol(points) < 3) {
+    stop("If tardis contains multiple time layers, then points should contain longitude, latitude and time columns")
+  }
+  if(is.null(tardis$tdat) & ncol(points) > 2) {
+    stop("If tardis consists of one layer, then points should contain longitude and latitude columns only")
+  }
   if(any(points[,1] > 180 | points[,1] < -180)) {
     stop("The first two columns in points must be in decimal degrees")
   }
@@ -107,12 +113,6 @@ point_check <- function(tardis, points, max.dist = NULL, round = NULL, verbose =
   }
   if(any(points[,3] < 0)) {
     stop("If supplied, the time column in points must only contain positive values")
-  }
-  if(length(tardis$tdat) > 2 & ncol(points) < 3) {
-    stop("If tardis contains multiple time layers, then points should contain longitude, latitude and time columns")
-  }
-  if(is.null(tardis$tdat) & ncol(points) > 2) {
-    stop("If tardis consists of one layer, then points should contain longitude and latitude columns only")
   }
 
   # time order for convenience

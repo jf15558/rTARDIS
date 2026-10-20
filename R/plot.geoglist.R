@@ -66,20 +66,20 @@ plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
                           legend = TRUE, axes = TRUE, bg = NA, add = FALSE,
                           xlim = NULL, ylim = NULL, par.reset = TRUE, ...) {
 
-   #x = foo2
-   #y = 1
-   #pal = sf.colors(10)
-   #links = T
-   #lcol = 1
-   #lwd = 1
-   #lty = 1
-   #hex.border = NA
-   #legend = T
-   #axes = T
-   #add = F
-   #bg = NA
-   #xlim = NULL
-   #ylim = NULL
+   # x = geog
+   # y = 15
+   # pal = sf::sf.colors(10)
+   # links = T
+   # lcol = 1
+   # lwd = 1
+   # lty = 1
+   # hex.border = NA
+   # legend = T
+   # axes = T
+   # add = F
+   # bg = NA
+   # xlim = NULL
+   # ylim = NULL
    # #xlim = c(-91, -89.5)
    # #ylim = c(-1.5, 0)
    # #xlim = c(-91, 50)
@@ -87,6 +87,7 @@ plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
    # zlim = NULL
    # #xlim = c(-1.5e7, 0)
    # #ylim = c(-5e6, 1e7)
+   # par.reset = T
 
   if(!exists("x")) {
     stop("Supply x as a geoglist with rast_to_geoglist()")
@@ -148,7 +149,9 @@ plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
     c(rep(bbox[4], len1), seq(bbox[4], bbox[3], length.out = len2), rep(bbox[3], len1), seq(bbox[3], bbox[4], length.out = len2))
   )
   frame <- as.polygons(vect(frame, crs = "EPSG:4326"))
-  frame <- project(frame, crs(x$layers))
+  if(!is.lonlat(x$layers[[1]])) {
+    frame <- project(frame, crs(x$layers))
+  }
   crs(frame) <- NA
 
   # crop bounding box to plot limits and plot
@@ -162,17 +165,24 @@ plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
   frame <- crop(frame, pol)
   bounds <- intersect(frame, pol)
 
-  # mask and crop to plotting bounds
+  # mask and crop to plotting bounds (global extent ignored for run speed)
   rst <- x$layers[[y]]
+  rbounds <- as.vector(ext(rst))
+  if(rbounds[1] < -179.99) {rbounds[1] <- -179.99}
+  if(rbounds[2] > 179.99) {rbounds[2] <- 179.99}
+  if(rbounds[3] < -89.99) {rbounds[3] <- -89.99}
+  if(rbounds[4] > 89.99) {rbounds[4] <- 89.99}
   crs(rst) <- NA
-  rst <- mask(crop(rst, bounds), bounds)
+  if(rbounds[1] < ext(bounds)[1] | rbounds[2] > ext(bounds)[2] | rbounds[3] < ext(bounds)[3] | rbounds[4] > ext(bounds)[4]) {
+    rst <- mask(crop(rst, bounds), bounds)
+  }
 
   # if the frame bisects a raster row or column, adjust so it falls in step
-  if(inherits(rst, "SpatRaster")) {
+  #if(inherits(rst, "SpatRaster")) {
     #foo <- ext(frame)
     #foo2 <- ext(rst)
     #frame <- crop(frame, bounds, ext = T)
-  }
+  #}
 
   plot(frame, col = bg, border = NA, axes = F, add = add)
   if(inherits(rst, "SpatRaster")) {
