@@ -20,7 +20,6 @@
   add = FALSE,
   xlim = NULL,
   ylim = NULL,
-  par.reset = TRUE,
   ...
 )
 }
@@ -48,7 +47,7 @@ links.}
 plotting hexagonal grids. By default none.}
 
 \item{legend}{\code{logical}. Should a legend be added to the plot? Defaults to
-\code{TRUE}.}
+\code{TRUE}. Legends are set to appear on the right hand side of the plot.}
 
 \item{axes}{\code{logical}. Should axes be added to the plot? These will look
 sensible for lon-lat geoglists, but may look odd for other projection
@@ -68,20 +67,16 @@ minimum and maximum x extent of the plot in terms of the projection system in
 minimum and maximum y extent of the plot in terms of the projection system in
 \code{x}.}
 
-\item{par.reset}{\code{logical}. Should default plotting parameters be restored on
-function exit? Defaults to TRUE to meet CRAN requirements, but can be toggled
-to allow interactive clicking functions to operate, or to allow other
-features to be easily added within the plot axis limits (e.g., with
-\code{add = TRUE}).}
-
-\item{...}{Other arguments passed to \code{terra::plot()}.}
+\item{...}{Other arguments passed to \code{terra::plot()}. Note that some of these
+have default settings already specified in this function, e.g.,
+\code{add = FALSE}, but can be safely changed if desired.}
 }
 \value{
 No return value.
 }
 \description{
 Plotting method for a \code{geoglist}. If the \code{geoglist} contains multiple
-layers, then default behaviour is to plot the first one.
+layers, then the default behaviour is to plot the first one.
 }
 \examples{
 \donttest{

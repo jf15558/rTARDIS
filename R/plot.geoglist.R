@@ -39,7 +39,7 @@
 #' `add = FALSE`, but can be safely changed if desired.
 #' @return No return value.
 #' @import sf terra
-#' @importFrom graphics par
+#' @importFrom graphics plot.new
 #' @importFrom graphics axis
 #' @importFrom graphics axTicks
 #' @export
@@ -184,11 +184,12 @@ plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
         zlim <- range(rst[[1]][,1], na.rm = T)
       }
     }
+    plot.new()
     strh <- graphics::strheight("M", cex = 0.8)
     lw <- max(graphics::strwidth(max(zlim), cex =  0.8))
     toff <- 0.5 * strh
     pad <- strh * 0.8
-    xlm[2] <- xlm[2] + toff + lw + pad
+    xlm[2] <- xlm[2] + (diff(xlm) * 0.2) + toff + lw + pad
   }
 
   # plot base canvas if needed
