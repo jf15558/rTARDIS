@@ -72,9 +72,7 @@ click_to_snip <- function(geog, layer = 1, nsnips = 1, ...) {
       stop("nsnips should be a single integer")
     }
 
-    oldpar <- par(no.readonly = TRUE)
-    on.exit(par(oldpar))
-    plot.geoglist(geog, layer, par.reset = F, ...)
+    plot.geoglist(geog, layer, ...)
 
     snips <- list()
     for(i in 1:nsnips) {

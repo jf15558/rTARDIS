@@ -67,9 +67,8 @@ click_optim <- function(tardis, weights = "gdist", geog, time = NULL, n = 3, loo
     }
     bin <- sum(time < tardis$tdat)
   }
-  oldpar <- par(no.readonly = TRUE)
-  on.exit(par(oldpar))
-  plot.geoglist(geog, bin, par.reset = F, ...)
+
+  plot.geoglist(geog, bin, ...)
 
   org <- cbind(click(n = n), rep(time, n))
 

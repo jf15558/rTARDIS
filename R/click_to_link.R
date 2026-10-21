@@ -82,9 +82,7 @@ click_to_link <- function(geog, layer = 1, nlinks = 1, ...) {
     bounds <- centroids(bounds[which(table(bar[,1]) != 7)])
   }
 
-  oldpar <- par(no.readonly = TRUE)
-  on.exit(par(oldpar))
-  plot.geoglist(geog, layer, par.reset = F, ...)
+  plot.geoglist(geog, layer, ...)
 
   lnk <- list()
   for(i in 1:nlinks) {

@@ -84,9 +84,7 @@ click_points <- function(geog, layer = 1, points = 1, print.only = TRUE, ...) {
     bounds <- centroids(bounds[which(table(bar[,1]) != 7)])
   }
 
-  oldpar <- par(no.readonly = TRUE)
-  on.exit(par(oldpar))
-  plot.geoglist(geog, layer, par.reset = F, ...)
+  plot.geoglist(geog, layer, ...)
 
   lnk <- list()
   for(i in 1:points) {

@@ -57,9 +57,7 @@ click_lcp <- function(tardis, weights = "gdist", geog, time = NULL, n = 1, col =
     bin <- sum(time < tardis$tdat)
   }
 
-  oldpar <- par(no.readonly = TRUE)
-  on.exit(par(oldpar))
-  plot.geoglist(geog, bin, par.reset = F, ...)
+  plot.geoglist(geog, bin, ...)
 
   org <- cbind(click(n = n), rep(time, n))
   dst <- cbind(click(n = n), rep(time, n))

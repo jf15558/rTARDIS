@@ -2,15 +2,21 @@
 
 `rTARDIS` (Terrains And Routes Directed In Spacetime) is an R package for spatiotemporal geographic connectivity analysis. It provides functions for constructing and analysing graph representations of complex geographic spaces at local to global scales, particularly where accessible spaces are discontinuously distributed but still display connectivity (e.g., island systems where isolation is strong but not necessarily absolute), and where that distribution also changes through time (e.g., habitat patch fragmentation or plate tectonic drift).
 
-`rTARDIS` was primarily designed to allow exploration of routes and distances across changing geographic architectures in deep time - Google Maps for palaeobiologists! Its general functionality, however, is also suitable for modern applications such as landscape genetics or dispersal ecology. As such, suggestions for enhancements or improvements are welcomed.
+`rTARDIS` was initially designed to allow exploration of routes and distances across changing geographic architectures in deep time - Google Maps for palaeobiologists! Its general functionality, however, is also suitable for modern applications in landscape genetics or dispersal ecology. Suggestions for enhancements or improvements are welcomed.
 
 # Installation
 
-A stable release of `rTARDIS` on CRAN is anticipated in the near future. For the time being, the development version of `TARDIS` can be installed via GitHub using:
+The stable version of `rTARDIS` can be installed from CRAN using:
 
 ```r
-# install.packages("devtools")
-devtools::install_github("jf15558/rTARDIS")
+install.packages("rTARDIS")
+```
+
+The development version of `rTARDIS` can be installed from GitHub using:
+
+```r
+# install.packages("pak")
+pak::pak("jf15558/rTARDIS")
 ```
 
 # Citation

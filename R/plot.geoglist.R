@@ -1,7 +1,7 @@
 #' plot.geoglist
 #'
 #' Plotting method for a `geoglist`. If the `geoglist` contains multiple
-#' layers, then default behaviour is to plot the first one.
+#' layers, then the default behaviour is to plot the first one.
 #'
 #' @name plot
 #' @method plot geoglist
@@ -20,7 +20,7 @@
 #' @param hex.border `character` or `integer`. The colour to be used for
 #' plotting hexagonal grids. By default none.
 #' @param legend `logical`. Should a legend be added to the plot? Defaults to
-#' `TRUE`.
+#' `TRUE`. Legends are set to appear on the right hand side of the plot.
 #' @param axes `logical`. Should axes be added to the plot? These will look
 #' sensible for lon-lat geoglists, but may look odd for other projection
 #' systems.
@@ -28,19 +28,16 @@
 #' `NA` (no colour) by default.
 #' @param add `logical`. Should `x` be added to an existing plot? `FALSE` by
 #' default.
-#' @return No return value.
 #' @param xlim `numeric`. If not `NULL`, then a vector of two numbers to set the
 #' minimum and maximum x extent of the plot in terms of the projection system in
 #' `x`.
 #' @param ylim `numeric`. If not `NULL`, then a vector of two numbers to set the
 #' minimum and maximum y extent of the plot in terms of the projection system in
 #' `x`.
-#' @param par.reset `logical`. Should default plotting parameters be restored on
-#' function exit? Defaults to TRUE to meet CRAN requirements, but can be toggled
-#' to allow interactive clicking functions to operate, or to allow other
-#' features to be easily added within the plot axis limits (e.g., with
-#' `add = TRUE`).
-#' @param ... Other arguments passed to `terra::plot()`.
+#' @param ... Other arguments passed to `terra::plot()`. Note that some of these
+#' have default settings already specified in this function, e.g.,
+#' `add = FALSE`, but can be safely changed if desired.
+#' @return No return value.
 #' @import sf terra
 #' @importFrom graphics par
 #' @importFrom graphics axis
@@ -64,7 +61,7 @@
 plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
                           lcol = "grey", lwd = 1, lty = 1, hex.border = NA,
                           legend = TRUE, axes = TRUE, bg = NA, add = FALSE,
-                          xlim = NULL, ylim = NULL, par.reset = TRUE, ...) {
+                          xlim = NULL, ylim = NULL, ...) {
 
    # x = geog
    # y = 15
@@ -125,48 +122,42 @@ plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
     }
   }
 
-  if(par.reset) {
-    oldpar <- par(no.readonly = TRUE)
-    on.exit(par(oldpar))
-  }
+  # get layer to plot
+  rst <- x$layers[[y]]
 
-  if(legend) {
-    pr <- newmar <- par("mar")
-    newmar[4] <- 5.1
-    par(mar = newmar)
-  }
-
-  # construct bounding polygon (adjust for global extent to avoid errors)
+  # construct bounding polygon (small adjustment for global extent to avoid errors)
   bbox <- x$gdat[1:4]
   if(bbox[1] < -179.99) {bbox[1] <- -179.99}
   if(bbox[2] > 179.99) {bbox[2] <- 179.99}
   if(bbox[3] < -89.99) {bbox[3] <- -89.99}
   if(bbox[4] > 89.99) {bbox[4] <- 89.99}
-  len1 <- diff(bbox[1:2]) / 0.1
-  len2 <- diff(bbox[3:4]) / 0.1
-  frame <- cbind(
-    c(seq(bbox[1], bbox[2], length.out = len1), rep(bbox[2], len2), seq(bbox[2], bbox[1], length.out = len1),  rep(bbox[1], len2)),
-    c(rep(bbox[4], len1), seq(bbox[4], bbox[3], length.out = len2), rep(bbox[3], len1), seq(bbox[3], bbox[4], length.out = len2))
-  )
-  frame <- as.polygons(vect(frame, crs = "EPSG:4326"))
-  if(!is.lonlat(x$layers[[1]])) {
+  if(!is.lonlat(rst)) {
+    len1 <- diff(bbox[1:2]) / 0.1
+    len2 <- diff(bbox[3:4]) / 0.1
+    frame <- cbind(
+      c(seq(bbox[1], bbox[2], length.out = len1), rep(bbox[2], len2), seq(bbox[2], bbox[1], length.out = len1),  rep(bbox[1], len2)),
+      c(rep(bbox[4], len1), seq(bbox[4], bbox[3], length.out = len2), rep(bbox[3], len1), seq(bbox[3], bbox[4], length.out = len2))
+    )
+    frame <- as.polygons(vect(frame, crs = "EPSG:4326"))
     frame <- project(frame, crs(x$layers))
+
+  } else {
+    frame <- as.polygons(vect(cbind(c(bbox[1], bbox[1], bbox[2], bbox[2], bbox[1]),
+                                    c(bbox[3], bbox[4], bbox[4], bbox[3], bbox[3]))))
   }
   crs(frame) <- NA
 
-  # crop bounding box to plot limits and plot
+  # crop bounding box to plot limits
   if(is.null(xlim)) {xlim <- ext(frame)[1:2]}
   if(is.null(ylim)) {ylim <- ext(frame)[3:4]}
   names(xlim) <- c("xmin", "xmax")
   names(ylim) <- c("ymin", "ymax")
-
-  # set plot canvas
   pol <- as.polygons(vect(cbind(xlim[c(1, 1, 2, 2, 1)], ylim[c(1, 2, 2, 1, 1)])))
   frame <- crop(frame, pol)
-  bounds <- intersect(frame, pol)
 
-  # mask and crop to plotting bounds (global extent ignored for run speed)
-  rst <- x$layers[[y]]
+  # mask and crop to plotting bounds if needed (global extent ignored for run speed)
+  bounds <- intersect(frame, pol)
+  crs(bounds) <- NA
   rbounds <- as.vector(ext(rst))
   if(is.lonlat(rst)) {
     if(rbounds[1] < -179.99) {rbounds[1] <- -179.99}
@@ -179,20 +170,37 @@ plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
     rst <- mask(crop(rst, bounds), bounds)
   }
 
-  # if the frame bisects a raster row or column, adjust so it falls in step
-  #if(inherits(rst, "SpatRaster")) {
-    #foo <- ext(frame)
-    #foo2 <- ext(rst)
-    #frame <- crop(frame, bounds, ext = T)
-  #}
+  # get plotting limits to include legend if needed
+  xlm <- ext(frame)[1:2]
+  ylm <- ext(frame)[3:4]
+  if(legend) {
 
-  plot(frame, col = bg, border = NA, axes = F, add = add)
+    if(!is.null(list(...)$range)) {
+      zlim = list(...)$range
+    } else {
+      if(inherits(rst, "SpatRaster")) {
+        zlim <- c(minmax(rst))
+      } else {
+        zlim <- range(rst[[1]][,1], na.rm = T)
+      }
+    }
+    strh <- graphics::strheight("M", cex = 0.8)
+    lw <- max(graphics::strwidth(max(zlim), cex =  0.8))
+    toff <- 0.5 * strh
+    pad <- strh * 0.8
+    xlm[2] <- xlm[2] + toff + lw + pad
+  }
+
+  # plot base canvas if needed
+  if(!add) {
+    plot(frame, col = bg, border = NA, axes = F, xlim = xlm, ylim = ylm)
+  }
+
+  # add geographic data
   if(inherits(rst, "SpatRaster")) {
-    foo <- plot(rst, col = pal, xlim = ext(frame)[1:2], ylim = ext(frame)[3:4],
-                axes = F, add = T, legend = F, ...)
+    foo <- plot(rst, col = pal, axes = F, add = T, legend = F, ...)
   } else {
-    plot(rst, values = rst[[1]][,1], col = pal, xlim = ext(frame)[1:2], ylim = ext(frame)[3:4],
-         border = hex.border, axes = F, add = T, legend = F, ...)
+    plot(rst, values = rst[[1]][,1], col = pal, border = hex.border, add = T, legend = F)
   }
 
   # add axes
@@ -218,18 +226,8 @@ plot.geoglist <- function(x, y = 1, pal = sf.colors(10), links = TRUE,
   # add legend
   if(legend) {
 
-    if(!is.null(list(...)$range)) {
-      zlim = list(...)$range
-    } else {
-      if(inherits(x$layers[[1]], "SpatRaster")) {
-        zlim <- c(minmax(x$layers[[y]]))
-      } else {
-        zlim <- range(rst, na.rm = T)
-      }
-    }
     legend_cont(x = seq(ext(frame)[2], par("usr")[2], length.out = 4)[2:3],
                 y = ext(bounds)[3:4], legend = zlim, col = pal)
-    suppressWarnings(par(mar = pr))
   }
 
   # add plot boundary
